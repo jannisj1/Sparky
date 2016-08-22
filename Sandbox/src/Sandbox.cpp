@@ -2,6 +2,7 @@
 
 #include "Test2D.h"
 #include "Test3D.h"
+#include "TestUI.h"
 #include "DeferredTest.h"
 #include "SponzaTest.h"
 
@@ -23,13 +24,13 @@ public:
 
 	void Init() override
 	{
-		// UI BRANCH
 		Application::Init();
 		VFS::Get()->Mount("models", "res/models");
 		VFS::Get()->Mount("pbr", "res/pbr");
 		VFS::Get()->Mount("shaders", "shaders");
-
-		PushLayer(spnew Test2D());
+		
+		PushLayer(spnew TestUI());
+		// PushLayer(spnew Test2D());
 		// PushLayer(spnew Test3D());
 		// PushLayer(spnew SponzaTest());
 		// PushLayer(spnew DeferredTest()); // Doesn't work atm

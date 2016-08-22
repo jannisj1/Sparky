@@ -181,6 +181,7 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClCompile Include="src\sp\graphics\API\Framebuffer2D.cpp" />
     <ClCompile Include="src\sp\graphics\API\FramebufferDepth.cpp" />
     <ClCompile Include="src\sp\graphics\GBuffer.cpp" />
+    <ClCompile Include="src\sp\graphics\layers\UILayer.cpp" />
     <ClCompile Include="src\sp\graphics\Light.cpp" />
     <ClCompile Include="src\sp\graphics\LightSetup.cpp" />
     <ClCompile Include="src\sp\graphics\Model.cpp" />
@@ -653,6 +654,7 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClInclude Include="src\sp\graphics\API\Framebuffer2D.h" />
     <ClInclude Include="src\sp\graphics\API\FramebufferDepth.h" />
     <ClInclude Include="src\sp\graphics\GBuffer.h" />
+    <ClInclude Include="src\sp\graphics\layers\UILayer.h" />
     <ClInclude Include="src\sp\graphics\Light.h" />
     <ClInclude Include="src\sp\graphics\LightSetup.h" />
     <ClInclude Include="src\sp\graphics\PBRMaterial.h" />

@@ -56,6 +56,7 @@
 #include <sp/graphics/layers/Layer.h>
 #include <sp/graphics/layers/Layer2D.h>
 #include <sp/graphics/layers/Layer3D.h>
+#include <sp/graphics/layers/UILayer.h>
 
 #include <sp/graphics/postfx/PostEffects.h>
 #include <sp/graphics/postfx/PostEffectsPass.h>
