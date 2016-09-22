@@ -48,8 +48,6 @@ namespace sp { namespace debug {
 
 	void DebugLayer::OnUpdate(const Timestep& ts)
 	{
-		DebugMenu::Get()->OnUpdate();
-
 		m_FrametimeLabel->SetText(StringFormat::Float(m_Application.GetFrametime()) + " ms");
 	}
 
@@ -66,12 +64,12 @@ namespace sp { namespace debug {
 
 	bool DebugLayer::OnMousePressedEvent(events::MousePressedEvent& e)
 	{
-		return DebugMenu::IsVisible() ? DebugMenu::Get()->OnMousePressed(e) : false;
+		return true;
 	}
 
 	bool DebugLayer::OnMouseReleasedEvent(events::MouseReleasedEvent& e)
 	{
-		return DebugMenu::IsVisible() ? DebugMenu::Get()->OnMouseReleased(e) : false;
+		return true;
 	}
 
 	bool DebugLayer::OnKeyPressedEvent(KeyPressedEvent& e)
@@ -81,7 +79,6 @@ namespace sp { namespace debug {
 
 		if (e.GetModifiers() == SP_MODIFIER_LEFT_CONTROL && e.GetKeyCode() == SP_KEY_TAB)
 		{
-			DebugMenu::SetVisible(!DebugMenu::IsVisible());
 			return true;
 		}
 		return false;
@@ -94,9 +91,6 @@ namespace sp { namespace debug {
 
 	void DebugLayer::OnRender(graphics::Renderer2D& renderer)
 	{
-		if (DebugMenu::IsVisible())
-			DebugMenu::Get()->OnRender(renderer);
-
 		for (uint i = 0; i < m_TempSprites.size(); i++)
 			spdel m_TempSprites[i];
 

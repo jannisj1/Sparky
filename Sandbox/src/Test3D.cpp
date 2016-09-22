@@ -228,12 +228,6 @@ void Test3D::OnInit(Renderer3D& renderer, Scene& scene)
 	lights->Add(m_Light);
 	m_Scene->PushLightSetup(lights);
 
-	DEBUG_MENU("Cube", &g_CubeTransform, -100.0f, 100.0f);
-	DEBUG_MENU("Light Direction", &lights->GetLights()[0]->direction, -1.0f, 1.0f);
-	DEBUG_MENU("Light Intensity", &lights->GetLights()[0]->intensity, 0, 100);
-	DEBUG_MENU("Dagger", &g_DaggerTransform, -50, 50);
-	DEBUG_MENU("Dagger Gloss", &g_DaggerGloss, 0.0f, 1.0f);
-
 	// shadowPassShader = Shader::CreateFromFile("Shadow", "shaders/ShadowPass.shader");
 	// g_DepthBuffer = FramebufferDepth::Create(2048, 2048);
 	// g_ShadowMap = (TextureDepth*)g_DepthBuffer->GetTexture();

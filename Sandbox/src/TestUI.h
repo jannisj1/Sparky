@@ -5,7 +5,6 @@
 class TestUI : public sp::graphics::UILayer
 {
 private:
-	sp::graphics::Label** debugInfo;
 	sp::graphics::Renderer2D* m_Renderer;
 public:
 	TestUI();

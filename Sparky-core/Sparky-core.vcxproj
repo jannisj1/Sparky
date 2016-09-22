@@ -54,8 +54,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)Dependencies\tinyxml2\src;$(SolutionDir)Dependencies\Spidermonkey\include\Spidermonkey;$(SolutionDir)Dependencies\Box2D\src;$(SolutionDir)Dependencies\gorilla-audio\src;$(SolutionDir)Dependencies\FreeType;$(SolutionDir)Dependencies\FreeType\include;$(SolutionDir)Dependencies\FreeImage\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Dependencies\tinyxml2\lib\$(Platform)\$(Configuration)\;$(SolutionDir)Dependencies\Spidermonkey\lib\x86;$(SolutionDir)Dependencies\libogg\bin;$(SolutionDir)Dependencies\OpenAL\libs\Win32;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\GLFW\lib-vc2013;$(SolutionDir)Dependencies\libvorbis\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Dependencies\SparkyCSS\src;$(SolutionDir)Dependencies\tinyxml2\src;$(SolutionDir)Dependencies\Spidermonkey\include\Spidermonkey;$(SolutionDir)Dependencies\Box2D\src;$(SolutionDir)Dependencies\gorilla-audio\src;$(SolutionDir)Dependencies\FreeType;$(SolutionDir)Dependencies\FreeType\include;$(SolutionDir)Dependencies\FreeImage\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Dependencies\SparkyCSS\lib\$(Platform)\$(Configuration)\;$(SolutionDir)Dependencies\tinyxml2\lib\$(Platform)\$(Configuration)\;$(SolutionDir)Dependencies\Spidermonkey\lib\x86;$(SolutionDir)Dependencies\libogg\bin;$(SolutionDir)Dependencies\OpenAL\libs\Win32;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\GLFW\lib-vc2013;$(SolutionDir)Dependencies\libvorbis\bin;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\Release\</OutDir>
     <IntDir>$(SolutionDir)bin\Release\Intermediates\$(ProjectName)\</IntDir>
     <TargetName>SPCore</TargetName>
@@ -68,8 +68,8 @@
     <TargetName>SPCore</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Dependencies\tinyxml2\src;$(SolutionDir)Dependencies\Spidermonkey\include\Spidermonkey;$(SolutionDir)Dependencies\Box2D\src;$(SolutionDir)Dependencies\gorilla-audio\src;$(SolutionDir)Dependencies\FreeType;$(SolutionDir)Dependencies\FreeType\include;$(SolutionDir)Dependencies\FreeImage\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Dependencies\tinyxml2\lib\$(Platform)\$(Configuration)\;$(SolutionDir)Dependencies\Spidermonkey\lib\x86;$(SolutionDir)Dependencies\libogg\bin;$(SolutionDir)Dependencies\OpenAL\libs\Win32;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\GLFW\lib-vc2013;$(SolutionDir)Dependencies\libvorbis\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Dependencies\SparkyCSS\src;$(SolutionDir)Dependencies\tinyxml2\src;$(SolutionDir)Dependencies\Spidermonkey\include\Spidermonkey;$(SolutionDir)Dependencies\Box2D\src;$(SolutionDir)Dependencies\gorilla-audio\src;$(SolutionDir)Dependencies\FreeType;$(SolutionDir)Dependencies\FreeType\include;$(SolutionDir)Dependencies\FreeImage\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Dependencies\SparkyCSS\lib\$(Platform)\$(Configuration)\;$(SolutionDir)Dependencies\tinyxml2\lib\$(Platform)\$(Configuration)\;$(SolutionDir)Dependencies\Spidermonkey\lib\x86;$(SolutionDir)Dependencies\libogg\bin;$(SolutionDir)Dependencies\OpenAL\libs\Win32;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\GLFW\lib-vc2013;$(SolutionDir)Dependencies\libvorbis\bin;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\Debug\</OutDir>
     <IntDir>$(SolutionDir)bin\Debug\Intermediates\$(ProjectName)\</IntDir>
     <TargetName>SPCore</TargetName>
@@ -87,7 +87,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glew32s.lib;opengl32.lib;d3d11.lib;d3dcompiler.lib;mozjs-51a1.lib;tinyxml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;opengl32.lib;d3d11.lib;d3dcompiler.lib;mozjs-51a1.lib;tinyxml2.lib;SparkyCSS.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
     </Link>
@@ -120,7 +120,7 @@ xcopy /f /y "$(SolutionDir)Dependencies\Spidermonkey\bin\x86\mozjs-51a1.dll" "$(
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glew32s.lib;opengl32.lib;d3d11.lib;d3dcompiler.lib;mozjs-51a1.lib;tinyxml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;opengl32.lib;d3d11.lib;d3dcompiler.lib;mozjs-51a1.lib;tinyxml2.lib;SparkyCSS.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
@@ -167,8 +167,6 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\sp\app\Input.cpp" />
-    <ClCompile Include="src\sp\debug\DebugMenuItem.cpp" />
-    <ClCompile Include="src\sp\debug\DebugMenuSlider.cpp" />
     <ClCompile Include="src\sp\entity\component\SpriteComponent.cpp" />
     <ClCompile Include="src\sp\events\WindowEvent.cpp" />
     <ClCompile Include="src\sp\graphics\API\Texture2D.cpp" />
@@ -196,6 +194,7 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClCompile Include="src\sp\graphics\Renderer.cpp" />
     <ClCompile Include="src\sp\graphics\Renderer2D.cpp" />
     <ClCompile Include="src\sp\graphics\shaders\ShaderManager.cpp" />
+    <ClCompile Include="src\sp\graphics\ui\UILabel.cpp" />
     <ClCompile Include="src\sp\platform\directx\DXFramebufferDepth.cpp" />
     <ClCompile Include="src\sp\platform\directx\DXRenderer.cpp" />
     <ClCompile Include="src\sp\platform\directx\DXShaderResource.cpp" />
@@ -212,9 +211,7 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClCompile Include="src\sp\platform\opengl\GLTexture2D.cpp" />
     <ClCompile Include="src\sp\platform\opengl\GLTextureCube.cpp" />
     <ClCompile Include="src\sp\platform\opengl\GLTextureDepth.cpp" />
-    <ClCompile Include="src\sp\graphics\ui\Button.cpp" />
     <ClCompile Include="src\sp\graphics\ui\Panel.cpp" />
-    <ClCompile Include="src\sp\graphics\ui\Slider.cpp" />
     <ClCompile Include="src\sp\graphics\ui\Widget.cpp" />
     <ClCompile Include="src\sp\maths\Rectangle.cpp" />
     <ClCompile Include="src\sp\platform\directx\DXVertexBuffer.cpp" />
@@ -263,7 +260,6 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">sp/sp.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="src\sp\debug\DebugLayer.cpp" />
-    <ClCompile Include="src\sp\debug\DebugMenu.cpp" />
     <ClCompile Include="src\sp\embedded\Embedded.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">sp/sp.h</PrecompiledHeaderFile>
@@ -644,9 +640,6 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\sp\app\Input.h" />
-    <ClInclude Include="src\sp\debug\DebugMenuAction.h" />
-    <ClInclude Include="src\sp\debug\DebugMenuItem.h" />
-    <ClInclude Include="src\sp\debug\DebugMenuSlider.h" />
     <ClInclude Include="src\sp\entity\component\SpriteComponent.h" />
     <ClInclude Include="src\sp\events\WindowEvent.h" />
     <ClInclude Include="src\sp\graphics\API\VertexBuffer.h" />
@@ -670,9 +663,8 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClInclude Include="src\sp\graphics\API\Texture2D.h" />
     <ClInclude Include="src\sp\graphics\API\TextureCube.h" />
     <ClInclude Include="src\sp\graphics\API\TextureDepth.h" />
-    <ClInclude Include="src\sp\graphics\ui\Button.h" />
     <ClInclude Include="src\sp\graphics\ui\Panel.h" />
-    <ClInclude Include="src\sp\graphics\ui\Slider.h" />
+    <ClInclude Include="src\sp\graphics\ui\UILabel.h" />
     <ClInclude Include="src\sp\graphics\ui\Widget.h" />
     <ClInclude Include="src\sp\maths\Rectangle.h" />
     <ClInclude Include="src\sp\platform\directx\DXCommon.h" />
@@ -712,7 +704,6 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClInclude Include="src\sp\audio\SoundManager.h" />
     <ClInclude Include="src\sp\Common.h" />
     <ClInclude Include="src\sp\debug\DebugLayer.h" />
-    <ClInclude Include="src\sp\debug\DebugMenu.h" />
     <ClInclude Include="src\sp\embedded\Embedded.h" />
     <ClInclude Include="src\sp\entity\component\Component.h" />
     <ClInclude Include="src\sp\entity\component\Components.h" />

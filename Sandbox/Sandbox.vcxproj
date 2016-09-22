@@ -99,6 +99,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\ui\TestCSS.css" />
     <None Include="shaders\AdvancedLighting.shader" />
     <None Include="shaders\postfx.shader" />
     <None Include="shaders\Scene.shader" />
@@ -129,6 +130,11 @@
     <None Include="shaders\Skybox.hlsl">
       <FileType>Document</FileType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="res\ui\TestUI.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

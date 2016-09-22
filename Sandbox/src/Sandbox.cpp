@@ -28,6 +28,7 @@ public:
 		VFS::Get()->Mount("models", "res/models");
 		VFS::Get()->Mount("pbr", "res/pbr");
 		VFS::Get()->Mount("shaders", "shaders");
+		VFS::Get()->Mount("ui", "res/ui");
 		
 		PushLayer(spnew TestUI());
 		// PushLayer(spnew Test2D());

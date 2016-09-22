@@ -213,9 +213,6 @@
     <ClCompile Include="src\sp\debug\DebugLayer.cpp">
       <Filter>sp\debug</Filter>
     </ClCompile>
-    <ClCompile Include="src\sp\debug\DebugMenu.cpp">
-      <Filter>sp\debug</Filter>
-    </ClCompile>
     <ClCompile Include="src\sp\app\Input.cpp">
       <Filter>sp\app</Filter>
     </ClCompile>
@@ -224,12 +221,6 @@
     </ClCompile>
     <ClCompile Include="src\sp\maths\Rectangle.cpp">
       <Filter>sp\maths</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sp\debug\DebugMenuItem.cpp">
-      <Filter>sp\debug</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sp\debug\DebugMenuSlider.cpp">
-      <Filter>sp\debug</Filter>
     </ClCompile>
     <ClCompile Include="src\sp\utils\ImageLoad.cpp">
       <Filter>sp\utils</Filter>
@@ -243,13 +234,7 @@
     <ClCompile Include="src\sp\graphics\ui\Widget.cpp">
       <Filter>sp\graphics\ui</Filter>
     </ClCompile>
-    <ClCompile Include="src\sp\graphics\ui\Slider.cpp">
-      <Filter>sp\graphics\ui</Filter>
-    </ClCompile>
     <ClCompile Include="src\sp\graphics\ui\Panel.cpp">
-      <Filter>sp\graphics\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sp\graphics\ui\Button.cpp">
       <Filter>sp\graphics\ui</Filter>
     </ClCompile>
     <ClCompile Include="src\sp\graphics\OBJModel.cpp">
@@ -444,6 +429,7 @@
     <ClCompile Include="src\sp\graphics\Renderable2D.cpp" />
     <ClCompile Include="src\sp\graphics\Renderer2D.cpp" />
     <ClCompile Include="src\sp\graphics\layers\UILayer.cpp" />
+    <ClCompile Include="src\sp\graphics\ui\UILabel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\sp\app\Application.h">
@@ -629,9 +615,6 @@
     <ClInclude Include="src\sp\app\Window.h">
       <Filter>sp\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\sp\debug\DebugMenu.h">
-      <Filter>sp\debug</Filter>
-    </ClInclude>
     <ClInclude Include="src\sp\events\Events.h">
       <Filter>sp\events</Filter>
     </ClInclude>
@@ -644,18 +627,6 @@
     <ClInclude Include="src\sp\maths\Rectangle.h">
       <Filter>sp\maths</Filter>
     </ClInclude>
-    <ClInclude Include="src\sp\debug\DebugMenuAction.h">
-      <Filter>sp\debug</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sp\debug\DebugMenuItem.h">
-      <Filter>sp\debug</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sp\debug\DebugMenuSlider.h">
-      <Filter>sp\debug</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sp\graphics\ui\Button.h">
-      <Filter>sp\graphics\ui</Filter>
-    </ClInclude>
     <ClInclude Include="src\sp\graphics\Light.h">
       <Filter>sp\graphics</Filter>
     </ClInclude>
@@ -663,9 +634,6 @@
       <Filter>sp\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\sp\graphics\ui\Widget.h">
-      <Filter>sp\graphics\ui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sp\graphics\ui\Slider.h">
       <Filter>sp\graphics\ui</Filter>
     </ClInclude>
     <ClInclude Include="src\sp\graphics\ui\Panel.h">
@@ -862,6 +830,7 @@
     </ClInclude>
     <ClInclude Include="src\sp\utils\Timestep.h" />
     <ClInclude Include="src\sp\graphics\layers\UILayer.h" />
+    <ClInclude Include="src\sp\graphics\ui\UILabel.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="SparkyCore-TODO.txt" />

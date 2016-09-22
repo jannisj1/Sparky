@@ -10,8 +10,6 @@
 #include "sp/events/Events.h"
 #include "sp/app/Application.h"
 
-#include "sp/debug/DebugMenu.h"
-
 #include "sp/graphics/Sprite.h"
 #include "sp/graphics/API/Texture2D.h"
 

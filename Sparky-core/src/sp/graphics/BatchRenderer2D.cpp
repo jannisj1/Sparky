@@ -11,7 +11,6 @@
 #include "sp/utils/Log.h"
 
 #include "Renderer.h"
-#include "sp/debug/DebugMenu.h"
 
 #include <freetype-gl/freetype-gl.h>
 
@@ -122,9 +121,6 @@ namespace sp { namespace graphics {
 		m_PostEffects = new PostEffects();
 		m_PostEffectsBuffer = Framebuffer2D::Create(m_ViewportSize.x, m_ViewportSize.y);
 #endif
-
-		debug::DebugMenu::Add(String("Renderer2D/Post Effects"), &s_PostEffectsEnabled);
-		debug::DebugMenu::Add(String("Renderer2D/Mask"), &s_MaskEnabled);
 	}
 
 	float BatchRenderer2D::SubmitTexture(API::Texture* texture)
@@ -331,22 +327,22 @@ namespace sp { namespace graphics {
 		DrawLine(start.x, start.y, end.x, end.y, color, thickness);
 	}
 
-	void BatchRenderer2D::DrawRect(float x, float y, float width, float height, uint color)
+	void BatchRenderer2D::DrawRect(float x, float y, float width, float height, uint color, float thickness)
 	{
-		DrawLine(x, y, x + width, y, color);
-		DrawLine(x + width, y, x + width, y + height, color);
-		DrawLine(x + width, y + height, x, y + height, color);
-		DrawLine(x, y + height, x, y, color);
+		DrawLine(x, y, x + width, y, color, thickness);
+		DrawLine(x + width, y, x + width, y + height, color, thickness);
+		DrawLine(x + width, y + height, x, y + height, color, thickness);
+		DrawLine(x, y + height, x, y, color, thickness);
 	}
 
-	void BatchRenderer2D::DrawRect(const maths::vec2& position, const maths::vec2& size, uint color)
+	void BatchRenderer2D::DrawRect(const maths::vec2& position, const maths::vec2& size, uint color, float thickness)
 	{
-		DrawRect(position.x, position.y, size.x, size.y, color);
+		DrawRect(position.x, position.y, size.x, size.y, color, thickness);
 	}
 
-	void BatchRenderer2D::DrawRect(const Rectangle& rectangle, uint color)
+	void BatchRenderer2D::DrawRect(const Rectangle& rectangle, uint color, float thickness)
 	{
-		DrawRect(rectangle.GetMinimumBound(), rectangle.size * 2.0f, color);
+		DrawRect(rectangle.GetMinimumBound(), rectangle.size * 2.0f, color, thickness);
 	}
 
 	void BatchRenderer2D::DrawString(const String& text, const maths::vec2& position, const Font& font, uint color)
@@ -357,7 +353,7 @@ namespace sp { namespace graphics {
 		SP_ASSERT(texture);
 		float ts = SubmitTexture(texture);
 
-		const vec2& scale = font.GetScale(); // FontManager::GetScale();
+		const vec2& scale = FontManager::GetScale();
 
 		float x = position.x;
 

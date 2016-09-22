@@ -85,9 +85,6 @@ void SponzaTest::OnInit(Renderer3D& renderer, Scene& scene)
 	LightSetup* lights = spnew LightSetup();
 	lights->Add(spnew Light(vec3(0.8f)));
 	m_Scene->PushLightSetup(lights);
-
-	DebugMenu::Add("SponzaTest/Light Direction", &lights->GetLights()[0]->direction, -1.0f, 1.0f);
-	DebugMenu::Add("SponzaTest/Light Intensity", &lights->GetLights()[0]->intensity, 0, 100);
 }
 
 void SponzaTest::OnTick()

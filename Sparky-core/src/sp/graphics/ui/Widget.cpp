@@ -3,11 +3,6 @@
 
 namespace sp { namespace graphics { namespace ui {
 
-	Widget::Widget(const maths::Rectangle& bounds)
-		: m_Bounds(bounds), m_Active(true), m_Focused(false)
-	{
-	}
-
 	bool Widget::OnMousePressed(events::MousePressedEvent& e)
 	{
 		return false;

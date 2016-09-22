@@ -5,7 +5,6 @@
 #include "sp/utils/Log.h"
 
 #include "sp/app/Application.h"
-#include "sp/debug/DebugMenu.h"
 
 namespace sp { namespace graphics {
 
@@ -18,15 +17,11 @@ namespace sp { namespace graphics {
 		m_Rotation = vec3(90.0f, 0.0f, 0.0f);
 		m_Yaw = 2.4f;
 		m_Pitch = 0.7f;
-
-		debug::DebugMenu::Add("Camera/FPS Camera Speed", &m_Speed);
-		debug::DebugMenu::Add("Camera/FPS Camera Sprint Speed", &m_SprintSpeed);
 	}
 
 	FPSCamera::~FPSCamera()
 	{
-		debug::DebugMenu::Remove("Camera/FPS Camera Speed");
-		debug::DebugMenu::Remove("Camera/FPS Camera Sprint Speed");
+
 	}
 
 	void FPSCamera::Focus()

@@ -22,6 +22,7 @@
     <None Include="shaders\ShadowPass.shader" />
     <None Include="shaders\Skybox.hlsl" />
     <None Include="shaders\Skybox.shader" />
+    <None Include="res\ui\TestCSS.css" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sandbox.cpp">
@@ -62,5 +63,8 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\AdvancedLighting.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="res\ui\TestUI.xml" />
   </ItemGroup>
 </Project>

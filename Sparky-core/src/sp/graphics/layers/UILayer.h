@@ -1,11 +1,13 @@
 #pragma once
 #include "Layer.h"
 
-#include "sp/Common.h"
+#include "sp/sp.h"
+
 #include "sp/Scene2D.h"
 #include "sp/events/Event.h"
 #include "sp/graphics/Renderable2D.h"
 #include "sp/graphics/Mask.h"
+#include "sp/graphics/ui/Widget.h"
 
 namespace sp { namespace graphics {
 
@@ -16,20 +18,17 @@ namespace sp { namespace graphics {
 	protected:
 		Material* m_Material;
 		Scene2D* m_Scene;
-		std::vector<Renderable2D*> m_SubmittedRenderables;
+		ui::Widget* m_RootWidget = nullptr;
 	public:
-		UILayer(const maths::mat4& projectionMatrix);
-		UILayer(Scene2D* scene);
+		UILayer();
 		virtual ~UILayer();
 
 		virtual void Init();
 		virtual void OnInit(Renderer2D& renderer, Material& material);
+		void FromXML(const String& xml);
 
 		inline void SetMask(const Mask* mask) const { m_Renderer->SetMask(mask); }
-		virtual Sprite* Add(Sprite* sprite);
 		inline Scene2D* GetScene() { return m_Scene; }
-
-		virtual Renderable2D* Submit(Renderable2D* renderable);
 
 		void OnUpdateInternal(const Timestep& ts) override;
 		virtual void OnRender(Renderer2D& renderer);
