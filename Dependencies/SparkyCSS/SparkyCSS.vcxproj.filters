@@ -38,12 +38,6 @@
     <ClInclude Include="src\SparkyCSS\SparkyCSS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\SparkyCSS\Selector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SparkyCSS\Value.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Flex Include="src\SparkyCSS\css.l" />

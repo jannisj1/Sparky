@@ -37,8 +37,7 @@ void TestUI::OnInit(Renderer2D& renderer, Material& material)
 
 void TestUI::OnTick()
 {
-	using namespace sp::internal;
-
+	
 }
 
 void TestUI::OnUpdate(const Timestep& ts)
@@ -48,26 +47,7 @@ void TestUI::OnUpdate(const Timestep& ts)
 
 bool TestUI::OnKeyPressedEvent(KeyPressedEvent& event)
 {
-	if (!m_Renderer)
-		return false;
-
-	Renderer2D& renderer = *m_Renderer;
-
-	if (event.GetRepeat())
-		return false;
-
-	if (event.GetKeyCode() == SP_KEY_T)
-	{
-		renderer.SetRenderTarget(renderer.GetRenderTarget() == RenderTarget::SCREEN ? RenderTarget::BUFFER : RenderTarget::SCREEN);
-		return true;
-	}
-	if (event.GetKeyCode() == SP_KEY_P)
-	{
-		renderer.SetPostEffects(!renderer.GetPostEffects());
-		return true;
-	}
-
-	return false;
+	return true;
 }
 
 bool TestUI::OnMousePressedEvent(MousePressedEvent& event)

@@ -3,6 +3,7 @@
 
 #include "sp/utils/Log.h"
 #include <freetype-gl/freetype-gl.h>
+#include "sp/graphics/FontManager.h"
 
 namespace sp { namespace graphics {
 
@@ -67,7 +68,7 @@ namespace sp { namespace graphics {
 		SP_ASSERT(glyph);
 
 		float yo = 0.0f;
-		const maths::vec2& scale = m_Scale;
+		const maths::vec2& scale = FontManager::GetScale();
 		for (int i = 0; i < text.size(); i++)
 		{
 			texture_glyph_t* glyph = texture_font_get_glyph(m_FTFont, text[i]);
@@ -86,7 +87,7 @@ namespace sp { namespace graphics {
 		using namespace ftgl;
 
 		float width = 0.0f;
-		const maths::vec2& scale = m_Scale;
+		const maths::vec2& scale = FontManager::GetScale();
 		for (int i = 0; i < text.size(); i++)
 		{
 			texture_glyph_t* glyph = texture_font_get_glyph(m_FTFont, text[i]);
@@ -105,7 +106,7 @@ namespace sp { namespace graphics {
 	{
 		using namespace ftgl;
 
-		const maths::vec2& scale = m_Scale;
+		const maths::vec2& scale = FontManager::GetScale();
 		float min = 0.0f;
 		float max = 0.0f;
 		for (int i = 0; i < text.size(); i++)

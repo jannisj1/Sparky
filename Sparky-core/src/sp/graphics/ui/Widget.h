@@ -1,9 +1,11 @@
 #pragma once
-
 #include "sp/sp.h"
-#include "Panel.h"
 
 #include "sp/maths/maths.h"
+#include "sp/css/CSSManager.h"
+#include "sp/graphics/Renderable2D.h"
+
+#include <SparkyCSS/SparkyCSS.h>
 
 namespace sp { namespace graphics { namespace ui {
 
@@ -19,14 +21,13 @@ namespace sp { namespace graphics { namespace ui {
 		WidgetState m_State;
 		maths::Rectangle m_Bounds;
 		
-		String m_Name;
-		String m_ID;
-		std::vector<String> m_Classes;
+		css::UIElementCSSInfo m_CSSInfo;
+		css::CSSManager* m_CSSManager;
 
 	public:
-		Widget(String name)
-		: m_Name(name) { }
-	
+		Widget(css::UIElementCSSInfo cssInfo, css::CSSManager* cssManager)
+			: m_CSSInfo(cssInfo), m_CSSManager(cssManager) { }
+		
 	public:
 		virtual bool OnMousePressed(events::MousePressedEvent& e);
 		virtual bool OnMouseReleased(events::MouseReleasedEvent& e);
@@ -39,11 +40,7 @@ namespace sp { namespace graphics { namespace ui {
 		inline maths::Rectangle& GetBounds() { return m_Bounds; }
 		inline void SetBounds(const maths::Rectangle& bounds) { m_Bounds = bounds; }
 		
-		inline const String& GetName() const { return m_Name; }
-		inline const std::vector<String> GetClasses() const { return m_Classes; }
-		inline const String& GetID() const { return m_ID; }
-
-		inline bool IsActive() const { return m_State == ACTIVE; }
+		inline const css::UIElementCSSInfo &GetCSSInfo() const { return m_CSSInfo; }
 	};
 
 } } }

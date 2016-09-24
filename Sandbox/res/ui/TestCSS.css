@@ -1,8 +1,11 @@
 
 label {
-    padding: 80%;
-    padding-top: 4px;
+    padding: 50%;
 
     margin: 10px;
     margin-bottom: 20px;
+}
+
+#lol {
+    padding: 20px;
 }

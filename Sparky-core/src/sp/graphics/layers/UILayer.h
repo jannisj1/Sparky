@@ -9,6 +9,8 @@
 #include "sp/graphics/Mask.h"
 #include "sp/graphics/ui/Widget.h"
 
+#include <tinyxml2.h>
+
 namespace sp { namespace graphics {
 
 	class SP_API UILayer : public Layer
@@ -19,6 +21,9 @@ namespace sp { namespace graphics {
 		Material* m_Material;
 		Scene2D* m_Scene;
 		ui::Widget* m_RootWidget = nullptr;
+
+		css::CSSManager m_CSSManager;
+
 	public:
 		UILayer();
 		virtual ~UILayer();

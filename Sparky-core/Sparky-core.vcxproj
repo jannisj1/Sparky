@@ -25,12 +25,13 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Emscripten|Win32'" Label="Configuration">
@@ -115,6 +116,7 @@ xcopy /f /y "$(SolutionDir)Dependencies\Spidermonkey\bin\x86\mozjs-51a1.dll" "$(
       <AdditionalIncludeDirectories>src</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>sp/sp.h</PrecompiledHeaderFile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -167,6 +169,7 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\sp\app\Input.cpp" />
+    <ClCompile Include="src\sp\css\CSSManager.cpp" />
     <ClCompile Include="src\sp\entity\component\SpriteComponent.cpp" />
     <ClCompile Include="src\sp\events\WindowEvent.cpp" />
     <ClCompile Include="src\sp\graphics\API\Texture2D.cpp" />
@@ -211,7 +214,6 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClCompile Include="src\sp\platform\opengl\GLTexture2D.cpp" />
     <ClCompile Include="src\sp\platform\opengl\GLTextureCube.cpp" />
     <ClCompile Include="src\sp\platform\opengl\GLTextureDepth.cpp" />
-    <ClCompile Include="src\sp\graphics\ui\Panel.cpp" />
     <ClCompile Include="src\sp\graphics\ui\Widget.cpp" />
     <ClCompile Include="src\sp\maths\Rectangle.cpp" />
     <ClCompile Include="src\sp\platform\directx\DXVertexBuffer.cpp" />
@@ -640,6 +642,7 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\sp\app\Input.h" />
+    <ClInclude Include="src\sp\css\CSSManager.h" />
     <ClInclude Include="src\sp\entity\component\SpriteComponent.h" />
     <ClInclude Include="src\sp\events\WindowEvent.h" />
     <ClInclude Include="src\sp\graphics\API\VertexBuffer.h" />
@@ -663,7 +666,6 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClInclude Include="src\sp\graphics\API\Texture2D.h" />
     <ClInclude Include="src\sp\graphics\API\TextureCube.h" />
     <ClInclude Include="src\sp\graphics\API\TextureDepth.h" />
-    <ClInclude Include="src\sp\graphics\ui\Panel.h" />
     <ClInclude Include="src\sp\graphics\ui\UILabel.h" />
     <ClInclude Include="src\sp\graphics\ui\Widget.h" />
     <ClInclude Include="src\sp\maths\Rectangle.h" />

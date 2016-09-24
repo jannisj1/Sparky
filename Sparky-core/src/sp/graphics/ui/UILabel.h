@@ -15,7 +15,7 @@ namespace sp { namespace graphics { namespace ui {
 		maths::vec2 m_Pos;
 
 	public:
-		UILabel(const String& value, const maths::vec2& pos, uint size);
+		UILabel(css::CSSManager* cssManager, const String& value, const maths::vec2& pos, uint size);
 
 		virtual void OnUpdate() override;
 		virtual void OnRender(Renderer2D& renderer) override;

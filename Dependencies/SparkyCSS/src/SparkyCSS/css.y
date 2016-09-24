@@ -8,11 +8,11 @@ using namespace sp::css;
 /*
 	typedef std::vector<
 				std::pair<
-					std::vector<CSSSelector>, 
+					std::vector<CSSSelector*>, 
 					std::unordered_map
 					<
 						sp::css::CSSKey, 
-						std::vector<sp::css::CSSValue*>
+						sp::css::CSSValue*
 					>
 				>
 			> CSSRules;
@@ -63,12 +63,12 @@ rules: rule rules
 
 rule: selector_list '{' key_value_pairs '}'
 
-selector_list: _identifier		{ res_map->push_back(std::make_pair(std::vector<CSSSelector*>{{ spnew CSSNameSelector(*$1) }}, std::unordered_map<sp::css::CSSKey, std::vector<sp::css::CSSValue*>>())); }
+selector_list: _identifier		{ res_map->push_back(std::make_pair(std::vector<CSSSelector*>{{ spnew CSSNameSelector(*$1) }}, std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*>())); }
+	| '#' _identifier			{ res_map->push_back(std::make_pair(std::vector<CSSSelector*>{{ spnew CSSIDSelector(*$2) }}, std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*>())); }
 
 key_value_pairs: key_value_pair ';' key_value_pairs
 	| key_value_pair
 	| 
-
 
 key_value_pair: key ':' values { 
 	
@@ -76,25 +76,25 @@ key_value_pair: key ':' values {
 	{
 		if($3->size() == 1)
 		{
-			res_map->back().second[PADDING_LEFT] = *$3;
-			res_map->back().second[PADDING_RIGHT] = *$3;
-			res_map->back().second[PADDING_TOP] = *$3;
-			res_map->back().second[PADDING_BOTTOM] = *$3;
+			res_map->back().second[PADDING_LEFT] = (*$3)[0];
+			res_map->back().second[PADDING_RIGHT] = (*$3)[0];
+			res_map->back().second[PADDING_TOP] = (*$3)[0];
+			res_map->back().second[PADDING_BOTTOM] = (*$3)[0];
 		}
 	}
 	else if($1 == MARGIN)
 	{
 		if($3->size() == 1)
 		{
-			res_map->back().second[MARGIN_LEFT] = *$3;
-			res_map->back().second[MARGIN_RIGHT] = *$3;
-			res_map->back().second[MARGIN_TOP] = *$3;
-			res_map->back().second[MARGIN_BOTTOM] = *$3;
+			res_map->back().second[MARGIN_LEFT] = (*$3)[0];
+			res_map->back().second[MARGIN_RIGHT] = (*$3)[0];
+			res_map->back().second[MARGIN_TOP] = (*$3)[0];
+			res_map->back().second[MARGIN_BOTTOM] = (*$3)[0];
 		}
 	}
 	else
 	{
-		res_map->back().second[$1] = *$3;
+		res_map->back().second[$1] = (*$3)[0];
 	}
 	
 	spdel $3;
@@ -110,7 +110,7 @@ key: _padding					{ $$ = PADDING; }
 	
 	| _margin					{ $$ = MARGIN; } 
 	| _margin_top				{ $$ = MARGIN_TOP; } 
-	| _margin_right			{ $$ = MARGIN_RIGHT; } 
+	| _margin_right				{ $$ = MARGIN_RIGHT; } 
 	| _margin_bottom			{ $$ = MARGIN_BOTTOM; } 
 	| _margin_left				{ $$ = MARGIN_LEFT; }
 

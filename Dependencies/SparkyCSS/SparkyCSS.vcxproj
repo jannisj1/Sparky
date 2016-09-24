@@ -72,23 +72,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ExecutablePath>$(ProjectDir)win_flex_bison;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(SolutionDir)Sparky-core\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Sparky-core\src;$(SolutionDir)Dependencies\SparkyCSS\src;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)lib\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Intermediates\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ExecutablePath>$(ProjectDir)win_flex_bison;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(SolutionDir)Sparky-core\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Sparky-core\src;$(SolutionDir)Dependencies\SparkyCSS\src;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)lib\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Intermediates\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Sparky-core\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Sparky-core\src;$(SolutionDir)Dependencies\SparkyCSS\src;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)lib\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Intermediates\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)Sparky-core\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Sparky-core\src;$(SolutionDir)Dependencies\SparkyCSS\src;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)lib\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Intermediates\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -187,9 +187,7 @@
   <ItemGroup>
     <ClInclude Include="src\SparkyCSS\lexer.h" />
     <ClInclude Include="src\SparkyCSS\parser.h" />
-    <ClInclude Include="src\SparkyCSS\Selector.h" />
     <ClInclude Include="src\SparkyCSS\SparkyCSS.h" />
-    <ClInclude Include="src\SparkyCSS\Value.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

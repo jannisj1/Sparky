@@ -4,14 +4,12 @@
 #include "../BatchRenderer2D.h"
 #include "sp/app/Window.h"
 #include "sp/app/Application.h"
-#include <SparkyCSS/SparkyCSS.h>
-#include <sp/graphics/ui/UILabel.h>
+#include "sp/graphics/ui/UILabel.h"
 
 namespace sp { namespace graphics {
 
 	UILayer::UILayer()
 	{
-
 		float width = Application::GetApplication().GetWindowWidth();
 		float height = Application::GetApplication().GetWindowHeight();
 
@@ -45,23 +43,19 @@ namespace sp { namespace graphics {
 
 	void UILayer::FromXML(const String& xml)
 	{
-		m_RootWidget = new ui::UILabel("How are you doin' dev? :)", maths::vec2(50, 50), 24);
-
-		css::CSSRules res;
-		css::CSSParser::Parse(res, VFS::Get()->ReadTextFile("/ui/TestCSS.css"));
-
-		for (auto r : res)
-		{
-			std::cout << r.first.front()->Applies(m_RootWidget) << std::endl;
-			for (auto v : r.second)
-			{
-				std::cout << "\tKey: " << v.first << " val: " << v.second.front()->ToString() << std::endl;
-			}
-		}
+		//m_CSSManager.EvalCSS(VFS::Get()->ReadTextFile("/ui/TestCSS.css"));
+		//m_RootWidget = new ui::UILabel(&m_CSSManager, "How are you doin' dev? :)", maths::vec2(50, 50), 24);
+		
+		tinyxml2::XMLDocument doc;
+		
+		String out;
+		VFS::Get()->ResolvePhysicalPath("/ui/", out);
+		SP_ERROR(out);
 	}
 
 	void UILayer::OnUpdateInternal(const Timestep& ts)
 	{
+		m_RootWidget->OnUpdate();
 		OnUpdate(ts);
 	}
 

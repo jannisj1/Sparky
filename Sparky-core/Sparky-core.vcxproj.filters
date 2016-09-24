@@ -234,9 +234,6 @@
     <ClCompile Include="src\sp\graphics\ui\Widget.cpp">
       <Filter>sp\graphics\ui</Filter>
     </ClCompile>
-    <ClCompile Include="src\sp\graphics\ui\Panel.cpp">
-      <Filter>sp\graphics\ui</Filter>
-    </ClCompile>
     <ClCompile Include="src\sp\graphics\OBJModel.cpp">
       <Filter>sp\graphics</Filter>
     </ClCompile>
@@ -430,6 +427,7 @@
     <ClCompile Include="src\sp\graphics\Renderer2D.cpp" />
     <ClCompile Include="src\sp\graphics\layers\UILayer.cpp" />
     <ClCompile Include="src\sp\graphics\ui\UILabel.cpp" />
+    <ClCompile Include="src\sp\css\CSSManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\sp\app\Application.h">
@@ -636,9 +634,6 @@
     <ClInclude Include="src\sp\graphics\ui\Widget.h">
       <Filter>sp\graphics\ui</Filter>
     </ClInclude>
-    <ClInclude Include="src\sp\graphics\ui\Panel.h">
-      <Filter>sp\graphics\ui</Filter>
-    </ClInclude>
     <ClInclude Include="src\sp\debug\DebugRenderer.h">
       <Filter>sp\debug</Filter>
     </ClInclude>
@@ -831,6 +826,7 @@
     <ClInclude Include="src\sp\utils\Timestep.h" />
     <ClInclude Include="src\sp\graphics\layers\UILayer.h" />
     <ClInclude Include="src\sp\graphics\ui\UILabel.h" />
+    <ClInclude Include="src\sp\css\CSSManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="SparkyCore-TODO.txt" />
