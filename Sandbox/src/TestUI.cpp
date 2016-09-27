@@ -21,7 +21,7 @@ TestUI::~TestUI()
 
 void TestUI::OnInit(Renderer2D& renderer, Material& material)
 {
-	FromXML("ui/TestUI.xml");
+	FromXML("/ui/TestUI.xml");
 
 	// m_Window->SetVsync(false);
 	m_Renderer = &renderer;

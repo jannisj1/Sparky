@@ -24,7 +24,7 @@ namespace sp { namespace css {
 
 	struct UIElementCSSInfo
 	{
-		UIElementCSSInfo(const String& name) : Name(name) { }
+		UIElementCSSInfo() {}
 		String ID;
 		String Name; // e.g. label, button...
 		std::vector<String> Classes;
@@ -52,9 +52,6 @@ namespace sp { namespace css {
 	public:
 		CSSValue(ValueType vt)
 			: m_ValueType(vt) { }
-
-		virtual String ToString() = 0;
-
 	};
 
 	class CSSLength : public CSSValue
@@ -68,11 +65,6 @@ namespace sp { namespace css {
 		{
 			if (lu == PERCENT)
 				m_Val /= 100.0f;
-		}
-
-		String ToString() override
-		{
-			return std::to_string(m_Val) + " " + std::to_string((int)m_Lu);
 		}
 
 		float ToPixel(bool horizontal)
@@ -146,8 +138,27 @@ namespace sp { namespace css {
 			return cssInfo->ID == m_ID;
 		}
 	};
+	
+	class CSSClassSelector : public CSSSelector
+	{
+		String m_Class;
 
-	typedef std::vector<std::pair<std::vector<CSSSelector*>, std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*>>> CSSRules;
+	public:
+		CSSClassSelector(const String& _class)
+			: m_Class(_class), CSSSelector(CLASS) {}
+
+		bool Applies(const UIElementCSSInfo* cssInfo)
+		{
+			for (auto& r : cssInfo->Classes)
+			{
+				if (r == m_Class) return true;
+			}
+
+			return false;
+		}
+	};
+	
+	typedef std::vector<std::pair<CSSSelector*, std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*>>> CSSRules;
 
 	class CSSParser
 	{

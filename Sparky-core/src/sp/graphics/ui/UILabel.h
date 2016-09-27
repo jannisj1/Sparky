@@ -11,13 +11,12 @@ namespace sp { namespace graphics { namespace ui {
 	protected:
 		String m_Value;
 		Font* m_Font;
-		uint m_Size;
 		maths::vec2 m_Pos;
 
 	public:
-		UILabel(css::CSSManager* cssManager, const String& value, const maths::vec2& pos, uint size);
+		UILabel(css::CSSManager* cssManager, tinyxml2::XMLElement *domElement);
 
-		virtual void OnUpdate() override;
+		virtual void OnUpdate(const maths::Rectangle& space) override;
 		virtual void OnRender(Renderer2D& renderer) override;
 
 		inline void SetValue(const String& label) { m_Value = label; }
@@ -26,6 +25,8 @@ namespace sp { namespace graphics { namespace ui {
 		inline void SetFont(Font* font) { m_Font = font; }
 		inline const Font& GetFont() const { return *m_Font; }
 
+		float GetWidth() override;
+		float GetHeight() override;
 	};
 
 } } }

@@ -5,6 +5,7 @@
 #include "sp/app/Window.h"
 #include "sp/app/Application.h"
 #include "sp/graphics/ui/UILabel.h"
+#include "sp/graphics/ui/UIRoot.h"
 
 namespace sp { namespace graphics {
 
@@ -43,19 +44,48 @@ namespace sp { namespace graphics {
 
 	void UILayer::FromXML(const String& xml)
 	{
-		//m_CSSManager.EvalCSS(VFS::Get()->ReadTextFile("/ui/TestCSS.css"));
-		//m_RootWidget = new ui::UILabel(&m_CSSManager, "How are you doin' dev? :)", maths::vec2(50, 50), 24);
-		
+		m_CSSManager.EvalCSS(VFS::Get()->ReadTextFile("/ui/TestCSS.css"));
+
+		String physicalPath;
+		VFS::Get()->ResolvePhysicalPath(xml, physicalPath);
 		tinyxml2::XMLDocument doc;
+		tinyxml2::XMLError err = doc.LoadFile(physicalPath.c_str());
+		if(err)
+			SP_ERROR("tinyxml2-error ", (int)err);
 		
-		String out;
-		VFS::Get()->ResolvePhysicalPath("/ui/", out);
-		SP_ERROR(out);
+		if(doc.FirstChildElement())
+			m_RootWidget = CreateWidgetFromXML(doc.FirstChildElement());
+	}
+
+	ui::Widget *UILayer::CreateWidgetFromXML(tinyxml2::XMLElement *domElement)
+	{
+		const std::string elemName = domElement->Name();
+		ui::Widget *curr = nullptr;
+
+		if (elemName == "ui") curr = spnew ui::UIRoot(&m_CSSManager, domElement);
+		else if (elemName == "label") curr = spnew ui::UILabel(&m_CSSManager, domElement);
+		else SP_ERROR("Unknown UI-Element: ", elemName);
+
+		tinyxml2::XMLElement *child = domElement->FirstChildElement();
+
+		while (child != nullptr)
+		{
+			curr->AddChild(CreateWidgetFromXML(child));
+			child = child->NextSiblingElement();
+		}
+
+		return curr;
 	}
 
 	void UILayer::OnUpdateInternal(const Timestep& ts)
 	{
-		m_RootWidget->OnUpdate();
+		maths::vec2 saveScale = FontManager::GetScale();
+		FontManager::SetScale(maths::vec2(1, 1));
+		
+		m_RootWidget->OnUpdate(maths::Rectangle(0, 0, Application::GetApplication().GetWindowWidth(), Application::GetApplication().GetWindowHeight()));
+		
+		FontManager::SetScale(saveScale); 
+		
 		OnUpdate(ts);
 	}
 
@@ -68,7 +98,6 @@ namespace sp { namespace graphics {
 
 		m_Renderer->Begin();
 		
-		SP_ASSERT(m_RootWidget);
 		m_RootWidget->OnRender(*m_Renderer);
 
 		m_Renderer->End();

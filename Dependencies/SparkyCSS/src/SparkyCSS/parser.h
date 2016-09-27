@@ -68,7 +68,7 @@ typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
 #line 29 "css.y"
- int i; float f; String *s; char b; sp::css::LengthUnit lu; sp::css::CSSKey csskey; sp::css::CSSValue *cssval; std::vector<sp::css::CSSValue*> *cssvalues; 
+ int i; float f; String *s; char b; sp::css::LengthUnit lu; sp::css::CSSKey csskey; sp::css::CSSValue *cssval; std::vector<sp::css::CSSValue*> *cssvalues; sp::css::CSSSelector *cssselector; 
 
 /* Line 2058 of yacc.c  */
 #line 75 "parser.h"

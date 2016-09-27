@@ -26,7 +26,7 @@ void yyerror (const char *s);
 
 %error-verbose
 
-%union { int i; float f; String *s; char b; sp::css::LengthUnit lu; sp::css::CSSKey csskey; sp::css::CSSValue *cssval; std::vector<sp::css::CSSValue*> *cssvalues; }
+%union { int i; float f; String *s; char b; sp::css::LengthUnit lu; sp::css::CSSKey csskey; sp::css::CSSValue *cssval; std::vector<sp::css::CSSValue*> *cssvalues; sp::css::CSSSelector *cssselector; }
 
 %start css
 
@@ -49,6 +49,7 @@ void yyerror (const char *s);
 %type<lu> length_unit
 %type<f> number
 %type<cssval> length
+%type<cssselector> selector
 
 %token<s> _identifier
 %token<f> _float
@@ -61,10 +62,13 @@ css: rules
 rules: rule rules 
 	| rule
 
-rule: selector_list '{' key_value_pairs '}'
+rule: selectors '{' key_value_pairs '}'
 
-selector_list: _identifier		{ res_map->push_back(std::make_pair(std::vector<CSSSelector*>{{ spnew CSSNameSelector(*$1) }}, std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*>())); }
-	| '#' _identifier			{ res_map->push_back(std::make_pair(std::vector<CSSSelector*>{{ spnew CSSIDSelector(*$2) }}, std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*>())); }
+selectors: selector			{ res_map->push_back(std::make_pair($1, std::unordered_map<CSSKey, CSSValue*>())); }
+
+selector: _identifier		{ $$ = spnew CSSNameSelector(*$1); }
+	| '.' _identifier		{ $$ = spnew CSSClassSelector(*$2); }
+	| '#' _identifier		{ $$ = spnew CSSIDSelector(*$2); }
 
 key_value_pairs: key_value_pair ';' key_value_pairs
 	| key_value_pair
@@ -76,6 +80,7 @@ key_value_pair: key ':' values {
 	{
 		if($3->size() == 1)
 		{
+			res_map->back().second[PADDING] = (*$3)[0];
 			res_map->back().second[PADDING_LEFT] = (*$3)[0];
 			res_map->back().second[PADDING_RIGHT] = (*$3)[0];
 			res_map->back().second[PADDING_TOP] = (*$3)[0];
@@ -86,6 +91,7 @@ key_value_pair: key ':' values {
 	{
 		if($3->size() == 1)
 		{
+			res_map->back().second[MARGIN] = (*$3)[0];
 			res_map->back().second[MARGIN_LEFT] = (*$3)[0];
 			res_map->back().second[MARGIN_RIGHT] = (*$3)[0];
 			res_map->back().second[MARGIN_TOP] = (*$3)[0];

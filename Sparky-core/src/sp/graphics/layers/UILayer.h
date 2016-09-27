@@ -40,6 +40,10 @@ namespace sp { namespace graphics {
 		void OnRender() override;
 	protected:
 		bool OnResize(uint width, uint height) override;
+
+	private:
+		ui::Widget* CreateWidgetFromXML(tinyxml2::XMLElement *domElement);
+
 	};	
 
 } }

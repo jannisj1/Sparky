@@ -40,6 +40,8 @@ namespace sp {
 
 	void Allocator::Free(void* block)
 	{
+		if (block == 0) return;
+
 		byte* memory = ((byte*)block) - sizeof(size_t);
 		size_t size = *(size_t*)memory;
 		sp::internal::MemoryManager::Get()->m_MemoryStats.totalFreed += size;

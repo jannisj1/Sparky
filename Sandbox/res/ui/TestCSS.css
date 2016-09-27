@@ -1,11 +1,10 @@
-
 label {
-    padding: 50%;
-
-    margin: 10px;
-    margin-bottom: 20px;
+    padding: 0px;
+    margin: 0px;
+    padding-top: 5px;
+    padding-left: 50%;
 }
 
-#lol {
-    padding: 20px;
+#moin {
+    padding: 0px;
 }
