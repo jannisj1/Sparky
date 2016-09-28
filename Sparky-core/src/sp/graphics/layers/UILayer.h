@@ -22,7 +22,7 @@ namespace sp { namespace graphics {
 		Scene2D* m_Scene;
 		ui::Widget* m_RootWidget = nullptr;
 
-		css::CSSManager m_CSSManager;
+		css::CSSManager *m_CSSManager;
 
 	public:
 		UILayer();

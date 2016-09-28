@@ -187,7 +187,9 @@
   <ItemGroup>
     <ClInclude Include="src\SparkyCSS\lexer.h" />
     <ClInclude Include="src\SparkyCSS\parser.h" />
+    <ClInclude Include="src\SparkyCSS\Selector.h" />
     <ClInclude Include="src\SparkyCSS\SparkyCSS.h" />
+    <ClInclude Include="src\SparkyCSS\Value.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

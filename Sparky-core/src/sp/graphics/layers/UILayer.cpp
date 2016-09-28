@@ -6,6 +6,7 @@
 #include "sp/app/Application.h"
 #include "sp/graphics/ui/UILabel.h"
 #include "sp/graphics/ui/UIRoot.h"
+#include "sp/graphics/ui/UIEmpty.h"
 
 namespace sp { namespace graphics {
 
@@ -17,6 +18,8 @@ namespace sp { namespace graphics {
 		m_Renderer = spnew BatchRenderer2D(width, height);
 		m_Scene = spnew Scene2D(maths::mat4::Orthographic(0, width, 0, height, -1.0f, 1.0f));
 		m_Renderer->SetCamera(m_Scene->GetCamera());
+
+		m_CSSManager = spnew css::CSSManager();
 	}
 
 	UILayer::~UILayer()
@@ -24,6 +27,7 @@ namespace sp { namespace graphics {
 		spdel m_Material;
 		spdel m_Renderer;
 		spdel m_RootWidget;
+		spdel m_CSSManager;
 	}
 
 	void UILayer::Init()
@@ -44,8 +48,6 @@ namespace sp { namespace graphics {
 
 	void UILayer::FromXML(const String& xml)
 	{
-		m_CSSManager.EvalCSS(VFS::Get()->ReadTextFile("/ui/TestCSS.css"));
-
 		String physicalPath;
 		VFS::Get()->ResolvePhysicalPath(xml, physicalPath);
 		tinyxml2::XMLDocument doc;
@@ -62,8 +64,21 @@ namespace sp { namespace graphics {
 		const std::string elemName = domElement->Name();
 		ui::Widget *curr = nullptr;
 
-		if (elemName == "ui") curr = spnew ui::UIRoot(&m_CSSManager, domElement);
-		else if (elemName == "label") curr = spnew ui::UILabel(&m_CSSManager, domElement);
+		if (elemName == "ui") curr = spnew ui::UIRoot(m_CSSManager, domElement);
+		else if (elemName == "label") curr = spnew ui::UILabel(m_CSSManager, domElement);
+		else if (elemName == "style")
+		{
+			curr = spnew ui::UIEmpty(m_CSSManager, domElement);
+			if (domElement->Attribute("src"))
+			{
+				m_CSSManager->EvalCSS(VFS::Get()->ReadTextFile(domElement->Attribute("src")));
+			}
+			else
+			{
+				const char *t = domElement->GetText();
+				m_CSSManager->EvalCSS((t == nullptr ? "" : t));
+			}
+		}
 		else SP_ERROR("Unknown UI-Element: ", elemName);
 
 		tinyxml2::XMLElement *child = domElement->FirstChildElement();

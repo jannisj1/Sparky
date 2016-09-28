@@ -88,9 +88,115 @@ CSSRules *res_map;
 
 void yyerror (const char *s);
 
+/*
+ * (c) Dean McNamee <dean@gmail.com>, 2012.
+ * C++ port by Konstantin Käfer <mail@kkaefer.com>, 2014.
+ *
+ * https://github.com/deanm/css-color-parser-js
+ * https://github.com/kkaefer/css-color-parser-cpp
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ *
+ */
+
+std::unordered_map<String, CSSColor>  color_map {
+    { "transparent", { 0, 0, 0, 0 } }, { "aliceblue", { 240, 248, 255, 1 } },
+    { "antiquewhite", { 250, 235, 215, 1 } }, { "aqua", { 0, 255, 255, 1 } },
+    { "aquamarine", { 127, 255, 212, 1 } }, { "azure", { 240, 255, 255, 1 } },
+    { "beige", { 245, 245, 220, 1 } }, { "bisque", { 255, 228, 196, 1 } },
+    { "black", { 0, 0, 0, 1 } }, { "blanchedalmond", { 255, 235, 205, 1 } },
+    { "blue", { 0, 0, 255, 1 } }, { "blueviolet", { 138, 43, 226, 1 } },
+    { "brown", { 165, 42, 42, 1 } }, { "burlywood", { 222, 184, 135, 1 } },
+    { "cadetblue", { 95, 158, 160, 1 } }, { "chartreuse", { 127, 255, 0, 1 } },
+    { "chocolate", { 210, 105, 30, 1 } }, { "coral", { 255, 127, 80, 1 } },
+    { "cornflowerblue", { 100, 149, 237, 1 } }, { "cornsilk", { 255, 248, 220, 1 } },
+    { "crimson", { 220, 20, 60, 1 } }, { "cyan", { 0, 255, 255, 1 } },
+    { "darkblue", { 0, 0, 139, 1 } }, { "darkcyan", { 0, 139, 139, 1 } },
+    { "darkgoldenrod", { 184, 134, 11, 1 } }, { "darkgray", { 169, 169, 169, 1 } },
+    { "darkgreen", { 0, 100, 0, 1 } }, { "darkgrey", { 169, 169, 169, 1 } },
+    { "darkkhaki", { 189, 183, 107, 1 } }, { "darkmagenta", { 139, 0, 139, 1 } },
+    { "darkolivegreen", { 85, 107, 47, 1 } }, { "darkorange", { 255, 140, 0, 1 } },
+    { "darkorchid", { 153, 50, 204, 1 } }, { "darkred", { 139, 0, 0, 1 } },
+    { "darksalmon", { 233, 150, 122, 1 } }, { "darkseagreen", { 143, 188, 143, 1 } },
+    { "darkslateblue", { 72, 61, 139, 1 } }, { "darkslategray", { 47, 79, 79, 1 } },
+    { "darkslategrey", { 47, 79, 79, 1 } }, { "darkturquoise", { 0, 206, 209, 1 } },
+    { "darkviolet", { 148, 0, 211, 1 } }, { "deeppink", { 255, 20, 147, 1 } },
+    { "deepskyblue", { 0, 191, 255, 1 } }, { "dimgray", { 105, 105, 105, 1 } },
+    { "dimgrey", { 105, 105, 105, 1 } }, { "dodgerblue", { 30, 144, 255, 1 } },
+    { "firebrick", { 178, 34, 34, 1 } }, { "floralwhite", { 255, 250, 240, 1 } },
+    { "forestgreen", { 34, 139, 34, 1 } }, { "fuchsia", { 255, 0, 255, 1 } },
+    { "gainsboro", { 220, 220, 220, 1 } }, { "ghostwhite", { 248, 248, 255, 1 } },
+    { "gold", { 255, 215, 0, 1 } }, { "goldenrod", { 218, 165, 32, 1 } },
+    { "gray", { 128, 128, 128, 1 } }, { "green", { 0, 128, 0, 1 } },
+    { "greenyellow", { 173, 255, 47, 1 } }, { "grey", { 128, 128, 128, 1 } },
+    { "honeydew", { 240, 255, 240, 1 } }, { "hotpink", { 255, 105, 180, 1 } },
+    { "indianred", { 205, 92, 92, 1 } }, { "indigo", { 75, 0, 130, 1 } },
+    { "ivory", { 255, 255, 240, 1 } }, { "khaki", { 240, 230, 140, 1 } },
+    { "lavender", { 230, 230, 250, 1 } }, { "lavenderblush", { 255, 240, 245, 1 } },
+    { "lawngreen", { 124, 252, 0, 1 } }, { "lemonchiffon", { 255, 250, 205, 1 } },
+    { "lightblue", { 173, 216, 230, 1 } }, { "lightcoral", { 240, 128, 128, 1 } },
+    { "lightcyan", { 224, 255, 255, 1 } }, { "lightgoldenrodyellow", { 250, 250, 210, 1 } },
+    { "lightgray", { 211, 211, 211, 1 } }, { "lightgreen", { 144, 238, 144, 1 } },
+    { "lightgrey", { 211, 211, 211, 1 } }, { "lightpink", { 255, 182, 193, 1 } },
+    { "lightsalmon", { 255, 160, 122, 1 } }, { "lightseagreen", { 32, 178, 170, 1 } },
+    { "lightskyblue", { 135, 206, 250, 1 } }, { "lightslategray", { 119, 136, 153, 1 } },
+    { "lightslategrey", { 119, 136, 153, 1 } }, { "lightsteelblue", { 176, 196, 222, 1 } },
+    { "lightyellow", { 255, 255, 224, 1 } }, { "lime", { 0, 255, 0, 1 } },
+    { "limegreen", { 50, 205, 50, 1 } }, { "linen", { 250, 240, 230, 1 } },
+    { "magenta", { 255, 0, 255, 1 } }, { "maroon", { 128, 0, 0, 1 } },
+    { "mediumaquamarine", { 102, 205, 170, 1 } }, { "mediumblue", { 0, 0, 205, 1 } },
+    { "mediumorchid", { 186, 85, 211, 1 } }, { "mediumpurple", { 147, 112, 219, 1 } },
+    { "mediumseagreen", { 60, 179, 113, 1 } }, { "mediumslateblue", { 123, 104, 238, 1 } },
+    { "mediumspringgreen", { 0, 250, 154, 1 } }, { "mediumturquoise", { 72, 209, 204, 1 } },
+    { "mediumvioletred", { 199, 21, 133, 1 } }, { "midnightblue", { 25, 25, 112, 1 } },
+    { "mintcream", { 245, 255, 250, 1 } }, { "mistyrose", { 255, 228, 225, 1 } },
+    { "moccasin", { 255, 228, 181, 1 } }, { "navajowhite", { 255, 222, 173, 1 } },
+    { "navy", { 0, 0, 128, 1 } }, { "oldlace", { 253, 245, 230, 1 } },
+    { "olive", { 128, 128, 0, 1 } }, { "olivedrab", { 107, 142, 35, 1 } },
+    { "orange", { 255, 165, 0, 1 } }, { "orangered", { 255, 69, 0, 1 } },
+    { "orchid", { 218, 112, 214, 1 } }, { "palegoldenrod", { 238, 232, 170, 1 } },
+    { "palegreen", { 152, 251, 152, 1 } }, { "paleturquoise", { 175, 238, 238, 1 } },
+    { "palevioletred", { 219, 112, 147, 1 } }, { "papayawhip", { 255, 239, 213, 1 } },
+    { "peachpuff", { 255, 218, 185, 1 } }, { "peru", { 205, 133, 63, 1 } },
+    { "pink", { 255, 192, 203, 1 } }, { "plum", { 221, 160, 221, 1 } },
+    { "powderblue", { 176, 224, 230, 1 } }, { "purple", { 128, 0, 128, 1 } },
+    { "red", { 255, 0, 0, 1 } }, { "rosybrown", { 188, 143, 143, 1 } },
+    { "royalblue", { 65, 105, 225, 1 } }, { "saddlebrown", { 139, 69, 19, 1 } },
+    { "salmon", { 250, 128, 114, 1 } }, { "sandybrown", { 244, 164, 96, 1 } },
+    { "seagreen", { 46, 139, 87, 1 } }, { "seashell", { 255, 245, 238, 1 } },
+    { "sienna", { 160, 82, 45, 1 } }, { "silver", { 192, 192, 192, 1 } },
+    { "skyblue", { 135, 206, 235, 1 } }, { "slateblue", { 106, 90, 205, 1 } },
+    { "slategray", { 112, 128, 144, 1 } }, { "slategrey", { 112, 128, 144, 1 } },
+    { "snow", { 255, 250, 250, 1 } }, { "springgreen", { 0, 255, 127, 1 } },
+    { "steelblue", { 70, 130, 180, 1 } }, { "tan", { 210, 180, 140, 1 } },
+    { "teal", { 0, 128, 128, 1 } }, { "thistle", { 216, 191, 216, 1 } },
+    { "tomato", { 255, 99, 71, 1 } }, { "turquoise", { 64, 224, 208, 1 } },
+    { "violet", { 238, 130, 238, 1 } }, { "wheat", { 245, 222, 179, 1 } },
+    { "white", { 255, 255, 255, 1 } }, { "whitesmoke", { 245, 245, 245, 1 } },
+    { "yellow", { 255, 255, 0, 1 } }, { "yellowgreen", { 154, 205, 50, 1 } }
+};
+
+// End of excerpt
+
 
 /* Line 371 of yacc.c  */
-#line 94 "parser.cpp"
+#line 200 "parser.cpp"
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -136,9 +242,13 @@ extern int yydebug;
      _margin_right = 265,
      _margin_bottom = 266,
      _margin_left = 267,
-     _pixel_suffix = 268,
-     _identifier = 269,
-     _float = 270
+     _color = 268,
+     _background_color = 269,
+     _pixel = 270,
+     _em = 271,
+     _font_size = 272,
+     _identifier = 273,
+     _float = 274
    };
 #endif
 
@@ -147,11 +257,11 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 387 of yacc.c  */
-#line 29 "css.y"
- int i; float f; String *s; char b; sp::css::LengthUnit lu; sp::css::CSSKey csskey; sp::css::CSSValue *cssval; std::vector<sp::css::CSSValue*> *cssvalues; sp::css::CSSSelector *cssselector; 
+#line 135 "css.y"
+ int i; float f; String *s; char b; sp::css::CSSLength::LengthUnit lu; sp::css::CSSKey csskey; sp::css::CSSValue *cssval; std::vector<sp::css::CSSValue*> *cssvalues; sp::css::CSSSelector *cssselector; 
 
 /* Line 387 of yacc.c  */
-#line 155 "parser.cpp"
+#line 265 "parser.cpp"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -179,7 +289,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 183 "parser.cpp"
+#line 293 "parser.cpp"
 
 #ifdef short
 # undef short
@@ -397,22 +507,22 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  11
+#define YYFINAL  12
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   26
+#define YYLAST   34
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  23
+#define YYNTOKENS  29
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  13
+#define YYNNTS  14
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  29
+#define YYNRULES  38
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  38
+#define YYNSTATES  47
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   270
+#define YYMAXUTOK   274
 
 #define YYTRANSLATE(YYX)						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -423,16 +533,16 @@ static const yytype_uint8 yytranslate[] =
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,    19,     2,    22,     2,     2,
-       2,     2,     2,     2,     2,     2,    18,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,    21,    20,
+       2,     2,     2,     2,     2,    23,     2,    28,     2,     2,
+       2,     2,    24,     2,    25,     2,    22,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,    27,    26,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,    16,     2,    17,     2,     2,     2,     2,
+       2,     2,     2,    20,     2,    21,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -447,7 +557,7 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15
+      15,    16,    17,    18,    19
 };
 
 #if YYDEBUG
@@ -455,29 +565,33 @@ static const yytype_uint8 yytranslate[] =
    YYRHS.  */
 static const yytype_uint8 yyprhs[] =
 {
-       0,     0,     3,     5,     6,     9,    11,    16,    18,    20,
-      23,    26,    30,    32,    33,    37,    39,    41,    43,    45,
-      47,    49,    51,    53,    55,    57,    59,    62,    64,    66
+       0,     0,     3,     5,     6,     9,    11,    12,    17,    19,
+      21,    24,    27,    29,    33,    37,    40,    42,    46,    48,
+      50,    52,    54,    56,    58,    60,    62,    64,    66,    68,
+      70,    72,    74,    76,    79,    81,    83,    85,    87
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
-      24,     0,    -1,    25,    -1,    -1,    26,    25,    -1,    26,
-      -1,    27,    16,    29,    17,    -1,    28,    -1,    14,    -1,
-      18,    14,    -1,    19,    14,    -1,    30,    20,    29,    -1,
-      30,    -1,    -1,    32,    21,    31,    -1,    33,    -1,     3,
-      -1,     4,    -1,     5,    -1,     6,    -1,     7,    -1,     8,
-      -1,     9,    -1,    10,    -1,    11,    -1,    12,    -1,    35,
-      34,    -1,    13,    -1,    22,    -1,    15,    -1
+      30,     0,    -1,    31,    -1,    -1,    32,    31,    -1,    32,
+      -1,    -1,    33,    20,    35,    21,    -1,    34,    -1,    18,
+      -1,    22,    18,    -1,    23,    18,    -1,    24,    -1,    34,
+      25,    34,    -1,    36,    26,    35,    -1,    36,    26,    -1,
+      36,    -1,    38,    27,    37,    -1,    39,    -1,    41,    -1,
+       3,    -1,     4,    -1,     5,    -1,     6,    -1,     7,    -1,
+       8,    -1,     9,    -1,    10,    -1,    11,    -1,    12,    -1,
+      13,    -1,    14,    -1,    17,    -1,    42,    40,    -1,    15,
+      -1,    28,    -1,    16,    -1,    18,    -1,    19,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_uint16 yyrline[] =
 {
-       0,    59,    59,    60,    62,    63,    65,    67,    69,    70,
-      71,    73,    74,    75,    77,   109,   111,   112,   113,   114,
-     115,   117,   118,   119,   120,   121,   123,   125,   126,   128
+       0,   172,   172,   173,   175,   176,   177,   179,   181,   183,
+     184,   185,   186,   187,   190,   191,   192,   195,   230,   231,
+     233,   234,   235,   236,   237,   239,   240,   241,   242,   243,
+     245,   246,   248,   250,   252,   253,   254,   257,   259
 };
 #endif
 
@@ -489,10 +603,11 @@ static const char *const yytname[] =
   "$end", "error", "$undefined", "_padding", "_padding_top",
   "_padding_right", "_padding_bottom", "_padding_left", "_margin",
   "_margin_top", "_margin_right", "_margin_bottom", "_margin_left",
-  "_pixel_suffix", "_identifier", "_float", "'{'", "'}'", "'.'", "'#'",
-  "';'", "':'", "'%'", "$accept", "css", "rules", "rule", "selectors",
-  "selector", "key_value_pairs", "key_value_pair", "values", "key",
-  "length", "length_unit", "number", YY_NULL
+  "_color", "_background_color", "_pixel", "_em", "_font_size",
+  "_identifier", "_float", "'{'", "'}'", "'.'", "'#'", "'*'", "','", "';'",
+  "':'", "'%'", "$accept", "css", "rules", "rule", "selectors", "selector",
+  "key_value_pairs", "key_value_pair", "values", "key", "length",
+  "length_unit", "color", "number", YY_NULL
 };
 #endif
 
@@ -502,25 +617,27 @@ static const char *const yytname[] =
 static const yytype_uint16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-     265,   266,   267,   268,   269,   270,   123,   125,    46,    35,
-      59,    58,    37
+     265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
+     123,   125,    46,    35,    42,    44,    59,    58,    37
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    23,    24,    24,    25,    25,    26,    27,    28,    28,
-      28,    29,    29,    29,    30,    31,    32,    32,    32,    32,
-      32,    32,    32,    32,    32,    32,    33,    34,    34,    35
+       0,    29,    30,    30,    31,    31,    31,    32,    33,    34,
+      34,    34,    34,    34,    35,    35,    35,    36,    37,    37,
+      38,    38,    38,    38,    38,    38,    38,    38,    38,    38,
+      38,    38,    38,    39,    40,    40,    40,    41,    42
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     1,     0,     2,     1,     4,     1,     1,     2,
-       2,     3,     1,     0,     3,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     2,     1,     1,     1
+       0,     2,     1,     0,     2,     1,     0,     4,     1,     1,
+       2,     2,     1,     3,     3,     2,     1,     3,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     2,     1,     1,     1,     1,     1
 };
 
 /* YYDEFACT[STATE-NAME] -- Default reduction number in state STATE-NUM.
@@ -528,35 +645,37 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       3,     8,     0,     0,     0,     2,     5,     0,     7,     9,
-      10,     1,     4,    13,    16,    17,    18,    19,    20,    21,
-      22,    23,    24,    25,     0,    12,     0,     6,    13,     0,
-      11,    29,    14,    15,     0,    27,    28,    26
+       3,     9,     0,     0,    12,     0,     2,     5,     0,     8,
+      10,    11,     1,     4,     0,     0,    20,    21,    22,    23,
+      24,    25,    26,    27,    28,    29,    30,    31,    32,     0,
+      16,     0,    13,     7,    15,     0,    14,    37,    38,    17,
+      18,    19,     0,    34,    36,    35,    33
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     4,     5,     6,     7,     8,    24,    25,    32,    26,
-      33,    37,    34
+      -1,     5,     6,     7,     8,     9,    29,    30,    39,    31,
+      40,    46,    41,    42
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -11
+#define YYPACT_NINF -7
 static const yytype_int8 yypact[] =
 {
-      -4,   -11,    -1,     2,    12,   -11,    -4,     1,   -11,   -11,
-     -11,   -11,   -11,    -3,   -11,   -11,   -11,   -11,   -11,   -11,
-     -11,   -11,   -11,   -11,     4,     3,     5,   -11,    -3,     7,
-     -11,   -11,   -11,   -11,    -2,   -11,   -11,   -11
+      -5,    -7,    -6,     4,    -7,    23,    -7,    -5,     5,    -1,
+      -7,    -7,    -7,    -7,    -3,    -5,    -7,    -7,    -7,    -7,
+      -7,    -7,    -7,    -7,    -7,    -7,    -7,    -7,    -7,     6,
+       3,     7,    -1,    -7,    -3,     2,    -7,    -7,    -7,    -7,
+      -7,    -7,     0,    -7,    -7,    -7,    -7
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -11,   -11,    13,   -11,   -11,   -11,   -10,   -11,   -11,   -11,
-     -11,   -11,   -11
+      -7,    -7,    19,    -7,    -7,    15,    -2,    -7,    -7,    -7,
+      -7,    -7,    -7,    -7
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -565,13 +684,14 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-      14,    15,    16,    17,    18,    19,    20,    21,    22,    23,
-       1,    35,    11,     9,     2,     3,    10,    13,    30,    12,
-      36,    27,    31,    28,     0,     0,    29
+      16,    17,    18,    19,    20,    21,    22,    23,    24,    25,
+      26,    27,    10,     1,    28,    43,    44,     2,     3,     4,
+      37,    38,    11,    12,    15,    14,    13,    33,    45,    34,
+      32,     0,    36,     0,    35
 };
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-11)))
+  (!!((Yystate) == (-7)))
 
 #define yytable_value_is_error(Yytable_value) \
   YYID (0)
@@ -579,18 +699,20 @@ static const yytype_uint8 yytable[] =
 static const yytype_int8 yycheck[] =
 {
        3,     4,     5,     6,     7,     8,     9,    10,    11,    12,
-      14,    13,     0,    14,    18,    19,    14,    16,    28,     6,
-      22,    17,    15,    20,    -1,    -1,    21
+      13,    14,    18,    18,    17,    15,    16,    22,    23,    24,
+      18,    19,    18,     0,    25,    20,     7,    21,    28,    26,
+      15,    -1,    34,    -1,    27
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    14,    18,    19,    24,    25,    26,    27,    28,    14,
-      14,     0,    25,    16,     3,     4,     5,     6,     7,     8,
-       9,    10,    11,    12,    29,    30,    32,    17,    20,    21,
-      29,    15,    31,    33,    35,    13,    22,    34
+       0,    18,    22,    23,    24,    30,    31,    32,    33,    34,
+      18,    18,     0,    31,    20,    25,     3,     4,     5,     6,
+       7,     8,     9,    10,    11,    12,    13,    14,    17,    35,
+      36,    38,    34,    21,    26,    27,    35,    18,    19,    37,
+      39,    41,    42,    15,    16,    28,    40
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1390,48 +1512,62 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 7:
+        case 8:
 /* Line 1792 of yacc.c  */
-#line 67 "css.y"
+#line 181 "css.y"
     { res_map->push_back(std::make_pair((yyvsp[(1) - (1)].cssselector), std::unordered_map<CSSKey, CSSValue*>())); }
-    break;
-
-  case 8:
-/* Line 1792 of yacc.c  */
-#line 69 "css.y"
-    { (yyval.cssselector) = spnew CSSNameSelector(*(yyvsp[(1) - (1)].s)); }
     break;
 
   case 9:
 /* Line 1792 of yacc.c  */
-#line 70 "css.y"
-    { (yyval.cssselector) = spnew CSSClassSelector(*(yyvsp[(2) - (2)].s)); }
+#line 183 "css.y"
+    { (yyval.cssselector) = spnew CSSNameSelector(*(yyvsp[(1) - (1)].s)); }
     break;
 
   case 10:
 /* Line 1792 of yacc.c  */
-#line 71 "css.y"
+#line 184 "css.y"
+    { (yyval.cssselector) = spnew CSSClassSelector(*(yyvsp[(2) - (2)].s)); }
+    break;
+
+  case 11:
+/* Line 1792 of yacc.c  */
+#line 185 "css.y"
     { (yyval.cssselector) = spnew CSSIDSelector(*(yyvsp[(2) - (2)].s)); }
     break;
 
-  case 14:
+  case 12:
 /* Line 1792 of yacc.c  */
-#line 77 "css.y"
+#line 186 "css.y"
+    { (yyval.cssselector) = spnew CSSAllSelector(); }
+    break;
+
+  case 13:
+/* Line 1792 of yacc.c  */
+#line 187 "css.y"
+    { (yyval.cssselector) = spnew CSSListSelector((yyvsp[(1) - (3)].cssselector), (yyvsp[(3) - (3)].cssselector)); }
+    break;
+
+  case 17:
+/* Line 1792 of yacc.c  */
+#line 195 "css.y"
     { 
 	
-	if((yyvsp[(1) - (3)].csskey) == PADDING)
+	switch((yyvsp[(1) - (3)].csskey))
 	{
+	case PADDING:
 		if((yyvsp[(3) - (3)].cssvalues)->size() == 1)
-		{
-			res_map->back().second[PADDING] = (*(yyvsp[(3) - (3)].cssvalues))[0];
-			res_map->back().second[PADDING_LEFT] = (*(yyvsp[(3) - (3)].cssvalues))[0];
-			res_map->back().second[PADDING_RIGHT] = (*(yyvsp[(3) - (3)].cssvalues))[0];
-			res_map->back().second[PADDING_TOP] = (*(yyvsp[(3) - (3)].cssvalues))[0];
-			res_map->back().second[PADDING_BOTTOM] = (*(yyvsp[(3) - (3)].cssvalues))[0];
-		}
-	}
-	else if((yyvsp[(1) - (3)].csskey) == MARGIN)
-	{
+			{
+				res_map->back().second[PADDING] = (*(yyvsp[(3) - (3)].cssvalues))[0];
+				res_map->back().second[PADDING_LEFT] = (*(yyvsp[(3) - (3)].cssvalues))[0];
+				res_map->back().second[PADDING_RIGHT] = (*(yyvsp[(3) - (3)].cssvalues))[0];
+				res_map->back().second[PADDING_TOP] = (*(yyvsp[(3) - (3)].cssvalues))[0];
+				res_map->back().second[PADDING_BOTTOM] = (*(yyvsp[(3) - (3)].cssvalues))[0];
+			}
+
+		break;
+
+	case MARGIN:
 		if((yyvsp[(3) - (3)].cssvalues)->size() == 1)
 		{
 			res_map->back().second[MARGIN] = (*(yyvsp[(3) - (3)].cssvalues))[0];
@@ -1440,109 +1576,146 @@ yyreduce:
 			res_map->back().second[MARGIN_TOP] = (*(yyvsp[(3) - (3)].cssvalues))[0];
 			res_map->back().second[MARGIN_BOTTOM] = (*(yyvsp[(3) - (3)].cssvalues))[0];
 		}
-	}
-	else
-	{
+	
+		break;
+
+	default:
 		res_map->back().second[(yyvsp[(1) - (3)].csskey)] = (*(yyvsp[(3) - (3)].cssvalues))[0];
 	}
-	
+
 	spdel (yyvsp[(3) - (3)].cssvalues);
 }
     break;
 
-  case 15:
-/* Line 1792 of yacc.c  */
-#line 109 "css.y"
-    { (yyval.cssvalues) = spnew std::vector<CSSValue*>; (yyval.cssvalues)->push_back((yyvsp[(1) - (1)].cssval)); }
-    break;
-
-  case 16:
-/* Line 1792 of yacc.c  */
-#line 111 "css.y"
-    { (yyval.csskey) = PADDING; }
-    break;
-
-  case 17:
-/* Line 1792 of yacc.c  */
-#line 112 "css.y"
-    { (yyval.csskey) = PADDING_TOP; }
-    break;
-
   case 18:
 /* Line 1792 of yacc.c  */
-#line 113 "css.y"
-    { (yyval.csskey) = PADDING_RIGHT; }
+#line 230 "css.y"
+    { (yyval.cssvalues) = spnew std::vector<CSSValue*>; (yyval.cssvalues)->push_back((yyvsp[(1) - (1)].cssval)); }
     break;
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 114 "css.y"
-    { (yyval.csskey) = PADDING_BOTTOM; }
+#line 231 "css.y"
+    { (yyval.cssvalues) = spnew std::vector<CSSValue*>; (yyval.cssvalues)->push_back((yyvsp[(1) - (1)].cssval)); }
     break;
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 115 "css.y"
-    { (yyval.csskey) = PADDING_LEFT; }
+#line 233 "css.y"
+    { (yyval.csskey) = PADDING; }
     break;
 
   case 21:
 /* Line 1792 of yacc.c  */
-#line 117 "css.y"
-    { (yyval.csskey) = MARGIN; }
+#line 234 "css.y"
+    { (yyval.csskey) = PADDING_TOP; }
     break;
 
   case 22:
 /* Line 1792 of yacc.c  */
-#line 118 "css.y"
-    { (yyval.csskey) = MARGIN_TOP; }
+#line 235 "css.y"
+    { (yyval.csskey) = PADDING_RIGHT; }
     break;
 
   case 23:
 /* Line 1792 of yacc.c  */
-#line 119 "css.y"
-    { (yyval.csskey) = MARGIN_RIGHT; }
+#line 236 "css.y"
+    { (yyval.csskey) = PADDING_BOTTOM; }
     break;
 
   case 24:
 /* Line 1792 of yacc.c  */
-#line 120 "css.y"
-    { (yyval.csskey) = MARGIN_BOTTOM; }
+#line 237 "css.y"
+    { (yyval.csskey) = PADDING_LEFT; }
     break;
 
   case 25:
 /* Line 1792 of yacc.c  */
-#line 121 "css.y"
-    { (yyval.csskey) = MARGIN_LEFT; }
+#line 239 "css.y"
+    { (yyval.csskey) = MARGIN; }
     break;
 
   case 26:
 /* Line 1792 of yacc.c  */
-#line 123 "css.y"
-    { (yyval.cssval) = spnew CSSLength((yyvsp[(1) - (2)].f), (yyvsp[(2) - (2)].lu)); }
+#line 240 "css.y"
+    { (yyval.csskey) = MARGIN_TOP; }
     break;
 
   case 27:
 /* Line 1792 of yacc.c  */
-#line 125 "css.y"
-    { (yyval.lu) = PIXEL; }
+#line 241 "css.y"
+    { (yyval.csskey) = MARGIN_RIGHT; }
     break;
 
   case 28:
 /* Line 1792 of yacc.c  */
-#line 126 "css.y"
-    { (yyval.lu) = PERCENT; }
+#line 242 "css.y"
+    { (yyval.csskey) = MARGIN_BOTTOM; }
     break;
 
   case 29:
 /* Line 1792 of yacc.c  */
-#line 128 "css.y"
+#line 243 "css.y"
+    { (yyval.csskey) = MARGIN_LEFT; }
+    break;
+
+  case 30:
+/* Line 1792 of yacc.c  */
+#line 245 "css.y"
+    { (yyval.csskey) = COLOR; }
+    break;
+
+  case 31:
+/* Line 1792 of yacc.c  */
+#line 246 "css.y"
+    { (yyval.csskey) = BACKGROUND_COLOR; }
+    break;
+
+  case 32:
+/* Line 1792 of yacc.c  */
+#line 248 "css.y"
+    { (yyval.csskey) = FONT_SIZE; }
+    break;
+
+  case 33:
+/* Line 1792 of yacc.c  */
+#line 250 "css.y"
+    { (yyval.cssval) = spnew CSSLength((yyvsp[(1) - (2)].f), (yyvsp[(2) - (2)].lu)); }
+    break;
+
+  case 34:
+/* Line 1792 of yacc.c  */
+#line 252 "css.y"
+    { (yyval.lu) = CSSLength::PIXEL; }
+    break;
+
+  case 35:
+/* Line 1792 of yacc.c  */
+#line 253 "css.y"
+    { (yyval.lu) = CSSLength::PERCENT; }
+    break;
+
+  case 36:
+/* Line 1792 of yacc.c  */
+#line 254 "css.y"
+    { (yyval.lu) = CSSLength::EM; }
+    break;
+
+  case 37:
+/* Line 1792 of yacc.c  */
+#line 257 "css.y"
+    { (yyval.cssval) = spnew CSSColor(color_map[*(yyvsp[(1) - (1)].s)]); }
+    break;
+
+  case 38:
+/* Line 1792 of yacc.c  */
+#line 259 "css.y"
     { (yyval.f) = (yyvsp[(1) - (1)].f); }
     break;
 
 
 /* Line 1792 of yacc.c  */
-#line 1546 "parser.cpp"
+#line 1719 "parser.cpp"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1774,7 +1947,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 130 "css.y"
+#line 261 "css.y"
 
 
 void yyerror(const char* s)

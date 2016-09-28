@@ -10,7 +10,15 @@ namespace sp { namespace css {
 
 	CSSManager::~CSSManager()
 	{
-
+		for (auto& rule: m_Rules)
+		{
+			spdel rule.first;
+			
+			for (auto val : rule.second)
+			{
+				spdel val.second;
+			}
+		}
 	}
 	
 	void CSSManager::EvalCSS(const String& css)

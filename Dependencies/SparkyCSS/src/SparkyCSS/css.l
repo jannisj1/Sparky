@@ -26,7 +26,13 @@
 "margin-bottom" return _margin_bottom;
 "margin-left" return _margin_left;
 
-"px" return _pixel_suffix;
+"color" return _color;
+"background-color" return _background_color;
+
+"px" return _pixel;
+"em" return _em;
+
+"font-size" return _font_size;
 
 ([0-9]+) |
 ([0-9]*[.][0-9]+)			{ yylval.f = std::stof(yytext); return _float; }

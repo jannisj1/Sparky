@@ -21,6 +21,12 @@ namespace sp { namespace graphics { namespace ui {
 
 	void UILabel::OnUpdate(const maths::Rectangle& space)
 	{
+		float size;
+		if (m_Font->GetFontSize() != (size = Get<css::CSSLength>(css::FONT_SIZE)->ToPixel(false)))
+		{
+			m_Font = FontManager::Get((uint)size);
+		}
+
 		m_Bounds = space;
 		
 		m_Pos.y = space.y;
@@ -32,11 +38,13 @@ namespace sp { namespace graphics { namespace ui {
 		m_Pos.x = space.x;
 		m_Pos.x += m_CSSManager->Get<css::CSSLength>(m_CSSInfo, css::MARGIN_LEFT)->ToPixel(true);
 		m_Pos.x += m_CSSManager->Get<css::CSSLength>(m_CSSInfo, css::PADDING_LEFT)->ToPixel(true);
+	
+		m_Color = Get<css::CSSColor>(css::COLOR)->GetColor();
 	}
 
 	void UILabel::OnRender(Renderer2D& renderer)
 	{
-		renderer.DrawString(m_Value, m_Pos, *m_Font);
+		renderer.DrawString(m_Value, m_Pos, *m_Font, m_Color);
 	}
 
 	float UILabel::GetWidth()

@@ -429,6 +429,7 @@
     <ClCompile Include="src\sp\graphics\ui\UILabel.cpp" />
     <ClCompile Include="src\sp\css\CSSManager.cpp" />
     <ClCompile Include="src\sp\graphics\ui\UIRoot.cpp" />
+    <ClCompile Include="src\sp\graphics\ui\UIEmpty.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\sp\app\Application.h">
@@ -829,6 +830,7 @@
     <ClInclude Include="src\sp\graphics\ui\UILabel.h" />
     <ClInclude Include="src\sp\css\CSSManager.h" />
     <ClInclude Include="src\sp\graphics\ui\UIRoot.h" />
+    <ClInclude Include="src\sp\graphics\ui\UIEmpty.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="SparkyCore-TODO.txt" />

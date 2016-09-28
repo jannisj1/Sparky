@@ -46,6 +46,10 @@ namespace sp { namespace graphics { namespace ui {
 		
 		inline void AddChild(ui::Widget *child) { m_Children.push_back(child); }
 		inline std::vector<ui::Widget*>& GetChildren() { return m_Children; }
+
+	protected:
+		template<class T>
+		inline T *Get(css::CSSKey key) { return m_CSSManager->Get<T>(m_CSSInfo, key); }
 	};
 
 } } }

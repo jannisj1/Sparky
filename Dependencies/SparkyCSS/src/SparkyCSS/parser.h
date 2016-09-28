@@ -56,9 +56,13 @@ extern int yydebug;
      _margin_right = 265,
      _margin_bottom = 266,
      _margin_left = 267,
-     _pixel_suffix = 268,
-     _identifier = 269,
-     _float = 270
+     _color = 268,
+     _background_color = 269,
+     _pixel = 270,
+     _em = 271,
+     _font_size = 272,
+     _identifier = 273,
+     _float = 274
    };
 #endif
 
@@ -67,11 +71,11 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 29 "css.y"
- int i; float f; String *s; char b; sp::css::LengthUnit lu; sp::css::CSSKey csskey; sp::css::CSSValue *cssval; std::vector<sp::css::CSSValue*> *cssvalues; sp::css::CSSSelector *cssselector; 
+#line 135 "css.y"
+ int i; float f; String *s; char b; sp::css::CSSLength::LengthUnit lu; sp::css::CSSKey csskey; sp::css::CSSValue *cssval; std::vector<sp::css::CSSValue*> *cssvalues; sp::css::CSSSelector *cssselector; 
 
 /* Line 2058 of yacc.c  */
-#line 75 "parser.h"
+#line 79 "parser.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

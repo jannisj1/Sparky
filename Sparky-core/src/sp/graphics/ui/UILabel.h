@@ -12,6 +12,7 @@ namespace sp { namespace graphics { namespace ui {
 		String m_Value;
 		Font* m_Font;
 		maths::vec2 m_Pos;
+		uint32 m_Color;
 
 	public:
 		UILabel(css::CSSManager* cssManager, tinyxml2::XMLElement *domElement);
