@@ -169,6 +169,7 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\sp\app\Input.cpp" />
+    <ClCompile Include="src\sp\css\CSSBounds.cpp" />
     <ClCompile Include="src\sp\css\CSSManager.cpp" />
     <ClCompile Include="src\sp\entity\component\SpriteComponent.cpp" />
     <ClCompile Include="src\sp\events\WindowEvent.cpp" />
@@ -644,6 +645,7 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\sp\app\Input.h" />
+    <ClInclude Include="src\sp\css\CSSBounds.h" />
     <ClInclude Include="src\sp\css\CSSManager.h" />
     <ClInclude Include="src\sp\entity\component\SpriteComponent.h" />
     <ClInclude Include="src\sp\events\WindowEvent.h" />

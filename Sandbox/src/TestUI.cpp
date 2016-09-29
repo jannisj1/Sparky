@@ -45,21 +45,12 @@ void TestUI::OnUpdate(const Timestep& ts)
 
 }
 
-bool TestUI::OnKeyPressedEvent(KeyPressedEvent& event)
-{
-	return true;
-}
-
-bool TestUI::OnMousePressedEvent(MousePressedEvent& event)
-{
-	return false;
-}
-
 void TestUI::OnEvent(sp::events::Event& event)
 {
 	EventDispatcher dispatcher(event);
-	dispatcher.Dispatch<KeyPressedEvent>(METHOD(&TestUI::OnKeyPressedEvent));
-	dispatcher.Dispatch<MousePressedEvent>(METHOD(&TestUI::OnMousePressedEvent));
+	//dispatcher.Dispatch<KeyPressedEvent>(METHOD(&TestUI::OnKeyPressedEvent));
+	dispatcher.Dispatch<MousePressedEvent>(METHOD(&UILayer::OnMousePressedEvent));
+	dispatcher.Dispatch<MouseMovedEvent>(METHOD(&UILayer::OnMouseMovedEvent));
 }
 
 void TestUI::OnRender(Renderer2D& renderer)

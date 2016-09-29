@@ -27,10 +27,24 @@ namespace sp { namespace graphics { namespace ui {
 
 	bool Widget::OnMouseMoved(events::MouseMovedEvent& e)
 	{
+		if (m_Bounds.Contains(e.GetPosition()))
+		{
+			m_CSSInfo.State = css::HOVER;
+		}
+		else
+		{
+			m_CSSInfo.State = css::IDLE;
+		}
+
+		for (auto c : m_Children)
+		{
+			c->OnMouseMoved(e);
+		}
+
 		return false;
 	}
 
-	void Widget::OnUpdate(const maths::Rectangle& space)
+	void Widget::OnUpdate(const css::CSSBounds& space)
 	{
 
 	}

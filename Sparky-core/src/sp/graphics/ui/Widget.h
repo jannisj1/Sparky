@@ -4,6 +4,7 @@
 #include "sp/maths/maths.h"
 #include "sp/css/CSSManager.h"
 #include "sp/graphics/Renderable2D.h"
+#include "sp/css/CSSBounds.h"
 
 #include <SparkyCSS/SparkyCSS.h>
 #include <tinyxml2.h>
@@ -20,7 +21,7 @@ namespace sp { namespace graphics { namespace ui {
 		};
 	protected:
 		WidgetState m_State;
-		maths::Rectangle m_Bounds;
+		css::CSSBounds m_Bounds;
 
 		css::UIElementCSSInfo m_CSSInfo;
 		css::CSSManager *m_CSSManager;
@@ -35,7 +36,7 @@ namespace sp { namespace graphics { namespace ui {
 		virtual bool OnMouseReleased(events::MouseReleasedEvent& e);
 		virtual bool OnMouseMoved(events::MouseMovedEvent& e);
 
-		virtual void OnUpdate(const maths::Rectangle& space);
+		virtual void OnUpdate(const css::CSSBounds& space);
 		virtual void OnRender(Renderer2D& renderer);
 
 		virtual float GetWidth() { return 0.0f; }

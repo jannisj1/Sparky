@@ -1,14 +1,16 @@
+label:hover {
+    color: red;
+}
+
+label.nice {
+    color: aquamarine;
+}
+
+
+
 * {
     padding: 5px;
     margin: 10px;
     color: white;
     font-size: 1em;
-}
-
-label {
-    color: red;
-}
-
-.moin {
-    color: darkgoldenrod;
 }

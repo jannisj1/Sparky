@@ -13,7 +13,7 @@ namespace sp { namespace graphics { namespace ui {
 
 	}
 
-	void UIRoot::OnUpdate(const maths::Rectangle& space)
+	void UIRoot::OnUpdate(const css::CSSBounds& space)
 	{
 		m_Bounds = space;
 
@@ -24,7 +24,7 @@ namespace sp { namespace graphics { namespace ui {
 			float height = c->GetHeight();
 			float width = c->GetWidth();
 
-			c->OnUpdate(maths::Rectangle(space.x + xOffset, space.y + yOffset, space.x + width, space.y + height));
+			c->OnUpdate(css::CSSBounds(space.x + xOffset, space.y + yOffset, space.x + width, space.y + height));
 			yOffset += height;
 		}
 	}

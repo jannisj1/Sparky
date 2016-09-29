@@ -29,15 +29,18 @@ namespace sp { namespace css {
 	CSSValue* CSSManager::GetValue(const UIElementCSSInfo& cssinfo, CSSKey key)
 	{
 		CSSValue* current = nullptr;
+		uint32 specificity = 0;
 
 		for (auto& rule : m_Rules)
 		{
 			if (rule.first->Applies(&cssinfo))
 			{
-				if (rule.second.find(key) != rule.second.end())
-				{
-					current = rule.second[key];
-				}
+				if(rule.first->GetSpecificity(&cssinfo) >= specificity)
+					if (rule.second.find(key) != rule.second.end())
+					{
+						current = rule.second[key];
+						specificity = rule.first->GetSpecificity(&cssinfo);
+					}
 			}
 		}
 

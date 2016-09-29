@@ -17,7 +17,7 @@ namespace sp { namespace graphics { namespace ui {
 	public:
 		UILabel(css::CSSManager* cssManager, tinyxml2::XMLElement *domElement);
 
-		virtual void OnUpdate(const maths::Rectangle& space) override;
+		virtual void OnUpdate(const css::CSSBounds& space) override;
 		virtual void OnRender(Renderer2D& renderer) override;
 
 		inline void SetValue(const String& label) { m_Value = label; }

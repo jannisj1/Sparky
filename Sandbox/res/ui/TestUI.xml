@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui>
   <style src="/ui/TestCSS.css"></style>
-  <label >HIIIII</label>
-  <label class="moin" value="DAFUG"/>
+  <label>Label 1 -.-</label>
+  <label class="nice" value="Label 2 :S"/>
 </ui>

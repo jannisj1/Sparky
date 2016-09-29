@@ -16,10 +16,10 @@ namespace sp { namespace graphics { namespace ui {
 		if (domElement->Attribute("value"))
 			m_Value = domElement->Attribute("value");
 		else
-			m_Value = m_CSSInfo.Name;
+			m_Value = domElement->GetText();
 	}
 
-	void UILabel::OnUpdate(const maths::Rectangle& space)
+	void UILabel::OnUpdate(const css::CSSBounds& space)
 	{
 		float size;
 		if (m_Font->GetFontSize() != (size = Get<css::CSSLength>(css::FONT_SIZE)->ToPixel(false)))
@@ -27,8 +27,10 @@ namespace sp { namespace graphics { namespace ui {
 			m_Font = FontManager::Get((uint)size);
 		}
 
-		m_Bounds = space;
-		
+		m_Bounds.position = space.position;
+		m_Bounds.size.x = GetWidth();
+		m_Bounds.size.y = GetHeight();
+
 		m_Pos.y = space.y;
 		m_Pos.y += m_CSSManager->Get<css::CSSLength>(m_CSSInfo, css::MARGIN_TOP)->ToPixel(false);
 		m_Pos.y += m_CSSManager->Get<css::CSSLength>(m_CSSInfo, css::PADDING_TOP)->ToPixel(false);

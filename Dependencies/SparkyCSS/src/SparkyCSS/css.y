@@ -178,14 +178,21 @@ rules: rule rules
 
 rule: selectors '{' key_value_pairs '}'
 
-selectors: selector			{ res_map->push_back(std::make_pair($1, std::unordered_map<CSSKey, CSSValue*>())); }
+selectors: selector				{ res_map->push_back(std::make_pair($1, std::unordered_map<CSSKey, CSSValue*>())); }
 
-selector: _identifier		{ $$ = spnew CSSNameSelector(*$1); }
-	| '.' _identifier		{ $$ = spnew CSSClassSelector(*$2); }
-	| '#' _identifier		{ $$ = spnew CSSIDSelector(*$2); }
-	| '*'					{ $$ = spnew CSSAllSelector(); }
-	| selector ',' selector { $$ = spnew CSSListSelector($1, $3); }
-
+selector: _identifier			{ $$ = spnew CSSNameSelector(*$1); }
+	| '.' _identifier			{ $$ = spnew CSSClassSelector(*$2); }
+	| selector '.' _identifier	{ $$ = spnew CSSClassSelector(*$3, $1); }
+	| '#' _identifier			{ $$ = spnew CSSIDSelector(*$2); }
+	| '*'						{ $$ = spnew CSSAllSelector(); }
+	| selector ',' selector		{ $$ = spnew CSSListSelector($1, $3); }
+	| selector ':' _identifier	{ 
+		
+		if(*$3 == "hover")
+			$$ = spnew CSSHoverSelector($1);
+		else
+			$$ = spnew CSSFalseSelector();
+		}
 
 key_value_pairs: key_value_pair ';' key_value_pairs
 	| key_value_pair ';'

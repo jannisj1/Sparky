@@ -38,6 +38,11 @@ namespace sp { namespace graphics {
 		void OnUpdateInternal(const Timestep& ts) override;
 		virtual void OnRender(Renderer2D& renderer);
 		void OnRender() override;
+		void OnEvent(events::Event& event) override;
+
+		bool OnMouseMovedEvent(events::MouseMovedEvent& event);
+		bool OnMousePressedEvent(events::MousePressedEvent& event);
+
 	protected:
 		bool OnResize(uint width, uint height) override;
 

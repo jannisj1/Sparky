@@ -20,6 +20,7 @@ namespace sp { namespace graphics {
 		m_Renderer->SetCamera(m_Scene->GetCamera());
 
 		m_CSSManager = spnew css::CSSManager();
+
 	}
 
 	UILayer::~UILayer()
@@ -97,12 +98,13 @@ namespace sp { namespace graphics {
 		maths::vec2 saveScale = FontManager::GetScale();
 		FontManager::SetScale(maths::vec2(1, 1));
 		
-		m_RootWidget->OnUpdate(maths::Rectangle(0, 0, Application::GetApplication().GetWindowWidth(), Application::GetApplication().GetWindowHeight()));
+		m_RootWidget->OnUpdate(css::CSSBounds(0, 0, Application::GetApplication().GetWindowWidth(), Application::GetApplication().GetWindowHeight()));
 		
 		FontManager::SetScale(saveScale); 
 		
 		OnUpdate(ts);
 	}
+
 
 	void UILayer::OnRender()
 	{
@@ -125,6 +127,24 @@ namespace sp { namespace graphics {
 
 	void UILayer::OnRender(Renderer2D& renderer)
 	{
+
+	}
+
+	void UILayer::OnEvent(events::Event& event)
+	{
+
+	}
+
+	bool UILayer::OnMouseMovedEvent(events::MouseMovedEvent & event)
+	{
+		m_RootWidget->OnMouseMoved(event);
+		return false;
+	}
+
+	bool UILayer::OnMousePressedEvent(events::MousePressedEvent& event)
+	{
+		m_RootWidget->OnMousePressed(event);	
+		return false;
 	}
 
 } }
