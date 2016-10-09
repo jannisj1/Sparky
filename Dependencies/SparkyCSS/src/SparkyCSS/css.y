@@ -132,7 +132,7 @@ std::unordered_map<String, CSSColor>  color_map {
 
 %error-verbose
 
-%union { int i; float f; String *s; char b; sp::css::CSSLength::LengthUnit lu; sp::css::CSSKey csskey; sp::css::CSSValue *cssval; std::vector<sp::css::CSSValue*> *cssvalues; sp::css::CSSSelector *cssselector; }
+%union { int i; float f; String *s; char b; sp::css::CSSLength::LengthUnit lu; sp::css::CSSFlowDirection *fd; sp::css::CSSKey csskey; sp::css::CSSValue *cssval; std::vector<sp::css::CSSValue*> *cssvalues; sp::css::CSSSelector *cssselector; }
 
 %start css
 
@@ -149,19 +149,39 @@ std::unordered_map<String, CSSColor>  color_map {
 %token _margin_left
 
 %token _color
+
 %token _background_color
+%token _background
+
+%token _flow_children
+
+%token _font_size
 
 %token _pixel
 %token _em
+%token _rgb
+%token _rgba
 
-%token _font_size
+%token _down
+%token _up
+%token _left
+%token _right
+%token _down_wrap
+%token _up_wrap
+%token _left_wrap
+%token _right_wrap
+
+%token _width
+%token _height
+
+%token _auto
 
 %type<csskey> key
 %type<cssvalues> values
 %type<lu> length_unit
-%type<f> number
-%type<cssval> length
-%type<cssval> color
+%type<fd> flow_direction
+%type<f> number color_number
+%type<cssval> length color
 %type<cssselector> selector
 
 %token<s> _identifier
@@ -169,8 +189,7 @@ std::unordered_map<String, CSSColor>  color_map {
 
 %%
 
-css: rules
-	| 
+css: rules 
 
 rules: rule rules 
 	| rule
@@ -184,12 +203,17 @@ selector: _identifier			{ $$ = spnew CSSNameSelector(*$1); }
 	| '.' _identifier			{ $$ = spnew CSSClassSelector(*$2); }
 	| selector '.' _identifier	{ $$ = spnew CSSClassSelector(*$3, $1); }
 	| '#' _identifier			{ $$ = spnew CSSIDSelector(*$2); }
+	| selector selector			{ $$ = spnew CSSInsideSelector($1, $2); }
 	| '*'						{ $$ = spnew CSSAllSelector(); }
 	| selector ',' selector		{ $$ = spnew CSSListSelector($1, $3); }
 	| selector ':' _identifier	{ 
 		
 		if(*$3 == "hover")
 			$$ = spnew CSSHoverSelector($1);
+		else if(*$3 == "focus")
+			$$ = spnew CSSFocusSelector($1);
+		else if(*$3 == "active")
+			$$ = spnew CSSActiveSelector($1);
 		else
 			$$ = spnew CSSFalseSelector();
 		}
@@ -227,6 +251,15 @@ key_value_pair: key ':' values {
 	
 		break;
 
+	case BACKGROUND:
+		
+		if($3->size() == 1)
+		{
+			res_map->back().second[BACKGROUND_COLOR] = (*$3)[0];
+		}
+		
+		break;
+
 	default:
 		res_map->back().second[$1] = (*$3)[0];
 	}
@@ -236,6 +269,7 @@ key_value_pair: key ':' values {
 
 values: length					{ $$ = spnew std::vector<CSSValue*>; $$->push_back($1); }
 	| color						{ $$ = spnew std::vector<CSSValue*>; $$->push_back($1); }
+	| flow_direction			{ $$ = spnew std::vector<CSSValue*>; $$->push_back($1); }
 
 key: _padding					{ $$ = PADDING; }
 	| _padding_top				{ $$ = PADDING_TOP; } 
@@ -250,11 +284,19 @@ key: _padding					{ $$ = PADDING; }
 	| _margin_left				{ $$ = MARGIN_LEFT; }
 
 	| _color					{ $$ = COLOR; }
+
 	| _background_color			{ $$ = BACKGROUND_COLOR; }
+	| _background				{ $$ = BACKGROUND; }
 
 	| _font_size				{ $$ = FONT_SIZE; }
 
+	| _flow_children			{ $$ = FLOW_CHILDREN; }
+
+	| _width					{ $$ = WIDTH; }
+	| _height					{ $$ = HEIGHT; }
+
 length: number length_unit		{ $$ = spnew CSSLength($1, $2); }
+	| _auto						{ $$ = spnew CSSLength(0.0f, CSSLength::AUTO); }
 
 length_unit: _pixel				{ $$ = CSSLength::PIXEL; }
 			| '%'				{ $$ = CSSLength::PERCENT; }
@@ -262,8 +304,22 @@ length_unit: _pixel				{ $$ = CSSLength::PIXEL; }
 
 
 color: _identifier				{ $$ = spnew CSSColor(color_map[*$1]); }
+	| _rgb '(' color_number ',' color_number ',' color_number ')' { $$ = spnew CSSColor((byte)$3, (byte)$5, (byte)$7); }
+	| _rgba '(' color_number ',' color_number ',' color_number ',' number ')' { $$ = spnew CSSColor((byte)$3, (byte)$5, (byte)$7, $9 * 255.0f); }
+
+color_number: number			{ $$ = $1; }
+	| number '%'				{ $$ = ($1 / 100.0f) * 255.0f; }
 
 number: _float					{ $$ = $1; }
+
+flow_direction: _down			{ $$ = spnew CSSFlowDirection(CSSFlowDirection::DOWN); }
+	| _up						{ $$ = spnew CSSFlowDirection(CSSFlowDirection::UP); }
+	| _left						{ $$ = spnew CSSFlowDirection(CSSFlowDirection::LEFT); }
+	| _right					{ $$ = spnew CSSFlowDirection(CSSFlowDirection::RIGHT); }
+	| _down_wrap				{ $$ = spnew CSSFlowDirection(CSSFlowDirection::DOWN, true); }
+	| _up_wrap					{ $$ = spnew CSSFlowDirection(CSSFlowDirection::UP, true); }
+	| _left_wrap				{ $$ = spnew CSSFlowDirection(CSSFlowDirection::LEFT, true); }
+	| _right_wrap				{ $$ = spnew CSSFlowDirection(CSSFlowDirection::RIGHT, true); }
 
 %%
 

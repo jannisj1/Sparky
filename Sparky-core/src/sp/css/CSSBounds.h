@@ -5,7 +5,7 @@
 namespace sp { namespace css {
 
 	/// Note that CSSBounds is different to maths::Rectangle in that it treats position
-	/// as top left and not in center
+	/// as top left and not center
 	class CSSBounds
 	{
 	public:
@@ -32,7 +32,7 @@ namespace sp { namespace css {
 		CSSBounds(float x, float y, float width, float height);
 
 		bool Contains(const maths::vec2& point);
-
+		maths::Rectangle ToRectangle();
 	};
 	
 } }

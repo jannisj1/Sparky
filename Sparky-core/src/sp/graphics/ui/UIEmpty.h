@@ -9,12 +9,12 @@ namespace sp { namespace graphics { namespace ui {
 	class UIEmpty : public Widget
 	{
 	public:
-		UIEmpty(css::CSSManager* cssManager, tinyxml2::XMLElement *domElement);
+		UIEmpty(Widget *parent, css::CSSManager* cssManager, tinyxml2::XMLElement *domElement);
 
-		virtual void OnUpdate(const css::CSSBounds& space) override;
-		virtual void OnRender(Renderer2D& renderer) override;
-
-		float GetWidth() override;
-		float GetHeight() override;
+		void OnUpdate(const css::CSSBounds& space) override;
+		void OnRender(Renderer2D& renderer) override;
+		float GetWidth(const css::CSSBounds& space) override;
+		float GetHeight(const css::CSSBounds& space) override;
 	};
+
 } } }

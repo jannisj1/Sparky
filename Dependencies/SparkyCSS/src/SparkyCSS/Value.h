@@ -10,7 +10,8 @@ namespace sp { namespace css {
 		enum class ValueType
 		{
 			LENGTH,
-			COLOR
+			COLOR,
+			FLOW_DIRECTION
 		};
 
 	private:
@@ -19,12 +20,19 @@ namespace sp { namespace css {
 	public:
 		CSSValue(ValueType vt)
 			: m_ValueType(vt) { }
+		virtual ~CSSValue() {}
 	};
 
 	class CSSColor : public CSSValue
 	{
-		uint32 m_Color;
-
+		union
+		{
+			uint32 m_Color;
+			struct {
+				byte r, g, b, a;
+			};
+		};
+		
 	public:
 		CSSColor()
 			: CSSValue(ValueType::COLOR)
@@ -32,11 +40,8 @@ namespace sp { namespace css {
 			m_Color = 0xFFFFFFFF;
 		}
 
-		CSSColor(byte r, byte g, byte b, byte a)
-			: CSSValue(ValueType::COLOR)
-		{
-			m_Color = ((byte)(a == 1 ? 255 : 0) << 24) + (b << 16) + (g << 8) + r;
-		}
+		CSSColor(byte r, byte g, byte b, float a = 1.0f)
+			: CSSValue(ValueType::COLOR), r(r), g(g), b(b), a((byte)(a*255.0f)) {}
 
 		inline uint32 GetColor() const { return m_Color; }
 	};
@@ -48,7 +53,8 @@ namespace sp { namespace css {
 		{
 			PIXEL,
 			PERCENT,
-			EM
+			EM,
+			AUTO
 		};
 
 	private:
@@ -62,6 +68,8 @@ namespace sp { namespace css {
 			if (lu == PERCENT)
 				m_Val /= 100.0f;
 		}
+
+		inline bool IsAuto() const { return m_Lu == AUTO; }
 
 		float ToPixel(bool horizontal)
 		{
@@ -82,11 +90,39 @@ namespace sp { namespace css {
 				return m_Val * 16.0f;
 				break;
 
+			case AUTO:
+				SP_ASSERT(false, "Auto not convertable to pixel sryy");
+				return 0.0f;
+				break;
+
 			default:
 				return 0.0f;
 				break;
 			}
 		}
+	};
+
+	class CSSFlowDirection : public CSSValue
+	{
+	public:
+		enum FlowDirection
+		{
+			DOWN,
+			UP,
+			LEFT,
+			RIGHT
+		};
+
+	private:
+		FlowDirection m_Fd;
+		bool m_Wrap;
+
+	public:
+		CSSFlowDirection(FlowDirection fd, bool wrap = false)
+			: m_Fd(fd), CSSValue(CSSValue::ValueType::FLOW_DIRECTION) {}
+
+		inline FlowDirection GetDirection() const { return m_Fd; }
+		inline bool IsWrapping() const { return m_Wrap; }
 	};
 
 } }

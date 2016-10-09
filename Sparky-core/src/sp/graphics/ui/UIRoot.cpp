@@ -1,39 +1,21 @@
-#include "sp/sp.h"
-#include "UIRoot.h"
+#include <sp/sp.h>
 
-#include "sp/graphics/FontManager.h"
+#include "UIRoot.h"
 
 namespace sp { namespace graphics { namespace ui {
 
-	using namespace maths;
+	UIRoot::UIRoot(Widget *parent, css::CSSManager* cssManager, tinyxml2::XMLElement *domElement)
+		: UIDiv(parent, cssManager, domElement) {}
 
-	UIRoot::UIRoot(css::CSSManager* cssManager, tinyxml2::XMLElement *domElement)
-		: Widget(cssManager, domElement)
+	float UIRoot::GetHeight(const css::CSSBounds& space)
 	{
-
-	}
-
-	void UIRoot::OnUpdate(const css::CSSBounds& space)
-	{
-		m_Bounds = space;
-
-		float xOffset = 0.0f, yOffset = 0.0f;
-
-		for (auto c : m_Children)
+		if (Get<css::CSSLength>(css::HEIGHT)->IsAuto())
 		{
-			float height = c->GetHeight();
-			float width = c->GetWidth();
-
-			c->OnUpdate(css::CSSBounds(space.x + xOffset, space.y + yOffset, space.x + width, space.y + height));
-			yOffset += height;
+			return space.height;
 		}
-	}
-
-	void UIRoot::OnRender(Renderer2D& renderer)
-	{
-		for (auto c : m_Children)
+		else
 		{
-			c->OnRender(renderer);
+			return UIDiv::GetHeight(space);
 		}
 	}
 

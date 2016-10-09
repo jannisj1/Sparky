@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui>
   <style src="/ui/TestCSS.css"></style>
-  <label>Label 1 -.-</label>
-  <label class="nice" value="Label 2 :S"/>
+  <div>
+    <label>Ohne lol</label>
+    <label>Ohne lol 2</label>
+  </div>
+  <div id="moin">
+    <label>Ohne lol</label>
+  </div>
 </ui>

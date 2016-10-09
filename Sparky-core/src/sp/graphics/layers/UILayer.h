@@ -16,11 +16,11 @@ namespace sp { namespace graphics {
 	class SP_API UILayer : public Layer
 	{
 	private:
-		Renderer2D* m_Renderer;
+		Renderer2D *m_Renderer;
 	protected:
-		Material* m_Material;
-		Scene2D* m_Scene;
-		ui::Widget* m_RootWidget = nullptr;
+		Material *m_Material;
+		Scene2D *m_Scene;
+		ui::Widget *m_RootWidget = nullptr;
 
 		css::CSSManager *m_CSSManager;
 
@@ -42,12 +42,14 @@ namespace sp { namespace graphics {
 
 		bool OnMouseMovedEvent(events::MouseMovedEvent& event);
 		bool OnMousePressedEvent(events::MousePressedEvent& event);
+		bool OnMouseReleasedEvent(events::MouseReleasedEvent& event);
+		bool OnWindowResizeEvent(events::ResizeWindowEvent& event);
 
 	protected:
 		bool OnResize(uint width, uint height) override;
 
 	private:
-		ui::Widget* CreateWidgetFromXML(tinyxml2::XMLElement *domElement);
+		ui::Widget* CreateWidgetFromXML(ui::Widget *parent, tinyxml2::XMLElement *domElement);
 
 	};	
 

@@ -1,16 +1,46 @@
 label:hover {
+    background-color: red;
+    color: blue;
+    font-size: 3em;
+}
+
+label {
     color: red;
+    background: blue;
+    padding: 5px;
+    margin: 2px;
 }
 
-label.nice {
-    color: aquamarine;
+ui {
+    background-color: blue;
+    padding: 10px;
+    margin: 5px;
+    background: white;
 }
 
+div {
+    background: green;
+    margin: 5px;
+    padding: 5px;
+}
 
+#moin:hover {
+    background-color: antiquewhite;
+
+}
+
+#moin {
+    background: yellow;
+    width: 50px;
+}
 
 * {
-    padding: 5px;
-    margin: 10px;
+    width: auto;
+    height: auto;
+    padding: 3px;
+    margin: 4px;
+    font-size: 2em;
     color: white;
-    font-size: 1em;
+    background-color: transparent;
+    flow-children: down;
 }

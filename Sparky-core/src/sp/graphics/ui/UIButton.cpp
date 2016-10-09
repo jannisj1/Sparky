@@ -8,67 +8,72 @@ namespace sp { namespace graphics { namespace ui {
 	using namespace maths;
 	using namespace css;
 
-	UIButton::UIButton(css::CSSManager* cssManager, tinyxml2::XMLElement *domElement)
-		: Widget(cssManager, domElement)
+	UIButton::UIButton(Widget *parent, css::CSSManager* cssManager, tinyxml2::XMLElement *domElement)
+		: Widget(parent, cssManager, domElement, true)
 	{
-		m_Font = FontManager::Get();
-
-		if (domElement->Attribute("value"))
-			m_Value = domElement->Attribute("value");
-		else
-			m_Value = domElement->GetText();
+		
 	}
 
 	void UIButton::OnUpdate(const css::CSSBounds& space)
 	{
-		float size;
-		if (m_Font->GetFontSize() != (size = Get<css::CSSLength>(css::FONT_SIZE)->ToPixel(false)))
-		{
-			m_Font = FontManager::Get((uint)size);
-		}
-
 		m_Bounds.position = vec2(space.position.x + Get<css::CSSLength>(css::MARGIN_LEFT)->ToPixel(true), space.position.y + Get<css::CSSLength>(css::MARGIN_TOP)->ToPixel(false));
-		m_Bounds.size.x = GetWidth() - Get<css::CSSLength>(css::MARGIN_LEFT)->ToPixel(true) - Get<css::CSSLength>(css::MARGIN_RIGHT)->ToPixel(true); //TODO: Make this more efficient
-		m_Bounds.size.y = GetHeight() - Get<css::CSSLength>(css::MARGIN_TOP)->ToPixel(false) - Get<css::CSSLength>(css::MARGIN_BOTTOM)->ToPixel(false);
+		m_Bounds.size.x = GetWidth(css::CSSBounds()) - Get<css::CSSLength>(css::MARGIN_LEFT)->ToPixel(true) - Get<css::CSSLength>(css::MARGIN_RIGHT)->ToPixel(true);
+		m_Bounds.size.y = GetHeight(css::CSSBounds()) - Get<css::CSSLength>(css::MARGIN_TOP)->ToPixel(false) - Get<css::CSSLength>(css::MARGIN_BOTTOM)->ToPixel(false);
 
-		m_Pos.y = space.y;
-		m_Pos.y += Get<css::CSSLength>(css::MARGIN_TOP)->ToPixel(false);
-		m_Pos.y += Get<css::CSSLength>(css::PADDING_TOP)->ToPixel(false);
-		m_Pos.y += m_Font->GetHeight(m_Value);
-		m_Pos.y = m_CSSManager->GetHeight() - m_Pos.y;
+		float xOffset = Get<css::CSSLength>(css::MARGIN_LEFT)->ToPixel(true) + Get<css::CSSLength>(css::PADDING_LEFT)->ToPixel(true),
+			yOffset = Get<css::CSSLength>(css::MARGIN_TOP)->ToPixel(false) + Get<css::CSSLength>(css::PADDING_TOP)->ToPixel(false);
 
-		m_Pos.x = space.x;
-		m_Pos.x += Get<css::CSSLength>(css::MARGIN_LEFT)->ToPixel(true);
-		m_Pos.x += Get<css::CSSLength>(css::PADDING_LEFT)->ToPixel(true);
+		for (auto c : m_Children)
+		{
+			float height = c->GetHeight(css::CSSBounds());
+			float width = c->GetWidth(css::CSSBounds());
+
+			c->OnUpdate(css::CSSBounds(space.x + xOffset, space.y + yOffset, space.x + width, space.y + height));
+			yOffset += height;
+		}
 	}
 
 	void UIButton::OnRender(Renderer2D& renderer)
 	{
 		renderer.FillRect(m_Bounds.ToRectangle(), Get<css::CSSColor>(css::BACKGROUND_COLOR)->GetColor());
-		renderer.DrawString(m_Value, m_Pos, *m_Font, Get<css::CSSColor>(css::COLOR)->GetColor());
+
+		for (auto c : m_Children)
+		{
+			c->OnRender(renderer);
+		}
 	}
 
-	float UIButton::GetWidth()
+	float UIButton::GetWidth(const css::CSSBounds& space)
 	{
-		return m_Font->GetWidth(m_Value) +
-			m_CSSManager->Get<CSSLength>(m_CSSInfo, PADDING_LEFT)->ToPixel(true) +
-			m_CSSManager->Get<CSSLength>(m_CSSInfo, PADDING_RIGHT)->ToPixel(true) +
-			m_CSSManager->Get<CSSLength>(m_CSSInfo, MARGIN_LEFT)->ToPixel(true) +
-			m_CSSManager->Get<CSSLength>(m_CSSInfo, MARGIN_RIGHT)->ToPixel(true);
+		float res = 0.0f;
+
+		for (auto c : m_Children)
+		{
+			float temp = c->GetWidth(css::CSSBounds());
+			res = temp > res ? temp : res;
+		}
+
+		return res +
+			Get<CSSLength>(PADDING_LEFT)->ToPixel(true) +
+			Get<CSSLength>(PADDING_RIGHT)->ToPixel(true) +
+			Get<CSSLength>(MARGIN_LEFT)->ToPixel(true) +
+			Get<CSSLength>(MARGIN_RIGHT)->ToPixel(true);
 	}
 
-	float UIButton::GetHeight()
+	float UIButton::GetHeight(const css::CSSBounds& space)
 	{
-		return m_Font->GetHeight(m_Value) +
-			m_CSSManager->Get<CSSLength>(m_CSSInfo, PADDING_TOP)->ToPixel(false) +
-			m_CSSManager->Get<CSSLength>(m_CSSInfo, PADDING_BOTTOM)->ToPixel(false) +
-			m_CSSManager->Get<CSSLength>(m_CSSInfo, MARGIN_TOP)->ToPixel(false) +
-			m_CSSManager->Get<CSSLength>(m_CSSInfo, MARGIN_BOTTOM)->ToPixel(false);
-	}
+		float res = 0.0f;
 
-	bool UIButton::OnMousePressed(events::MousePressedEvent& e)
-	{
-		return false;
+		for (auto c : m_Children)
+		{
+			res += c->GetHeight(css::CSSBounds());
+		}
+
+		return res +
+			Get<CSSLength>(PADDING_TOP)->ToPixel(false) +
+			Get<CSSLength>(PADDING_BOTTOM)->ToPixel(false) +
+			Get<CSSLength>(MARGIN_TOP)->ToPixel(false) +
+			Get<CSSLength>(MARGIN_BOTTOM)->ToPixel(false);
 	}
 
 } } }

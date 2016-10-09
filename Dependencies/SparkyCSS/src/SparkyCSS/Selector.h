@@ -9,6 +9,7 @@ namespace sp { namespace css {
 	enum UIState {
 		IDLE,
 		HOVER,
+		FOCUSED,
 		ACTIVE
 	};
 
@@ -19,6 +20,7 @@ namespace sp { namespace css {
 		String Name;
 		std::vector<String> Classes;
 		UIState State;
+		const UIElementCSSInfo* Parent = nullptr;
 	};
 
 	class CSSSelector
@@ -152,6 +154,45 @@ namespace sp { namespace css {
 		}
 	};
 
+	class CSSInsideSelector : public CSSSelector
+	{
+		CSSSelector *m_First, *m_Second;
+
+	public:
+		CSSInsideSelector(CSSSelector *first, CSSSelector *second)
+			: m_First(first), m_Second(second), CSSSelector(SelectorType::LIST) {}
+
+		bool Applies(const UIElementCSSInfo *cssInfo)
+		{
+			if (m_Second->Applies(cssInfo))
+			{
+				const UIElementCSSInfo *parent = cssInfo->Parent;
+				
+				while (parent)
+				{
+					if (m_First->Applies(parent))
+					{
+						return true;
+					}
+					parent = parent->Parent;
+				}
+			}
+
+			return false;
+		}
+
+		uint32 GetSpecificity(const UIElementCSSInfo *cssInfo)
+		{
+			uint32 res = 0U;
+
+			res += m_First->GetSpecificity(cssInfo);
+			res += m_Second->GetSpecificity(cssInfo);
+			res += (1U << 8U);
+
+			return res;
+		}
+	};
+
 	// Pseudo-Selectors
 
 	class CSSHoverSelector : public CSSSelector
@@ -165,6 +206,38 @@ namespace sp { namespace css {
 		bool Applies(const UIElementCSSInfo *cssInfo)
 		{
 			return cssInfo->State == HOVER && m_Child->Applies(cssInfo);
+		}
+
+		uint32 GetSpecificity(const UIElementCSSInfo *cssInfo) { return (1U << 16U) + m_Child->GetSpecificity(cssInfo); }
+	};
+
+	class CSSFocusSelector : public CSSSelector
+	{
+		CSSSelector *m_Child;
+
+	public:
+		CSSFocusSelector(CSSSelector *child)
+			: m_Child(child), CSSSelector(SelectorType::PSEUDO) {}
+
+		bool Applies(const UIElementCSSInfo *cssInfo)
+		{
+			return cssInfo->State == FOCUSED && m_Child->Applies(cssInfo);
+		}
+
+		uint32 GetSpecificity(const UIElementCSSInfo *cssInfo) { return (1U << 16U) + m_Child->GetSpecificity(cssInfo); }
+	};
+
+	class CSSActiveSelector : public CSSSelector
+	{
+		CSSSelector *m_Child;
+
+	public:
+		CSSActiveSelector(CSSSelector *child)
+			: m_Child(child), CSSSelector(SelectorType::PSEUDO) {}
+
+		bool Applies(const UIElementCSSInfo *cssInfo)
+		{
+			return cssInfo->State == ACTIVE && m_Child->Applies(cssInfo);
 		}
 
 		uint32 GetSpecificity(const UIElementCSSInfo *cssInfo) { return (1U << 16U) + m_Child->GetSpecificity(cssInfo); }

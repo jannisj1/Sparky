@@ -4,9 +4,11 @@
 #include "../BatchRenderer2D.h"
 #include "sp/app/Window.h"
 #include "sp/app/Application.h"
-#include "sp/graphics/ui/UILabel.h"
+#include "sp/graphics/ui/UIDiv.h"
 #include "sp/graphics/ui/UIRoot.h"
+#include "sp/graphics/ui/UILabel.h"
 #include "sp/graphics/ui/UIEmpty.h"
+#include "sp/graphics/ui/UIButton.h"
 
 namespace sp { namespace graphics {
 
@@ -56,20 +58,24 @@ namespace sp { namespace graphics {
 		if(err)
 			SP_ERROR("tinyxml2-error ", (int)err);
 		
+		ui::Widget::FocusedWidget = nullptr;
+
 		if(doc.FirstChildElement())
-			m_RootWidget = CreateWidgetFromXML(doc.FirstChildElement());
+			m_RootWidget = CreateWidgetFromXML(nullptr, doc.FirstChildElement());
 	}
 
-	ui::Widget *UILayer::CreateWidgetFromXML(tinyxml2::XMLElement *domElement)
+	ui::Widget *UILayer::CreateWidgetFromXML(ui::Widget *parent, tinyxml2::XMLElement *domElement)
 	{
 		const std::string elemName = domElement->Name();
 		ui::Widget *curr = nullptr;
 
-		if (elemName == "ui") curr = spnew ui::UIRoot(m_CSSManager, domElement);
-		else if (elemName == "label") curr = spnew ui::UILabel(m_CSSManager, domElement);
+		if (elemName == "ui") curr = spnew ui::UIRoot(parent, m_CSSManager, domElement);
+		else if (elemName == "div") curr = spnew ui::UIDiv(parent, m_CSSManager, domElement);
+		else if (elemName == "label") curr = spnew ui::UILabel(parent, m_CSSManager, domElement);
+		else if (elemName == "button") curr = spnew ui::UIButton(parent, m_CSSManager, domElement);
 		else if (elemName == "style")
 		{
-			curr = spnew ui::UIEmpty(m_CSSManager, domElement);
+			curr = spnew ui::UIEmpty(parent, m_CSSManager, domElement);
 			if (domElement->Attribute("src"))
 			{
 				m_CSSManager->EvalCSS(VFS::Get()->ReadTextFile(domElement->Attribute("src")));
@@ -86,7 +92,7 @@ namespace sp { namespace graphics {
 
 		while (child != nullptr)
 		{
-			curr->AddChild(CreateWidgetFromXML(child));
+			curr->AddChild(CreateWidgetFromXML(curr, child));
 			child = child->NextSiblingElement();
 		}
 
@@ -137,13 +143,23 @@ namespace sp { namespace graphics {
 
 	bool UILayer::OnMouseMovedEvent(events::MouseMovedEvent & event)
 	{
-		m_RootWidget->OnMouseMoved(event);
-		return false;
+		return m_RootWidget->OnMouseMoved(event);
 	}
 
 	bool UILayer::OnMousePressedEvent(events::MousePressedEvent& event)
 	{
-		m_RootWidget->OnMousePressed(event);	
+		return m_RootWidget->OnMousePressed(event);
+	}
+
+	bool UILayer::OnMouseReleasedEvent(events::MouseReleasedEvent& event)
+	{
+		return m_RootWidget->OnMouseReleased(event);
+	}
+
+	bool UILayer::OnWindowResizeEvent(events::ResizeWindowEvent& event)
+	{
+		//TODO: Not workin wtf
+		m_Scene->GetCamera()->SetProjectionMatrix(maths::mat4::Orthographic(0, event.GetWidth(), 0, event.GetHeight(), -1.0f, 1.0f));
 		return false;
 	}
 

@@ -18,10 +18,16 @@ namespace sp { namespace css {
 		MARGIN_BOTTOM,
 		MARGIN_LEFT,
 
-		COLOR,
-		BACKGROUND_COLOR,
+		WIDTH,
+		HEIGHT,
 
-		FONT_SIZE
+		COLOR,
+
+		BACKGROUND_COLOR,
+		BACKGROUND,
+
+		FONT_SIZE,
+		FLOW_CHILDREN
 	};
 
 	typedef std::vector<std::pair<CSSSelector*, std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*>>> CSSRules;
@@ -30,7 +36,6 @@ namespace sp { namespace css {
 	{
 	public:
 		static void Parse(CSSRules& rules, const String& css);
-
 	};
 
 } }

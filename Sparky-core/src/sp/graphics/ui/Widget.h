@@ -13,36 +13,31 @@ namespace sp { namespace graphics { namespace ui {
 
 	class SP_API Widget
 	{
-	public:
-		enum WidgetState
-		{
-			ACTIVE,
-			HOVER,
-		};
 	protected:
-		WidgetState m_State;
 		css::CSSBounds m_Bounds;
-
 		css::UIElementCSSInfo m_CSSInfo;
 		css::CSSManager *m_CSSManager;
 		tinyxml2::XMLElement *m_DOMElement;
 		std::vector<Widget*> m_Children;
+		bool m_Activatable, m_Focusable;
+		bool m_IsDivContainer;
 
 	public:
-		Widget(css::CSSManager *cssManager, tinyxml2::XMLElement *domElement);
+		Widget(Widget *parent, css::CSSManager *cssManager, tinyxml2::XMLElement *domElement, bool activatable = false, bool focusable = false);
 
 	public:
+		static ui::Widget *FocusedWidget;
 		virtual bool OnMousePressed(events::MousePressedEvent& e);
 		virtual bool OnMouseReleased(events::MouseReleasedEvent& e);
 		virtual bool OnMouseMoved(events::MouseMovedEvent& e);
 
-		virtual void OnUpdate(const css::CSSBounds& space);
+		virtual void OnUpdate(const css::CSSBounds& space) = 0;
 		virtual void OnRender(Renderer2D& renderer);
 
-		virtual float GetWidth() { return 0.0f; }
-		virtual float GetHeight() { return 0.0f; }
+		virtual float GetWidth(const css::CSSBounds& space) = 0;
+		virtual float GetHeight(const css::CSSBounds& space) = 0;
 
-		inline const css::UIElementCSSInfo &GetCSSInfo() const { return m_CSSInfo; }
+		inline css::UIElementCSSInfo &GetCSSInfo() { return m_CSSInfo; }
 		inline const css::CSSValue *GetCSSValue(css::CSSKey key) { return m_CSSManager->GetValue(m_CSSInfo, key); }
 		
 		inline void AddChild(ui::Widget *child) { m_Children.push_back(child); }

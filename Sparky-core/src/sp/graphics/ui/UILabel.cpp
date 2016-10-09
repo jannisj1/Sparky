@@ -8,8 +8,8 @@ namespace sp { namespace graphics { namespace ui {
 	using namespace maths;
 	using namespace css;
 
-	UILabel::UILabel(css::CSSManager* cssManager, tinyxml2::XMLElement *domElement)
-		: Widget(cssManager, domElement)
+	UILabel::UILabel(Widget *parent, css::CSSManager* cssManager, tinyxml2::XMLElement *domElement)
+		: Widget(parent, cssManager, domElement)
 	{
 		m_Font = FontManager::Get();
 
@@ -27,44 +27,43 @@ namespace sp { namespace graphics { namespace ui {
 			m_Font = FontManager::Get((uint)size);
 		}
 
-		m_Bounds.position = space.position;
-		m_Bounds.size.x = GetWidth();
-		m_Bounds.size.y = GetHeight();
+		m_Bounds.position = vec2(space.position.x + Get<css::CSSLength>(css::MARGIN_LEFT)->ToPixel(true), space.position.y + Get<css::CSSLength>(css::MARGIN_TOP)->ToPixel(false));
+		m_Bounds.size.x = GetWidth(css::CSSBounds()) - Get<css::CSSLength>(css::MARGIN_LEFT)->ToPixel(true) - Get<css::CSSLength>(css::MARGIN_RIGHT)->ToPixel(true);
+		m_Bounds.size.y = GetHeight(css::CSSBounds()) - Get<css::CSSLength>(css::MARGIN_TOP)->ToPixel(false) - Get<css::CSSLength>(css::MARGIN_BOTTOM)->ToPixel(false);
 
 		m_Pos.y = space.y;
-		m_Pos.y += m_CSSManager->Get<css::CSSLength>(m_CSSInfo, css::MARGIN_TOP)->ToPixel(false);
-		m_Pos.y += m_CSSManager->Get<css::CSSLength>(m_CSSInfo, css::PADDING_TOP)->ToPixel(false);
+		m_Pos.y += Get<css::CSSLength>(css::MARGIN_TOP)->ToPixel(false);
+		m_Pos.y += Get<css::CSSLength>(css::PADDING_TOP)->ToPixel(false);
 		m_Pos.y += m_Font->GetHeight(m_Value);
 		m_Pos.y = m_CSSManager->GetHeight() - m_Pos.y;
 
 		m_Pos.x = space.x;
-		m_Pos.x += m_CSSManager->Get<css::CSSLength>(m_CSSInfo, css::MARGIN_LEFT)->ToPixel(true);
-		m_Pos.x += m_CSSManager->Get<css::CSSLength>(m_CSSInfo, css::PADDING_LEFT)->ToPixel(true);
-	
-		m_Color = Get<css::CSSColor>(css::COLOR)->GetColor();
+		m_Pos.x += Get<css::CSSLength>(css::MARGIN_LEFT)->ToPixel(true);
+		m_Pos.x += Get<css::CSSLength>(css::PADDING_LEFT)->ToPixel(true);
 	}
 
 	void UILabel::OnRender(Renderer2D& renderer)
 	{
-		renderer.DrawString(m_Value, m_Pos, *m_Font, m_Color);
+		renderer.FillRect(m_Bounds.ToRectangle(), Get<css::CSSColor>(css::BACKGROUND_COLOR)->GetColor());
+		renderer.DrawString(m_Value, m_Pos, *m_Font, Get<css::CSSColor>(css::COLOR)->GetColor());
 	}
 
-	float UILabel::GetWidth()
+	float UILabel::GetWidth(const css::CSSBounds& space)
 	{
 		return m_Font->GetWidth(m_Value) +
-			m_CSSManager->Get<CSSLength>(m_CSSInfo, PADDING_LEFT)->ToPixel(true) +
-			m_CSSManager->Get<CSSLength>(m_CSSInfo, PADDING_RIGHT)->ToPixel(true) +
-			m_CSSManager->Get<CSSLength>(m_CSSInfo, MARGIN_LEFT)->ToPixel(true) +
-			m_CSSManager->Get<CSSLength>(m_CSSInfo, MARGIN_RIGHT)->ToPixel(true);
+			Get<CSSLength>(PADDING_LEFT)->ToPixel(true) +
+			Get<CSSLength>(PADDING_RIGHT)->ToPixel(true) +
+			Get<CSSLength>(MARGIN_LEFT)->ToPixel(true) +
+			Get<CSSLength>(MARGIN_RIGHT)->ToPixel(true);
 	}
 
-	float UILabel::GetHeight()
+	float UILabel::GetHeight(const css::CSSBounds& space)
 	{
 		return m_Font->GetHeight(m_Value) +
-			m_CSSManager->Get<CSSLength>(m_CSSInfo, PADDING_TOP)->ToPixel(false) +
-			m_CSSManager->Get<CSSLength>(m_CSSInfo, PADDING_BOTTOM)->ToPixel(false) +
-			m_CSSManager->Get<CSSLength>(m_CSSInfo, MARGIN_TOP)->ToPixel(false) +
-			m_CSSManager->Get<CSSLength>(m_CSSInfo, MARGIN_BOTTOM)->ToPixel(false);
+			Get<CSSLength>(PADDING_TOP)->ToPixel(false) +
+			Get<CSSLength>(PADDING_BOTTOM)->ToPixel(false) +
+			Get<CSSLength>(MARGIN_TOP)->ToPixel(false) +
+			Get<CSSLength>(MARGIN_BOTTOM)->ToPixel(false);
 	}
 
 } } }

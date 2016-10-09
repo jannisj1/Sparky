@@ -1,5 +1,6 @@
 #include <sp/sp.h>
 #include "CSSBounds.h"
+#include "sp/app/Application.h"
 
 namespace sp { namespace css {
 
@@ -15,6 +16,20 @@ namespace sp { namespace css {
 	{
 		return ((point.x >= x) && (point.x < (x + width))) &&
 			((point.y >= y) && (point.y < (y + height)));
+	}
+
+	maths::Rectangle CSSBounds::ToRectangle()
+	{
+		maths::Rectangle res;
+
+		res.width = width / 2;
+		res.height = height / 2;
+		res.x = x + width / 2;
+		res.y = y + height / 2;
+
+		res.y = Application::GetApplication().GetWindowHeight() - res.y;
+
+		return res;
 	}
 
 } }
