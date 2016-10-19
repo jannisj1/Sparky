@@ -10,8 +10,6 @@ namespace sp { namespace graphics { namespace ui {
 	{
 	public:
 		UIRoot(Widget *parent, css::CSSManager* cssManager, tinyxml2::XMLElement *domElement);
-
-		virtual float GetHeight(const css::CSSBounds& space) override;
 	};
 
 } } }

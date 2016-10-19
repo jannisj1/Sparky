@@ -16,7 +16,7 @@ namespace sp { namespace graphics { namespace ui {
 	public:
 		UILabel(Widget *parent, css::CSSManager* cssManager, tinyxml2::XMLElement *domElement);
 
-		void OnUpdate(const css::CSSBounds& space) override;
+		css::CSSBounds OnUpdate(const css::CSSBounds& space, const css::CSSBounds& initialSpace) override;
 		void OnRender(Renderer2D& renderer) override;
 
 		inline void SetValue(const String& label) { m_Value = label; }
@@ -25,8 +25,12 @@ namespace sp { namespace graphics { namespace ui {
 		inline void SetFont(Font* font) { m_Font = font; }
 		inline const Font& GetFont() const { return *m_Font; }
 
-		float GetWidth(const css::CSSBounds& space) override;
-		float GetHeight(const css::CSSBounds& space) override;
+		virtual void MoveBy(const maths::vec2& delta) override;
+
+		/*
+		virtual float GetWidth(const css::CSSBounds& space) override;
+		virtual float GetHeight(const css::CSSBounds& space) override;
+		*/
 	};
 
 } } }

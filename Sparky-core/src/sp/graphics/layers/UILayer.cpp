@@ -1,13 +1,12 @@
 #include "sp/sp.h"
 #include "UILayer.h"
 
-#include "../BatchRenderer2D.h"
+#include "../Renderer2D.h"
 #include "sp/app/Window.h"
 #include "sp/app/Application.h"
 #include "sp/graphics/ui/UIDiv.h"
 #include "sp/graphics/ui/UIRoot.h"
 #include "sp/graphics/ui/UILabel.h"
-#include "sp/graphics/ui/UIEmpty.h"
 #include "sp/graphics/ui/UIButton.h"
 
 namespace sp { namespace graphics {
@@ -17,12 +16,11 @@ namespace sp { namespace graphics {
 		float width = Application::GetApplication().GetWindowWidth();
 		float height = Application::GetApplication().GetWindowHeight();
 
-		m_Renderer = spnew BatchRenderer2D(width, height);
+		m_Renderer = spnew Renderer2D(width, height);
 		m_Scene = spnew Scene2D(maths::mat4::Orthographic(0, width, 0, height, -1.0f, 1.0f));
 		m_Renderer->SetCamera(m_Scene->GetCamera());
 
 		m_CSSManager = spnew css::CSSManager();
-
 	}
 
 	UILayer::~UILayer()
@@ -44,7 +42,7 @@ namespace sp { namespace graphics {
 
 	bool UILayer::OnResize(uint width, uint height)
 	{
-		((BatchRenderer2D*)m_Renderer)->SetScreenSize(maths::tvec2<uint>(width, height));
+		((Renderer2D*)m_Renderer)->SetScreenSize(maths::tvec2<uint>(width, height));
 		m_Scene->GetRenderer()->SetScreenSize(maths::tvec2<uint>(width, height));
 		return false;
 	}
@@ -72,10 +70,9 @@ namespace sp { namespace graphics {
 		if (elemName == "ui") curr = spnew ui::UIRoot(parent, m_CSSManager, domElement);
 		else if (elemName == "div") curr = spnew ui::UIDiv(parent, m_CSSManager, domElement);
 		else if (elemName == "label") curr = spnew ui::UILabel(parent, m_CSSManager, domElement);
-		else if (elemName == "button") curr = spnew ui::UIButton(parent, m_CSSManager, domElement);
+		//else if (elemName == "button") curr = spnew ui::UIButton(parent, m_CSSManager, domElement);
 		else if (elemName == "style")
 		{
-			curr = spnew ui::UIEmpty(parent, m_CSSManager, domElement);
 			if (domElement->Attribute("src"))
 			{
 				m_CSSManager->EvalCSS(VFS::Get()->ReadTextFile(domElement->Attribute("src")));
@@ -90,11 +87,14 @@ namespace sp { namespace graphics {
 
 		tinyxml2::XMLElement *child = domElement->FirstChildElement();
 
-		while (child != nullptr)
-		{
-			curr->AddChild(CreateWidgetFromXML(curr, child));
-			child = child->NextSiblingElement();
-		}
+		if(curr)
+			while (child != nullptr)
+			{
+				ui::Widget *childWidget = CreateWidgetFromXML(curr, child);
+				if(childWidget)
+					curr->AddChild(childWidget);
+				child = child->NextSiblingElement();
+			}
 
 		return curr;
 	}
@@ -103,8 +103,8 @@ namespace sp { namespace graphics {
 	{
 		maths::vec2 saveScale = FontManager::GetScale();
 		FontManager::SetScale(maths::vec2(1, 1));
-		
-		m_RootWidget->OnUpdate(css::CSSBounds(0, 0, Application::GetApplication().GetWindowWidth(), Application::GetApplication().GetWindowHeight()));
+		css::CSSBounds space(0, 0, Application::GetApplication().GetWindowWidth(), Application::GetApplication().GetWindowHeight());
+		m_RootWidget->OnUpdate(space, space);
 		
 		FontManager::SetScale(saveScale); 
 		

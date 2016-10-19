@@ -9,8 +9,8 @@
 
 #include "sp/utils/Log.h"
 
+#include "Renderer2D.h"
 #include "Renderer.h"
-#include "sp/debug/DebugMenu.h"
 
 #include <freetype-gl/freetype-gl.h>
 
@@ -131,9 +131,6 @@ namespace sp { namespace graphics {
 		m_PostEffects = spnew PostEffects();
 		m_PostEffectsBuffer = Framebuffer2D::Create(m_ViewportSize.x, m_ViewportSize.y);
 #endif
-
-		debug::DebugMenu::Add(String("Renderer2D/Post Effects"), &s_PostEffectsEnabled);
-		debug::DebugMenu::Add(String("Renderer2D/Mask"), &s_MaskEnabled);
 	}
 
 	void Renderer2D::Push(const maths::mat4& matrix, bool override)
@@ -385,7 +382,7 @@ namespace sp { namespace graphics {
 		SP_ASSERT(texture);
 		float ts = SubmitTexture(texture);
 
-		const vec2& scale = font.GetScale();
+		const vec2& scale = FontManager::GetScale();
 
 		float x = position.x;
 

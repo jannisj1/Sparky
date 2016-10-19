@@ -5,7 +5,7 @@
 #include "Widget.h"
 
 namespace sp { namespace graphics { namespace ui {
-
+	/*
 	class UIButton : public Widget
 	{
 	protected:
@@ -24,9 +24,10 @@ namespace sp { namespace graphics { namespace ui {
 
 		inline void SetFont(Font* font) { m_Font = font; }
 		inline const Font& GetFont() const { return *m_Font; }
-
+		
 		float GetWidth(const css::CSSBounds& space) override;
 		float GetHeight(const css::CSSBounds& space) override;
+		
 	};
-
+	*/
 } } }

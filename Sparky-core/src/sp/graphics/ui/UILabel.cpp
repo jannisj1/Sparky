@@ -19,51 +19,53 @@ namespace sp { namespace graphics { namespace ui {
 			m_Value = domElement->GetText();
 	}
 
-	void UILabel::OnUpdate(const css::CSSBounds& space)
+	css::CSSBounds UILabel::OnUpdate(const css::CSSBounds& space, const css::CSSBounds& initialSpace)
 	{
 		float size;
-		if (m_Font->GetFontSize() != (size = Get<css::CSSLength>(css::FONT_SIZE)->ToPixel(false)))
+		if (m_Font->GetFontSize() != (size = GetPixelHeight(FONT_SIZE)))
 		{
 			m_Font = FontManager::Get((uint)size);
 		}
 
-		m_Bounds.position = vec2(space.position.x + Get<css::CSSLength>(css::MARGIN_LEFT)->ToPixel(true), space.position.y + Get<css::CSSLength>(css::MARGIN_TOP)->ToPixel(false));
-		m_Bounds.size.x = GetWidth(css::CSSBounds()) - Get<css::CSSLength>(css::MARGIN_LEFT)->ToPixel(true) - Get<css::CSSLength>(css::MARGIN_RIGHT)->ToPixel(true);
-		m_Bounds.size.y = GetHeight(css::CSSBounds()) - Get<css::CSSLength>(css::MARGIN_TOP)->ToPixel(false) - Get<css::CSSLength>(css::MARGIN_BOTTOM)->ToPixel(false);
+		m_OuterBounds.x = space.x;
+		m_OuterBounds.y = space.y;
 
-		m_Pos.y = space.y;
-		m_Pos.y += Get<css::CSSLength>(css::MARGIN_TOP)->ToPixel(false);
-		m_Pos.y += Get<css::CSSLength>(css::PADDING_TOP)->ToPixel(false);
-		m_Pos.y += m_Font->GetHeight(m_Value);
-		m_Pos.y = m_CSSManager->GetHeight() - m_Pos.y;
+		m_Bounds.x = space.x + GetPixelWidth(MARGIN_LEFT);
+		m_Bounds.y = space.y + GetPixelHeight(MARGIN_TOP);
 
-		m_Pos.x = space.x;
-		m_Pos.x += Get<css::CSSLength>(css::MARGIN_LEFT)->ToPixel(true);
-		m_Pos.x += Get<css::CSSLength>(css::PADDING_LEFT)->ToPixel(true);
+		m_Bounds.width = m_Font->GetWidth(m_Value) + GetPixelWidth(PADDING_LEFT) + GetPixelWidth(PADDING_RIGHT) + GetPixelWidth(BORDER_LEFT_WIDTH) + GetPixelWidth(BORDER_RIGHT_WIDTH);
+		m_Bounds.height = m_Font->GetHeight(m_Value) + GetPixelHeight(PADDING_TOP) + GetPixelHeight(PADDING_BOTTOM) + GetPixelHeight(BORDER_TOP_WIDTH) + GetPixelHeight(BORDER_BOTTOM_WIDTH);
+		
+		m_OuterBounds.width = m_Bounds.width + GetPixelWidth(MARGIN_RIGHT) + GetPixelWidth(MARGIN_LEFT);
+		m_OuterBounds.height = m_Bounds.height + GetPixelHeight(MARGIN_BOTTOM) + GetPixelHeight(MARGIN_TOP);
+
+		m_Pos.x = m_Bounds.x + GetPixelWidth(BORDER_LEFT_WIDTH) + GetPixelWidth(PADDING_LEFT);
+		m_Pos.y = m_Bounds.y + GetPixelHeight(PADDING_TOP) + GetPixelHeight(BORDER_TOP_WIDTH) + m_Font->GetHeight(m_Value);
+
+		maths::vec2 offsets = m_Font->GetOffsets(m_Value);
+		offsets.x = -offsets.x;
+		m_Pos += offsets;
+
+		m_Pos.y = Application::GetApplication().GetWindowHeight() - m_Pos.y;
+
+		String s = m_Value;
+
+		return PositionInsideParent(space, initialSpace);
 	}
 
 	void UILabel::OnRender(Renderer2D& renderer)
 	{
-		renderer.FillRect(m_Bounds.ToRectangle(), Get<css::CSSColor>(css::BACKGROUND_COLOR)->GetColor());
+		DrawBackgroundAndBorder(renderer);
 		renderer.DrawString(m_Value, m_Pos, *m_Font, Get<css::CSSColor>(css::COLOR)->GetColor());
 	}
 
-	float UILabel::GetWidth(const css::CSSBounds& space)
+	void UILabel::MoveBy(const maths::vec2& delta)
 	{
-		return m_Font->GetWidth(m_Value) +
-			Get<CSSLength>(PADDING_LEFT)->ToPixel(true) +
-			Get<CSSLength>(PADDING_RIGHT)->ToPixel(true) +
-			Get<CSSLength>(MARGIN_LEFT)->ToPixel(true) +
-			Get<CSSLength>(MARGIN_RIGHT)->ToPixel(true);
-	}
-
-	float UILabel::GetHeight(const css::CSSBounds& space)
-	{
-		return m_Font->GetHeight(m_Value) +
-			Get<CSSLength>(PADDING_TOP)->ToPixel(false) +
-			Get<CSSLength>(PADDING_BOTTOM)->ToPixel(false) +
-			Get<CSSLength>(MARGIN_TOP)->ToPixel(false) +
-			Get<CSSLength>(MARGIN_BOTTOM)->ToPixel(false);
+		m_OuterBounds.position += delta;
+		m_InnerBounds.position += delta;
+		m_Bounds.position += delta;
+		m_Pos.x += delta.x;
+		m_Pos.y -= delta.y;
 	}
 
 } } }

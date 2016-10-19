@@ -20,6 +20,7 @@ namespace sp { namespace css {
 		String Name;
 		std::vector<String> Classes;
 		UIState State;
+		CSSBounds InnerBounds;
 		const UIElementCSSInfo* Parent = nullptr;
 	};
 

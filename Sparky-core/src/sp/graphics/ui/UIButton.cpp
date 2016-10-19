@@ -7,7 +7,7 @@ namespace sp { namespace graphics { namespace ui {
 
 	using namespace maths;
 	using namespace css;
-
+	/*
 	UIButton::UIButton(Widget *parent, css::CSSManager* cssManager, tinyxml2::XMLElement *domElement)
 		: Widget(parent, cssManager, domElement, true)
 	{
@@ -75,5 +75,5 @@ namespace sp { namespace graphics { namespace ui {
 			Get<CSSLength>(MARGIN_TOP)->ToPixel(false) +
 			Get<CSSLength>(MARGIN_BOTTOM)->ToPixel(false);
 	}
-
+	*/
 } } }

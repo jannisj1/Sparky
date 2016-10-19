@@ -5,128 +5,16 @@
 
 using namespace sp::css;
 
-/*
-	typedef std::vector<
-				std::pair<
-					std::vector<CSSSelector*>, 
-					std::unordered_map
-					<
-						sp::css::CSSKey, 
-						sp::css::CSSValue*
-					>
-				>
-			> CSSRules;
-*/
-
 CSSRules *res_map;
 
 void yyerror (const char *s);
 
-/*
- * (c) Dean McNamee <dean@gmail.com>, 2012.
- * C++ port by Konstantin Käfer <mail@kkaefer.com>, 2014.
- *
- * https://github.com/deanm/css-color-parser-js
- * https://github.com/kkaefer/css-color-parser-cpp
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to
- * deal in the Software without restriction, including without limitation the
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
- * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
- * IN THE SOFTWARE.
- *
- */
+void push_value_vector(sp::css::CSSValue *val);
+std::vector<sp::css::CSSValue*> *get_value_vector_ownership();
 
-std::unordered_map<String, CSSColor>  color_map {
-    { "transparent", { 0, 0, 0, 0 } }, { "aliceblue", { 240, 248, 255, 1 } },
-    { "antiquewhite", { 250, 235, 215, 1 } }, { "aqua", { 0, 255, 255, 1 } },
-    { "aquamarine", { 127, 255, 212, 1 } }, { "azure", { 240, 255, 255, 1 } },
-    { "beige", { 245, 245, 220, 1 } }, { "bisque", { 255, 228, 196, 1 } },
-    { "black", { 0, 0, 0, 1 } }, { "blanchedalmond", { 255, 235, 205, 1 } },
-    { "blue", { 0, 0, 255, 1 } }, { "blueviolet", { 138, 43, 226, 1 } },
-    { "brown", { 165, 42, 42, 1 } }, { "burlywood", { 222, 184, 135, 1 } },
-    { "cadetblue", { 95, 158, 160, 1 } }, { "chartreuse", { 127, 255, 0, 1 } },
-    { "chocolate", { 210, 105, 30, 1 } }, { "coral", { 255, 127, 80, 1 } },
-    { "cornflowerblue", { 100, 149, 237, 1 } }, { "cornsilk", { 255, 248, 220, 1 } },
-    { "crimson", { 220, 20, 60, 1 } }, { "cyan", { 0, 255, 255, 1 } },
-    { "darkblue", { 0, 0, 139, 1 } }, { "darkcyan", { 0, 139, 139, 1 } },
-    { "darkgoldenrod", { 184, 134, 11, 1 } }, { "darkgray", { 169, 169, 169, 1 } },
-    { "darkgreen", { 0, 100, 0, 1 } }, { "darkgrey", { 169, 169, 169, 1 } },
-    { "darkkhaki", { 189, 183, 107, 1 } }, { "darkmagenta", { 139, 0, 139, 1 } },
-    { "darkolivegreen", { 85, 107, 47, 1 } }, { "darkorange", { 255, 140, 0, 1 } },
-    { "darkorchid", { 153, 50, 204, 1 } }, { "darkred", { 139, 0, 0, 1 } },
-    { "darksalmon", { 233, 150, 122, 1 } }, { "darkseagreen", { 143, 188, 143, 1 } },
-    { "darkslateblue", { 72, 61, 139, 1 } }, { "darkslategray", { 47, 79, 79, 1 } },
-    { "darkslategrey", { 47, 79, 79, 1 } }, { "darkturquoise", { 0, 206, 209, 1 } },
-    { "darkviolet", { 148, 0, 211, 1 } }, { "deeppink", { 255, 20, 147, 1 } },
-    { "deepskyblue", { 0, 191, 255, 1 } }, { "dimgray", { 105, 105, 105, 1 } },
-    { "dimgrey", { 105, 105, 105, 1 } }, { "dodgerblue", { 30, 144, 255, 1 } },
-    { "firebrick", { 178, 34, 34, 1 } }, { "floralwhite", { 255, 250, 240, 1 } },
-    { "forestgreen", { 34, 139, 34, 1 } }, { "fuchsia", { 255, 0, 255, 1 } },
-    { "gainsboro", { 220, 220, 220, 1 } }, { "ghostwhite", { 248, 248, 255, 1 } },
-    { "gold", { 255, 215, 0, 1 } }, { "goldenrod", { 218, 165, 32, 1 } },
-    { "gray", { 128, 128, 128, 1 } }, { "green", { 0, 128, 0, 1 } },
-    { "greenyellow", { 173, 255, 47, 1 } }, { "grey", { 128, 128, 128, 1 } },
-    { "honeydew", { 240, 255, 240, 1 } }, { "hotpink", { 255, 105, 180, 1 } },
-    { "indianred", { 205, 92, 92, 1 } }, { "indigo", { 75, 0, 130, 1 } },
-    { "ivory", { 255, 255, 240, 1 } }, { "khaki", { 240, 230, 140, 1 } },
-    { "lavender", { 230, 230, 250, 1 } }, { "lavenderblush", { 255, 240, 245, 1 } },
-    { "lawngreen", { 124, 252, 0, 1 } }, { "lemonchiffon", { 255, 250, 205, 1 } },
-    { "lightblue", { 173, 216, 230, 1 } }, { "lightcoral", { 240, 128, 128, 1 } },
-    { "lightcyan", { 224, 255, 255, 1 } }, { "lightgoldenrodyellow", { 250, 250, 210, 1 } },
-    { "lightgray", { 211, 211, 211, 1 } }, { "lightgreen", { 144, 238, 144, 1 } },
-    { "lightgrey", { 211, 211, 211, 1 } }, { "lightpink", { 255, 182, 193, 1 } },
-    { "lightsalmon", { 255, 160, 122, 1 } }, { "lightseagreen", { 32, 178, 170, 1 } },
-    { "lightskyblue", { 135, 206, 250, 1 } }, { "lightslategray", { 119, 136, 153, 1 } },
-    { "lightslategrey", { 119, 136, 153, 1 } }, { "lightsteelblue", { 176, 196, 222, 1 } },
-    { "lightyellow", { 255, 255, 224, 1 } }, { "lime", { 0, 255, 0, 1 } },
-    { "limegreen", { 50, 205, 50, 1 } }, { "linen", { 250, 240, 230, 1 } },
-    { "magenta", { 255, 0, 255, 1 } }, { "maroon", { 128, 0, 0, 1 } },
-    { "mediumaquamarine", { 102, 205, 170, 1 } }, { "mediumblue", { 0, 0, 205, 1 } },
-    { "mediumorchid", { 186, 85, 211, 1 } }, { "mediumpurple", { 147, 112, 219, 1 } },
-    { "mediumseagreen", { 60, 179, 113, 1 } }, { "mediumslateblue", { 123, 104, 238, 1 } },
-    { "mediumspringgreen", { 0, 250, 154, 1 } }, { "mediumturquoise", { 72, 209, 204, 1 } },
-    { "mediumvioletred", { 199, 21, 133, 1 } }, { "midnightblue", { 25, 25, 112, 1 } },
-    { "mintcream", { 245, 255, 250, 1 } }, { "mistyrose", { 255, 228, 225, 1 } },
-    { "moccasin", { 255, 228, 181, 1 } }, { "navajowhite", { 255, 222, 173, 1 } },
-    { "navy", { 0, 0, 128, 1 } }, { "oldlace", { 253, 245, 230, 1 } },
-    { "olive", { 128, 128, 0, 1 } }, { "olivedrab", { 107, 142, 35, 1 } },
-    { "orange", { 255, 165, 0, 1 } }, { "orangered", { 255, 69, 0, 1 } },
-    { "orchid", { 218, 112, 214, 1 } }, { "palegoldenrod", { 238, 232, 170, 1 } },
-    { "palegreen", { 152, 251, 152, 1 } }, { "paleturquoise", { 175, 238, 238, 1 } },
-    { "palevioletred", { 219, 112, 147, 1 } }, { "papayawhip", { 255, 239, 213, 1 } },
-    { "peachpuff", { 255, 218, 185, 1 } }, { "peru", { 205, 133, 63, 1 } },
-    { "pink", { 255, 192, 203, 1 } }, { "plum", { 221, 160, 221, 1 } },
-    { "powderblue", { 176, 224, 230, 1 } }, { "purple", { 128, 0, 128, 1 } },
-    { "red", { 255, 0, 0, 1 } }, { "rosybrown", { 188, 143, 143, 1 } },
-    { "royalblue", { 65, 105, 225, 1 } }, { "saddlebrown", { 139, 69, 19, 1 } },
-    { "salmon", { 250, 128, 114, 1 } }, { "sandybrown", { 244, 164, 96, 1 } },
-    { "seagreen", { 46, 139, 87, 1 } }, { "seashell", { 255, 245, 238, 1 } },
-    { "sienna", { 160, 82, 45, 1 } }, { "silver", { 192, 192, 192, 1 } },
-    { "skyblue", { 135, 206, 235, 1 } }, { "slateblue", { 106, 90, 205, 1 } },
-    { "slategray", { 112, 128, 144, 1 } }, { "slategrey", { 112, 128, 144, 1 } },
-    { "snow", { 255, 250, 250, 1 } }, { "springgreen", { 0, 255, 127, 1 } },
-    { "steelblue", { 70, 130, 180, 1 } }, { "tan", { 210, 180, 140, 1 } },
-    { "teal", { 0, 128, 128, 1 } }, { "thistle", { 216, 191, 216, 1 } },
-    { "tomato", { 255, 99, 71, 1 } }, { "turquoise", { 64, 224, 208, 1 } },
-    { "violet", { 238, 130, 238, 1 } }, { "wheat", { 245, 222, 179, 1 } },
-    { "white", { 255, 255, 255, 1 } }, { "whitesmoke", { 245, 245, 245, 1 } },
-    { "yellow", { 255, 255, 0, 1 } }, { "yellowgreen", { 154, 205, 50, 1 } }
-};
+void add_key_value_pair(sp::css::CSSKey key, const std::vector<sp::css::CSSValue*>& v);
 
-// End of excerpt
+extern std::unordered_map<String, sp::css::CSSColor> color_map;
 
 %}
 
@@ -170,18 +58,40 @@ std::unordered_map<String, CSSColor>  color_map {
 %token _up_wrap
 %token _left_wrap
 %token _right_wrap
+%token _static
 
 %token _width
 %token _height
 
-%token _auto
+%token _fit_children
+
+%token _border;
+
+%token _border_style;
+%token _border_top_style;
+%token _border_right_style;
+%token _border_bottom_style;
+%token _border_left_style;
+
+%token _solid;
+%token _none;
+
+%token _border_width;
+%token _border_top_width;
+%token _border_right_width;
+%token _border_bottom_width;
+%token _border_left_width;
+
+%token _border_color;
+%token _border_top_color;
+%token _border_right_color;
+%token _border_bottom_color;
+%token _border_left_color;
 
 %type<csskey> key
-%type<cssvalues> values
 %type<lu> length_unit
 %type<fd> flow_direction
 %type<f> number color_number
-%type<cssval> length color
 %type<cssselector> selector
 
 %token<s> _identifier
@@ -215,8 +125,12 @@ selector: _identifier			{ $$ = spnew CSSNameSelector(*$1); }
 		else if(*$3 == "active")
 			$$ = spnew CSSActiveSelector($1);
 		else
+		{
+			yyerror("Unknown pseudo selector");
 			$$ = spnew CSSFalseSelector();
 		}
+
+	}
 
 key_value_pairs: key_value_pair ';' key_value_pairs
 	| key_value_pair ';'
@@ -224,52 +138,10 @@ key_value_pairs: key_value_pair ';' key_value_pairs
 
 
 key_value_pair: key ':' values { 
-	
-	switch($1)
-	{
-	case PADDING:
-		if($3->size() == 1)
-			{
-				res_map->back().second[PADDING] = (*$3)[0];
-				res_map->back().second[PADDING_LEFT] = (*$3)[0];
-				res_map->back().second[PADDING_RIGHT] = (*$3)[0];
-				res_map->back().second[PADDING_TOP] = (*$3)[0];
-				res_map->back().second[PADDING_BOTTOM] = (*$3)[0];
-			}
-
-		break;
-
-	case MARGIN:
-		if($3->size() == 1)
-		{
-			res_map->back().second[MARGIN] = (*$3)[0];
-			res_map->back().second[MARGIN_LEFT] = (*$3)[0];
-			res_map->back().second[MARGIN_RIGHT] = (*$3)[0];
-			res_map->back().second[MARGIN_TOP] = (*$3)[0];
-			res_map->back().second[MARGIN_BOTTOM] = (*$3)[0];
-		}
-	
-		break;
-
-	case BACKGROUND:
-		
-		if($3->size() == 1)
-		{
-			res_map->back().second[BACKGROUND_COLOR] = (*$3)[0];
-		}
-		
-		break;
-
-	default:
-		res_map->back().second[$1] = (*$3)[0];
-	}
-
-	spdel $3;
+	std::vector<sp::css::CSSValue*> *vec = get_value_vector_ownership();
+	add_key_value_pair($1, *vec);
+	spdel vec;
 }
-
-values: length					{ $$ = spnew std::vector<CSSValue*>; $$->push_back($1); }
-	| color						{ $$ = spnew std::vector<CSSValue*>; $$->push_back($1); }
-	| flow_direction			{ $$ = spnew std::vector<CSSValue*>; $$->push_back($1); }
 
 key: _padding					{ $$ = PADDING; }
 	| _padding_top				{ $$ = PADDING_TOP; } 
@@ -295,35 +167,83 @@ key: _padding					{ $$ = PADDING; }
 	| _width					{ $$ = WIDTH; }
 	| _height					{ $$ = HEIGHT; }
 
-length: number length_unit		{ $$ = spnew CSSLength($1, $2); }
-	| _auto						{ $$ = spnew CSSLength(0.0f, CSSLength::AUTO); }
+	| _border					{ $$ = BORDER; }
+
+	| _border_style				{ $$ = BORDER_STYLE; }
+	| _border_top_style			{ $$ = BORDER_TOP_STYLE; }
+	| _border_right_style		{ $$ = BORDER_RIGHT_STYLE; }
+	| _border_bottom_style		{ $$ = BORDER_BOTTOM_STYLE; }
+	| _border_left_style		{ $$ = BORDER_LEFT_STYLE; }
+
+	| _border_width				{ $$ = BORDER_WIDTH; }
+	| _border_top_width			{ $$ = BORDER_TOP_WIDTH; }
+	| _border_right_width		{ $$ = BORDER_RIGHT_WIDTH; }
+	| _border_bottom_width		{ $$ = BORDER_BOTTOM_WIDTH; }
+	| _border_left_width		{ $$ = BORDER_LEFT_WIDTH; }
+	
+	| _border_color				{ $$ = BORDER_COLOR; }
+	| _border_top_color			{ $$ = BORDER_TOP_COLOR; }
+	| _border_right_color		{ $$ = BORDER_RIGHT_COLOR; }
+	| _border_bottom_color		{ $$ = BORDER_BOTTOM_COLOR; }
+	| _border_left_color		{ $$ = BORDER_LEFT_COLOR; }
+
+values: values ',' value
+	| values value
+	| value
+
+value: length
+	| color
+	| flow_direction
+	| border_style
+
+length: number length_unit		{ push_value_vector(spnew CSSLength($1, $2)); }
+	| _fit_children				{ push_value_vector(spnew CSSLength(0.0f, CSSLength::FIT_CHILDREN)); }
 
 length_unit: _pixel				{ $$ = CSSLength::PIXEL; }
 			| '%'				{ $$ = CSSLength::PERCENT; }
 			| _em				{ $$ = CSSLength::EM; }
 
-
-color: _identifier				{ $$ = spnew CSSColor(color_map[*$1]); }
-	| _rgb '(' color_number ',' color_number ',' color_number ')' { $$ = spnew CSSColor((byte)$3, (byte)$5, (byte)$7); }
-	| _rgba '(' color_number ',' color_number ',' color_number ',' number ')' { $$ = spnew CSSColor((byte)$3, (byte)$5, (byte)$7, $9 * 255.0f); }
+color: _identifier				{ push_value_vector(spnew CSSColor(color_map[*$1])); }
+	| _rgb '(' color_number ',' color_number ',' color_number ')'	{ push_value_vector(spnew CSSColor((byte)$3, (byte)$5, (byte)$7)); }
+	| _rgba '(' color_number ',' color_number ',' color_number ',' number ')'	{ push_value_vector(spnew CSSColor((byte)$3, (byte)$5, (byte)$7, $9 * 255.0f)); }
 
 color_number: number			{ $$ = $1; }
 	| number '%'				{ $$ = ($1 / 100.0f) * 255.0f; }
 
 number: _float					{ $$ = $1; }
 
-flow_direction: _down			{ $$ = spnew CSSFlowDirection(CSSFlowDirection::DOWN); }
-	| _up						{ $$ = spnew CSSFlowDirection(CSSFlowDirection::UP); }
-	| _left						{ $$ = spnew CSSFlowDirection(CSSFlowDirection::LEFT); }
-	| _right					{ $$ = spnew CSSFlowDirection(CSSFlowDirection::RIGHT); }
-	| _down_wrap				{ $$ = spnew CSSFlowDirection(CSSFlowDirection::DOWN, true); }
-	| _up_wrap					{ $$ = spnew CSSFlowDirection(CSSFlowDirection::UP, true); }
-	| _left_wrap				{ $$ = spnew CSSFlowDirection(CSSFlowDirection::LEFT, true); }
-	| _right_wrap				{ $$ = spnew CSSFlowDirection(CSSFlowDirection::RIGHT, true); }
+flow_direction: _down			{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::DOWN)); }
+	| _up						{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::UP)); }
+	| _left						{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::LEFT)); }
+	| _right					{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::RIGHT)); }
+	| _down_wrap				{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::DOWN, true)); }
+	| _up_wrap					{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::UP, true)); }
+	| _left_wrap				{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::LEFT, true)); }
+	| _right_wrap				{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::RIGHT, true)); }
+	| _static					{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::STATIC)); }
 
+border_style: _solid			{ push_value_vector(spnew CSSBorderStyle(CSSBorderStyle::SOLID)); }
+	| _none						{ push_value_vector(spnew CSSBorderStyle(CSSBorderStyle::NONE)); }
 %%
 
 void yyerror(const char* s)
 {
-	SP_ERROR("SparkyCSS-Error: ", s, "( ln.", yylineno, ")");
+	SP_ERROR("SparkyCSS-Error: ", s, "(ln.", yylineno, ")");
+}
+
+static std::vector<sp::css::CSSValue*> *current_value_vec = nullptr;
+
+void push_value_vector(sp::css::CSSValue *val)
+{
+	if(!current_value_vec)
+		current_value_vec = spnew std::vector<sp::css::CSSValue*>();
+
+	current_value_vec->push_back(val);
+}
+
+std::vector<sp::css::CSSValue*> *get_value_vector_ownership()
+{
+	std::vector<sp::css::CSSValue*> *res = current_value_vec;
+	current_value_vec = nullptr;
+	return res;
 }

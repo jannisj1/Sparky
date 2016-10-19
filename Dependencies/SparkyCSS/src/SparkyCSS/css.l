@@ -45,17 +45,42 @@
 "left-wrap" return _left_wrap;
 "right-wrap" return _right_wrap;
 
+"static" return _static;
+
 "width" return _width;
 "height" return _height;
 
-"auto" return _auto;
-
+"fit-children" return _fit_children;
 
 "px" return _pixel;
 "em" return _em;
 
 "rgb" return _rgb;
 "rgba" return _rgba;
+
+
+"border" return _border;
+
+"border-style" return _border_style;
+"border-top-style" return _border_top_style;
+"border-right-style" return _border_right_style;
+"border-bottom-style" return _border_bottom_style;
+"border-left-style" return _border_left_style;
+
+"solid" return _solid;
+"none" return _none;
+
+"border-width" return _border_width;
+"border-top-width" return _border_top_width;
+"border-right-width" return _border_right_width;
+"border-bottom-width" return _border_bottom_width;
+"border-left-width" return _border_left_width;
+
+"border-color" return _border_color;
+"border-top-color" return _border_top_color;
+"border-right-color" return _border_right_color;
+"border-bottom-color" return _border_bottom_color;
+"border-left-color" return _border_left_color;
 
 ([0-9]+) |
 ([0-9]*[.][0-9]+)			{ yylval.f = std::stof(yytext); return _float; }

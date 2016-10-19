@@ -11,7 +11,8 @@ namespace sp { namespace css {
 		{
 			LENGTH,
 			COLOR,
-			FLOW_DIRECTION
+			FLOW_DIRECTION,
+			BORDER_STYLE
 		};
 
 	private:
@@ -21,6 +22,8 @@ namespace sp { namespace css {
 		CSSValue(ValueType vt)
 			: m_ValueType(vt) { }
 		virtual ~CSSValue() {}
+
+		ValueType GetType() const { return m_ValueType; }
 	};
 
 	class CSSColor : public CSSValue
@@ -54,7 +57,7 @@ namespace sp { namespace css {
 			PIXEL,
 			PERCENT,
 			EM,
-			AUTO
+			FIT_CHILDREN
 		};
 
 	private:
@@ -69,29 +72,33 @@ namespace sp { namespace css {
 				m_Val /= 100.0f;
 		}
 
-		inline bool IsAuto() const { return m_Lu == AUTO; }
+		inline bool FitChildren() const { return m_Lu == FIT_CHILDREN; }
 
-		float ToPixel(bool horizontal)
+		float ToPixel(UIElementCSSInfo *cssinfo, bool horizontal)
 		{
 			switch (m_Lu)
 			{
 			case PIXEL:
 				return m_Val;
-				break;
-
+				
 			case PERCENT:
 				if (horizontal)
-					return Window::GetWindowClass(nullptr)->GetWidth() * m_Val;
+					if (cssinfo->Parent)
+						return cssinfo->Parent->InnerBounds.width * m_Val;
+					else
+						return Application::GetApplication().GetWindowWidth() * m_Val;
 				else
-					return Window::GetWindowClass(nullptr)->GetHeight() * m_Val;
+					if (cssinfo->Parent)
+						return cssinfo->Parent->InnerBounds.height * m_Val;
+					else
+						return Application::GetApplication().GetWindowHeight() * m_Val;
 				break;
 
 			case EM:
 				return m_Val * 16.0f;
-				break;
-
-			case AUTO:
-				SP_ASSERT(false, "Auto not convertable to pixel sryy");
+				
+			case FIT_CHILDREN:
+				SP_ASSERT(false, "fit-children not convertable to pixel sryy");
 				return 0.0f;
 				break;
 
@@ -110,7 +117,8 @@ namespace sp { namespace css {
 			DOWN,
 			UP,
 			LEFT,
-			RIGHT
+			RIGHT,
+			STATIC
 		};
 
 	private:
@@ -119,10 +127,29 @@ namespace sp { namespace css {
 
 	public:
 		CSSFlowDirection(FlowDirection fd, bool wrap = false)
-			: m_Fd(fd), CSSValue(CSSValue::ValueType::FLOW_DIRECTION) {}
+			: m_Fd(fd), m_Wrap(wrap), CSSValue(CSSValue::ValueType::FLOW_DIRECTION) {}
 
 		inline FlowDirection GetDirection() const { return m_Fd; }
 		inline bool IsWrapping() const { return m_Wrap; }
+	};
+
+	class CSSBorderStyle : public CSSValue
+	{
+	public:
+		enum BorderStyle
+		{
+			SOLID,
+			NONE
+		};
+
+	private:
+		BorderStyle m_Bs;
+
+	public:
+		CSSBorderStyle(BorderStyle bs)
+			: m_Bs(bs), CSSValue(CSSValue::ValueType::BORDER_STYLE) {}
+
+		inline BorderStyle GetBorderStyle() const { return m_Bs; }
 	};
 
 } }

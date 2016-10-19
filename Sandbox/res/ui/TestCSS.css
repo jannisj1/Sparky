@@ -1,42 +1,25 @@
-label:hover {
-    background-color: red;
-    color: blue;
-    font-size: 3em;
-}
-
 label {
-    color: red;
-    background: blue;
-    padding: 5px;
+    background: red;
+    padding: 0px;
     margin: 2px;
+    border: 2px solid blue;
+    font-size: 5em;
 }
 
 ui {
-    background-color: blue;
-    padding: 10px;
-    margin: 5px;
+    margin: 0px;
     background: white;
-}
-
-div {
-    background: green;
-    margin: 5px;
-    padding: 5px;
-}
-
-#moin:hover {
-    background-color: antiquewhite;
-
-}
-
-#moin {
-    background: yellow;
-    width: 50px;
+    padding: 0px;
+    margin: 0px;
+    flow-children: down-wrap;
+    width: fit-children;
+    height: 100%;
 }
 
 * {
-    width: auto;
-    height: auto;
+    border: none 0px black;
+    width: 100%;
+    height: fit-children;
     padding: 3px;
     margin: 4px;
     font-size: 2em;

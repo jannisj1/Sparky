@@ -423,12 +423,10 @@
     <ClCompile Include="src\sp\graphics\layers\UILayer.cpp" />
     <ClCompile Include="src\sp\graphics\ui\UILabel.cpp" />
     <ClCompile Include="src\sp\css\CSSManager.cpp" />
-    <ClCompile Include="src\sp\graphics\ui\UIEmpty.cpp" />
     <ClCompile Include="src\sp\css\CSSBounds.cpp" />
     <ClCompile Include="src\sp\graphics\ui\UIButton.cpp" />
     <ClCompile Include="src\sp\graphics\ui\UIDiv.cpp" />
     <ClCompile Include="src\sp\graphics\ui\UIRoot.cpp" />
-	<ClCompile Include="src\sp\entity\component\Physics2DComponent.cpp" />
     <ClCompile Include="src\sp\graphics\Renderable2D.cpp" />
     <ClCompile Include="src\sp\graphics\Renderer2D.cpp">
       <Filter>sp\graphics</Filter>
@@ -825,7 +823,6 @@
     <ClInclude Include="src\sp\utils\Timestep.h" />
     <ClInclude Include="src\sp\graphics\layers\UILayer.h" />
     <ClInclude Include="src\sp\graphics\ui\UILabel.h" />
-    <ClInclude Include="src\sp\graphics\ui\UIEmpty.h" />
     <ClInclude Include="src\sp\css\CSSBounds.h" />
     <ClInclude Include="src\sp\graphics\ui\UIButton.h" />
     <ClInclude Include="src\sp\graphics\ui\UIDiv.h" />

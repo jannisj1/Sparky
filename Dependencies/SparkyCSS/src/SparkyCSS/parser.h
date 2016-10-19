@@ -73,11 +73,30 @@ extern int yydebug;
      _up_wrap = 282,
      _left_wrap = 283,
      _right_wrap = 284,
-     _width = 285,
-     _height = 286,
-     _auto = 287,
-     _identifier = 288,
-     _float = 289
+     _static = 285,
+     _width = 286,
+     _height = 287,
+     _fit_children = 288,
+     _border = 289,
+     _border_style = 290,
+     _border_top_style = 291,
+     _border_right_style = 292,
+     _border_bottom_style = 293,
+     _border_left_style = 294,
+     _solid = 295,
+     _none = 296,
+     _border_width = 297,
+     _border_top_width = 298,
+     _border_right_width = 299,
+     _border_bottom_width = 300,
+     _border_left_width = 301,
+     _border_color = 302,
+     _border_top_color = 303,
+     _border_right_color = 304,
+     _border_bottom_color = 305,
+     _border_left_color = 306,
+     _identifier = 307,
+     _float = 308
    };
 #endif
 
@@ -86,11 +105,11 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 135 "css.y"
+#line 23 "css.y"
  int i; float f; String *s; char b; sp::css::CSSLength::LengthUnit lu; sp::css::CSSFlowDirection *fd; sp::css::CSSKey csskey; sp::css::CSSValue *cssval; std::vector<sp::css::CSSValue*> *cssvalues; sp::css::CSSSelector *cssselector; 
 
 /* Line 2058 of yacc.c  */
-#line 94 "parser.h"
+#line 113 "parser.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

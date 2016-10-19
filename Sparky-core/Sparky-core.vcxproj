@@ -198,7 +198,6 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClCompile Include="src\sp\graphics\Renderer.cpp" />
     <ClCompile Include="src\sp\graphics\shaders\ShaderManager.cpp" />
     <ClCompile Include="src\sp\graphics\ui\UIButton.cpp" />
-    <ClCompile Include="src\sp\graphics\ui\UIEmpty.cpp" />
     <ClCompile Include="src\sp\graphics\ui\UILabel.cpp" />
     <ClCompile Include="src\sp\graphics\ui\UIDiv.cpp" />
     <ClCompile Include="src\sp\graphics\ui\UIRoot.cpp" />
@@ -672,7 +671,6 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClInclude Include="src\sp\graphics\API\TextureCube.h" />
     <ClInclude Include="src\sp\graphics\API\TextureDepth.h" />
     <ClInclude Include="src\sp\graphics\ui\UIButton.h" />
-    <ClInclude Include="src\sp\graphics\ui\UIEmpty.h" />
     <ClInclude Include="src\sp\graphics\ui\UILabel.h" />
     <ClInclude Include="src\sp\graphics\ui\UIDiv.h" />
     <ClInclude Include="src\sp\graphics\ui\UIRoot.h" />
