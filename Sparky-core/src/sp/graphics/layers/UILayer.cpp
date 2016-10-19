@@ -104,7 +104,7 @@ namespace sp { namespace graphics {
 		maths::vec2 saveScale = FontManager::GetScale();
 		FontManager::SetScale(maths::vec2(1, 1));
 		css::CSSBounds space(0, 0, Application::GetApplication().GetWindowWidth(), Application::GetApplication().GetWindowHeight());
-		m_RootWidget->OnUpdate(space, space);
+		m_RootWidget->CalculatePosition(space, space);
 		
 		FontManager::SetScale(saveScale); 
 		

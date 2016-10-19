@@ -102,7 +102,7 @@ namespace sp { namespace css {
 		{
 			for (auto& r : cssInfo->Classes)
 			{
-				if (r == m_Class && (m_Child) ? m_Child->Applies(cssInfo) : true) return true;
+				if (r == m_Class && ((m_Child) ? m_Child->Applies(cssInfo) : true)) return true;
 			}
 
 			return false;

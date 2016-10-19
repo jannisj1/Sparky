@@ -13,7 +13,7 @@ namespace sp { namespace graphics { namespace ui {
 
 	}
 
-	css::CSSBounds UIDiv::OnUpdate(const css::CSSBounds& space, const css::CSSBounds& initialSpace)
+	css::CSSBounds UIDiv::CalculatePosition(const css::CSSBounds& space, const css::CSSBounds& initialSpace)
 	{
 		using namespace css;
 
@@ -62,7 +62,7 @@ namespace sp { namespace graphics { namespace ui {
 
 		for (auto c : m_Children)
 		{
-			childrenSpace = c->OnUpdate(childrenSpace, m_InnerBounds);
+			childrenSpace = c->CalculatePosition(childrenSpace, m_InnerBounds);
 		}
 
 		m_Bounds = space;

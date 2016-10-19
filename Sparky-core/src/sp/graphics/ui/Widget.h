@@ -35,7 +35,7 @@ namespace sp { namespace graphics { namespace ui {
 		virtual bool OnMouseReleased(events::MouseReleasedEvent& e);
 		virtual bool OnMouseMoved(events::MouseMovedEvent& e);
 
-		virtual css::CSSBounds OnUpdate(const css::CSSBounds& space, const css::CSSBounds& initialSpace) = 0;
+		virtual css::CSSBounds CalculatePosition(const css::CSSBounds& space, const css::CSSBounds& initialSpace) = 0;
 		virtual void OnRender(Renderer2D& renderer);
 		/*
 		virtual float GetWidth(const css::CSSBounds& space) = 0;

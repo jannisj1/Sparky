@@ -16,7 +16,7 @@ namespace sp { namespace graphics { namespace ui {
 	public:
 		UILabel(Widget *parent, css::CSSManager* cssManager, tinyxml2::XMLElement *domElement);
 
-		css::CSSBounds OnUpdate(const css::CSSBounds& space, const css::CSSBounds& initialSpace) override;
+		css::CSSBounds CalculatePosition(const css::CSSBounds& space, const css::CSSBounds& initialSpace) override;
 		void OnRender(Renderer2D& renderer) override;
 
 		inline void SetValue(const String& label) { m_Value = label; }

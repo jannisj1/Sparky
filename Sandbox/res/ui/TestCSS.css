@@ -1,9 +1,18 @@
-label {
-    background: red;
-    padding: 0px;
-    margin: 2px;
-    border: 2px solid blue;
-    font-size: 5em;
+.green {
+    font-size: 2em;
+    color: blue;
+    background-color: green;
+    width: fit-children;
+}
+
+.biglabel {
+    font-size: 10em;
+    background: blue;
+    color: green;
+}
+
+.green label {
+    color: red;
 }
 
 ui {
@@ -23,7 +32,7 @@ ui {
     padding: 3px;
     margin: 4px;
     font-size: 2em;
-    color: white;
+    color: black;
     background-color: transparent;
     flow-children: down;
 }

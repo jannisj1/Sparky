@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui>
   <style src="/ui/TestCSS.css"></style>
+  <label class="biglabel" value="firstLabel"/>
+  <label value="labelTwo"/>
   <label value="sanni"/>
-  <label value="sanni"/>
-  <label value="sanni"/>
-  <label value="sanni"/>
-  <label value="sanni"/>
-  <label value="sanni"/>
-  <label value="sanniafafa"/>
-  <label value="sanni"/>
+  <div class="green">
+    <label value="sanni"/>
+    <label value="sanni"/>
+    <label value="sanni"/>
+    <label value="sanniafafa"/>
+    <label value="sanni"/>
+  </div>
   <label value="sanni"/>
   <label value="sanni"/>
   <label value="sanni"/>

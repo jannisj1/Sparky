@@ -19,7 +19,7 @@ namespace sp { namespace graphics { namespace ui {
 			m_Value = domElement->GetText();
 	}
 
-	css::CSSBounds UILabel::OnUpdate(const css::CSSBounds& space, const css::CSSBounds& initialSpace)
+	css::CSSBounds UILabel::CalculatePosition(const css::CSSBounds& space, const css::CSSBounds& initialSpace)
 	{
 		float size;
 		if (m_Font->GetFontSize() != (size = GetPixelHeight(FONT_SIZE)))

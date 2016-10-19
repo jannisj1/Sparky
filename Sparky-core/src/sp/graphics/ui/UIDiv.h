@@ -14,7 +14,7 @@ namespace sp { namespace graphics { namespace ui {
 	public:
 		UIDiv(Widget *parent, css::CSSManager* cssManager, tinyxml2::XMLElement *domElement);
 
-		css::CSSBounds OnUpdate(const css::CSSBounds& space, const css::CSSBounds& initialSpace) override;
+		css::CSSBounds CalculatePosition(const css::CSSBounds& space, const css::CSSBounds& initialSpace) override;
 		void OnRender(Renderer2D& renderer) override;
 		/*
 		virtual float GetWidth(const css::CSSBounds& space) override;
