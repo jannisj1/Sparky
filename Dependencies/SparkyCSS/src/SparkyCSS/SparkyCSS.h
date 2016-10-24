@@ -55,6 +55,7 @@ namespace sp { namespace css {
 	class CSSParser
 	{
 	public:
+		static void ParseMasterCSS(CSSRules& rules);
 		static void Parse(CSSRules& rules, const String& css);
 	};
 

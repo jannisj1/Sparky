@@ -1,38 +1,16 @@
-.green {
-    font-size: 2em;
-    color: blue;
-    background-color: green;
-    width: fit-children;
+.mydiv {
+    flow-children: right;
 }
 
-.biglabel {
-    font-size: 10em;
-    background: blue;
-    color: green;
+label:hover {
+    background: red;
+
 }
 
-.green label {
-    color: red;
+label {
+    background: green;
 }
 
 ui {
-    margin: 0px;
-    background: white;
-    padding: 0px;
-    margin: 0px;
-    flow-children: down-wrap;
-    width: fit-children;
-    height: 100%;
-}
-
-* {
-    border: none 0px black;
-    width: 100%;
-    height: fit-children;
-    padding: 3px;
-    margin: 4px;
-    font-size: 2em;
-    color: black;
-    background-color: transparent;
-    flow-children: down;
+    background: black;
 }

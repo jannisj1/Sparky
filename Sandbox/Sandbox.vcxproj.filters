@@ -23,6 +23,8 @@
     <None Include="shaders\Skybox.hlsl" />
     <None Include="shaders\Skybox.shader" />
     <None Include="res\ui\TestCSS.css" />
+    <None Include="res\ui\Test.js" />
+    <None Include="res\ui\sparky.js" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sandbox.cpp">

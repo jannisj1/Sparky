@@ -7,6 +7,8 @@ void yyerror(const char *s);
 
 namespace sp { namespace css {
 
+	String masterCSS = "*{ border: none 0px black;width: 100%;height: fit-children;padding: 3px;margin: 4px;font-size: 2em;color: black;background-color: transparent;flow-children: down; } ui { height: 100%; background: white; margin: 0px; padding: 0px; } div { padding: 0px; margin: 0px; } ";
+
 	void CSSParser::Parse(CSSRules& rules,  const String& css)
 	{
 		res_map = &rules; 
@@ -16,6 +18,11 @@ namespace sp { namespace css {
 		yyparse();
 
 		return;
+	}
+
+	void CSSParser::ParseMasterCSS(CSSRules& rules)
+	{
+		Parse(rules, masterCSS);
 	}
 
 } }

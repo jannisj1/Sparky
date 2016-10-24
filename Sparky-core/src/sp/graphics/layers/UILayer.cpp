@@ -8,6 +8,7 @@
 #include "sp/graphics/ui/UIRoot.h"
 #include "sp/graphics/ui/UILabel.h"
 #include "sp/graphics/ui/UIButton.h"
+#include <SparkyJS/SparkyJS.h>
 
 namespace sp { namespace graphics {
 
@@ -19,16 +20,16 @@ namespace sp { namespace graphics {
 		m_Renderer = spnew Renderer2D(width, height);
 		m_Scene = spnew Scene2D(maths::mat4::Orthographic(0, width, 0, height, -1.0f, 1.0f));
 		m_Renderer->SetCamera(m_Scene->GetCamera());
-
-		m_CSSManager = spnew css::CSSManager();
 	}
 
 	UILayer::~UILayer()
 	{
+		spdel m_EE;
 		spdel m_Material;
 		spdel m_Renderer;
 		spdel m_RootWidget;
 		spdel m_CSSManager;
+		spdel m_Doc;
 	}
 
 	void UILayer::Init()
@@ -38,6 +39,7 @@ namespace sp { namespace graphics {
 
 	void UILayer::OnInit(Renderer2D& renderer, Material& material)
 	{
+
 	}
 
 	bool UILayer::OnResize(uint width, uint height)
@@ -49,17 +51,37 @@ namespace sp { namespace graphics {
 
 	void UILayer::FromXML(const String& xml)
 	{
-		String physicalPath;
-		VFS::Get()->ResolvePhysicalPath(xml, physicalPath);
-		tinyxml2::XMLDocument doc;
-		tinyxml2::XMLError err = doc.LoadFile(physicalPath.c_str());
+		String physicalPathXML, physicalPathJS;
+		if (!VFS::Get()->ResolvePhysicalPath(xml, physicalPathXML))
+		{
+			SP_ERROR("xml-file \"", xml, "\" does not exist");
+			return;
+		}
+		
+		if (!VFS::Get()->ResolvePhysicalPath("/ui/sparky.js", physicalPathJS))
+		{
+			SP_ERROR("sparky.js could not be found!");
+			return;
+		}
+
+		spdel m_Doc;
+		spdel m_RootWidget;
+		spdel m_CSSManager;
+		spdel m_EE;
+
+		m_CSSManager = spnew css::CSSManager();
+		m_EE = spnew spjs::ExecutionEngine();
+		m_EE->EvalScript(VFS::Get()->ReadTextFile("/ui/sparky.js"));
+
+		m_Doc = spnew tinyxml2::XMLDocument();
+		tinyxml2::XMLError err = m_Doc->LoadFile(physicalPathXML.c_str());
 		if(err)
 			SP_ERROR("tinyxml2-error ", (int)err);
 		
 		ui::Widget::FocusedWidget = nullptr;
 
-		if(doc.FirstChildElement())
-			m_RootWidget = CreateWidgetFromXML(nullptr, doc.FirstChildElement());
+		if(m_Doc->FirstChildElement())
+			m_RootWidget = CreateWidgetFromXML(nullptr, m_Doc->FirstChildElement());
 	}
 
 	ui::Widget *UILayer::CreateWidgetFromXML(ui::Widget *parent, tinyxml2::XMLElement *domElement)
@@ -83,18 +105,34 @@ namespace sp { namespace graphics {
 				m_CSSManager->EvalCSS((t == nullptr ? "" : t));
 			}
 		}
+		else if (elemName == "script")
+		{
+			if (domElement->Attribute("src"))
+			{ 
+				m_EE->EvalScript(VFS::Get()->ReadTextFile(domElement->Attribute("src")), domElement->Attribute("src"));
+			}
+			else
+			{
+				const char *t = domElement->GetText();
+				m_EE->EvalScript((t == nullptr ? "" : t));
+			}
+		}
 		else SP_ERROR("Unknown UI-Element: ", elemName);
 
 		tinyxml2::XMLElement *child = domElement->FirstChildElement();
 
-		if(curr)
+		if (curr)
+		{
 			while (child != nullptr)
 			{
 				ui::Widget *childWidget = CreateWidgetFromXML(curr, child);
-				if(childWidget)
+				if (childWidget)
 					curr->AddChild(childWidget);
 				child = child->NextSiblingElement();
 			}
+
+			curr->SetEE(m_EE);
+		}
 
 		return curr;
 	}

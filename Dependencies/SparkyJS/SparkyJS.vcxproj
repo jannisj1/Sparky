@@ -72,22 +72,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(ProjectDir)lib\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Intermediates\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)Dependencies\Spidermonkey\include\Spidermonkey;$(SolutionDir)Sparky-core\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)src\v7;$(SolutionDir)Dependencies\Spidermonkey\include\Spidermonkey;$(SolutionDir)Sparky-core\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(ProjectDir)lib\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Intermediates\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)Dependencies\Spidermonkey\include\Spidermonkey;$(SolutionDir)Sparky-core\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)src\v7;$(SolutionDir)Dependencies\Spidermonkey\include\Spidermonkey;$(SolutionDir)Sparky-core\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)lib\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Intermediates\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)Dependencies\Spidermonkey\include\Spidermonkey;$(SolutionDir)Sparky-core\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)src\v7;$(SolutionDir)Dependencies\Spidermonkey\include\Spidermonkey;$(SolutionDir)Sparky-core\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(ProjectDir)lib\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Intermediates\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)Dependencies\Spidermonkey\include\Spidermonkey;$(SolutionDir)Sparky-core\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)src\v7;$(SolutionDir)Dependencies\Spidermonkey\include\Spidermonkey;$(SolutionDir)Sparky-core\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -96,6 +96,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -108,6 +109,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -116,7 +118,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -132,7 +134,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -149,12 +151,15 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Script.h" />
-    <ClInclude Include="src\SparkyJS.h" />
+    <ClInclude Include="src\SparkyJS\Bindings.h" />
+    <ClInclude Include="src\SparkyJS\Script.h" />
+    <ClInclude Include="src\SparkyJS\ShellPrincipals.h" />
+    <ClInclude Include="src\SparkyJS\SparkyJS.h" />
+    <ClInclude Include="src\SparkyJS\test.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Script.cpp" />
-    <ClCompile Include="src\SparkyJS.cpp" />
+    <ClCompile Include="src\SparkyJS\Script.cpp" />
+    <ClCompile Include="src\SparkyJS\SparkyJS.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

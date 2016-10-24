@@ -40,13 +40,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Dependencies\tinyxml2\src;$(SolutionDir)Dependencies\SparkyCSS\src;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\Spidermonkey\include\Spidermonkey;$(SolutionDir)Dependencies\tinyxml2\src;$(SolutionDir)Dependencies\SparkyCSS\src;$(VC_IncludePath);$(SolutionDir)Dependencies\SparkyJS\src;$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediates\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)Dependencies\tinyxml2\src;$(SolutionDir)Dependencies\SparkyCSS\src;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\Spidermonkey\include\Spidermonkey;$(SolutionDir)Dependencies\tinyxml2\src;$(SolutionDir)Dependencies\SparkyCSS\src;$(VC_IncludePath);$(SolutionDir)Dependencies\SparkyJS\src\v7;$(SolutionDir)Dependencies\SparkyJS\src;$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediates\$(ProjectName)</IntDir>
@@ -99,6 +99,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\ui\sparky.js" />
+    <None Include="res\ui\Test.js" />
     <None Include="res\ui\TestCSS.css" />
     <None Include="shaders\AdvancedLighting.shader" />
     <None Include="shaders\postfx.shader" />

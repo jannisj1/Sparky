@@ -22,7 +22,9 @@ namespace sp { namespace graphics {
 		Scene2D *m_Scene;
 		ui::Widget *m_RootWidget = nullptr;
 
-		css::CSSManager *m_CSSManager;
+		tinyxml2::XMLDocument *m_Doc = nullptr;
+		css::CSSManager *m_CSSManager = nullptr;
+		spjs::ExecutionEngine *m_EE = nullptr;
 
 	public:
 		UILayer();

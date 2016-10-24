@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui>
-  <style src="/ui/TestCSS.css"></style>
+  <style src="/ui/TestCSS.css"/>
+  <script>
+    function lol(x){
+      log.warn(x);
+    }
+    
+  </script>
+  
   <label class="biglabel" value="firstLabel"/>
   <label value="labelTwo"/>
-  <label value="sanni"/>
-  <div class="green">
-    <label value="sanni"/>
-    <label value="sanni"/>
-    <label value="sanni"/>
-    <label value="sanniafafa"/>
-    <label value="sanni"/>
+  <div class="mydiv">
+    <label value="afa"/>
+    <label value="jsanniafafa"/>
   </div>
-  <label value="sanni"/>
-  <label value="sanni"/>
-  <label value="sanni"/>
-  <label value="sanni"/>
-  <label value="sanni"/>
-  <label value="sanni"/>
-  <label value="sanni"/>
-  <label value="sanni"/>
-  <label value="sanni"/>
+  <label onmouseover="lol(Math.sqrt(79128564804));" value="Hover for time"/>
 </ui>

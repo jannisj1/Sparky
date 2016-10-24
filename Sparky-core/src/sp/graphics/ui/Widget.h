@@ -8,6 +8,7 @@
 #include "sp/graphics/Renderer2D.h"
 
 #include <SparkyCSS/SparkyCSS.h>
+#include <SparkyJS/SparkyJS.h>
 #include <tinyxml2.h>
 
 namespace sp { namespace graphics { namespace ui {
@@ -25,15 +26,18 @@ namespace sp { namespace graphics { namespace ui {
 		css::CSSBounds &m_InnerBounds = m_CSSInfo.InnerBounds;
 		css::CSSBounds m_OuterBounds;
 		Widget *m_Parent;
+		spjs::ExecutionEngine *m_JS = nullptr;
 
 	public:
 		Widget(Widget *parent, css::CSSManager *cssManager, tinyxml2::XMLElement *domElement, bool activatable = false, bool focusable = false);
 
 	public:
 		static ui::Widget *FocusedWidget;
-		virtual bool OnMousePressed(events::MousePressedEvent& e);
-		virtual bool OnMouseReleased(events::MouseReleasedEvent& e);
-		virtual bool OnMouseMoved(events::MouseMovedEvent& e);
+		bool OnMousePressed(events::MousePressedEvent& e);
+		bool OnMouseReleased(events::MouseReleasedEvent& e);
+		bool OnMouseMoved(events::MouseMovedEvent& e);
+
+		//void OnHover()
 
 		virtual css::CSSBounds CalculatePosition(const css::CSSBounds& space, const css::CSSBounds& initialSpace) = 0;
 		virtual void OnRender(Renderer2D& renderer);
@@ -41,6 +45,8 @@ namespace sp { namespace graphics { namespace ui {
 		virtual float GetWidth(const css::CSSBounds& space) = 0;
 		virtual float GetHeight(const css::CSSBounds& space) = 0;
 		*/
+
+		inline void SetEE(spjs::ExecutionEngine *ee) { m_JS = ee; }
 
 		inline css::UIElementCSSInfo &GetCSSInfo() { return m_CSSInfo; }
 		inline const css::CSSValue *GetCSSValue(css::CSSKey key) { return m_CSSManager->GetValue(m_CSSInfo, key); }

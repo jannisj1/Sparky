@@ -18,18 +18,27 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\SparkyJS.h">
+    <ClInclude Include="src\SparkyJS\SparkyJS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Script.h">
+    <ClInclude Include="src\SparkyJS\Script.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SparkyJS\Bindings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SparkyJS\ShellPrincipals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SparkyJS\test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\SparkyJS.cpp">
+    <ClCompile Include="src\SparkyJS\SparkyJS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Script.cpp">
+    <ClCompile Include="src\SparkyJS\Script.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

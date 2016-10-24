@@ -5,7 +5,7 @@ namespace sp { namespace css {
 	
 	CSSManager::CSSManager()
 	{
-
+		CSSParser::ParseMasterCSS(m_Rules);
 	}
 
 	CSSManager::~CSSManager()

@@ -36,11 +36,25 @@ namespace sp { namespace graphics { namespace ui {
 	{
 		if (m_Bounds.Contains(e.GetPosition()))
 		{
-			if (m_CSSInfo.State == css::IDLE) m_CSSInfo.State = css::HOVER;
+			if (m_CSSInfo.State == css::IDLE)
+			{
+				const char *mouseover = m_DOMElement->Attribute("onmouseover");
+				if(mouseover)
+					m_JS->EvalScript(mouseover);
+
+				m_CSSInfo.State = css::HOVER;
+			}
 		}
 		else
 		{
-			if (m_CSSInfo.State == css::HOVER) m_CSSInfo.State = css::IDLE;
+			if (m_CSSInfo.State == css::HOVER)
+			{
+				const char *onmouseout = m_DOMElement->Attribute("onmouseout");
+				if (onmouseout)
+					m_JS->EvalScript(onmouseout);
+
+				m_CSSInfo.State = css::IDLE;
+			}
 		}
 
 		for (auto c : m_Children)
@@ -71,6 +85,10 @@ namespace sp { namespace graphics { namespace ui {
 				m_CSSInfo.State = css::ACTIVE;
 				return true;
 			}
+
+			const char *onclick = m_DOMElement->Attribute("onclick");
+			if (onclick)
+				m_JS->EvalScript(onclick);
 		}
 
 		for (auto c : m_Children)
@@ -85,12 +103,20 @@ namespace sp { namespace graphics { namespace ui {
 	{
 		if (m_CSSInfo.State == css::ACTIVE)
 		{
+			const char *onrelease = m_DOMElement->Attribute("onrelease");
+			if (onrelease)
+				m_JS->EvalScript(onrelease);
+
 			if (m_Bounds.Contains(e.GetPosition()))
 			{
 				if (m_Focusable)
 				{
 					m_CSSInfo.State = css::FOCUSED;
 					FocusedWidget = this;
+
+					const char *onfocus = m_DOMElement->Attribute("onfocus");
+					if (onfocus)
+						m_JS->EvalScript(onfocus);
 				}
 				else m_CSSInfo.State = css::HOVER;
 			}
