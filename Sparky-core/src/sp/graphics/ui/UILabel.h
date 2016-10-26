@@ -9,7 +9,7 @@ namespace sp { namespace graphics { namespace ui {
 	class UILabel : public Widget
 	{
 	protected:
-		String m_Value;
+		String m_Value, m_InitialValue;
 		Font* m_Font;
 		maths::vec2 m_Pos;
 

@@ -1,16 +1,19 @@
-.mydiv {
-    flow-children: right;
-}
-
-label:hover {
-    background: red;
-
+ui {
+    background: black;
 }
 
 label {
-    background: green;
+    color: white;
+    font-size: 24px;
+    margin: 0px;
 }
 
-ui {
-    background: black;
+label:hover {
+    color: red;
+}
+
+#debugInfo {
+    margin-top: 10px;
+    margin-left: 5px;
+
 }

@@ -29,7 +29,7 @@ namespace sp {
 	private:
 		bool m_Running, m_Suspended;
 		Timer* m_Timer;
-		uint m_UpdatesPerSecond, m_FramesPerSecond;
+		uint m_UpdatesPerSecond = 0, m_FramesPerSecond = 0;
 		float m_Frametime;
 
 		String m_Name;

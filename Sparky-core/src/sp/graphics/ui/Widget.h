@@ -69,6 +69,8 @@ namespace sp { namespace graphics { namespace ui {
 
 		css::CSSBounds PositionInsideParent(const css::CSSBounds& space, const css::CSSBounds& initialSpace);
 		void DrawBackgroundAndBorder(Renderer2D& renderer);
+
+		String GetDOMValue(const String& name);
 	};
 
 } } }

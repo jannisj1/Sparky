@@ -7,6 +7,59 @@
 
 namespace sp { namespace spjs {
 
+	static std::vector<ExecutionEngine*> EEInstances;
+
+	bool SetValue(JSContext* cx, unsigned int argc, JS::Value* vp)
+	{
+		JS::CallArgs c = JS::CallArgsFromVp(argc, vp);
+		auto val = EEInstances[c[0].toInt32()]->m_ExposedValues[c[1].toInt32()];
+
+		switch (val.first.first)
+		{
+		case ExecutionEngine::ExposedValueType::DOUBLE:
+			*(double*)val.second = c[2].toDouble();
+			break;
+		case ExecutionEngine::ExposedValueType::FLOAT:
+			*(float*)val.second = c[2].toDouble();
+			break;
+		case ExecutionEngine::ExposedValueType::INT32:
+			*(int32*)val.second = c[2].toDouble();
+			break;
+		case ExecutionEngine::ExposedValueType::STRING:
+			*(String*)val.second = JS_EncodeString(EEInstances[c[0].toInt32()]->m_Context, c[2].toString());
+			break;
+		}
+
+		return true;
+	}
+
+	bool GetValue(JSContext* cx, unsigned int argc, JS::Value* vp)
+	{
+		JS::CallArgs c = JS::CallArgsFromVp(argc, vp);
+		
+		auto val = EEInstances[c[0].toInt32()]->m_ExposedValues[c[1].toInt32()];
+
+		switch (val.first.first)
+		{
+		case ExecutionEngine::ExposedValueType::DOUBLE:
+			*vp = JS::DoubleValue(*(double*)val.second);
+			break;
+		case ExecutionEngine::ExposedValueType::FLOAT:
+			*vp = JS::DoubleValue(*(float*)val.second);
+			break;
+		case ExecutionEngine::ExposedValueType::INT32:
+			*vp = JS::DoubleValue(*(int32*)val.second);
+			break;
+		case ExecutionEngine::ExposedValueType::STRING:
+			*vp = JS::StringValue(JS_NewStringCopyN(EEInstances[c[0].toInt32()]->m_Context, ((String*)val.second)->c_str(), ((String*)val.second)->length())); //TODO dont allocate a string everytime when it is const
+			break;
+		default:
+			SP_ASSERT(false);
+		}
+
+		return true;
+	}
+
 	// Needed?
 	void wr(JSContext* cx, const char* msg, JSErrorReport* er)
 	{
@@ -17,15 +70,21 @@ namespace sp { namespace spjs {
 	{
 		std::thread t1(&ExecutionEngine::StartEngine, this);
 		t1.detach();
+		m_ID = EEInstances.size();
+		EEInstances.push_back(this);
 	}
 
 	ExecutionEngine::~ExecutionEngine()
 	{
-		for (auto s : m_Scripts) spdel s;
+		for (auto& v : m_ExposedValues)
+			if (v.first.second && v.first.first != ExposedValueType::STRING)
+				spdel v.second;
 
+		for (auto s : m_Scripts) spdel s;
 		spdel m_AC;
 
 		spdel m_Retval;
+		spdel m_Retval2;
 		spdel m_Global;
 		JS_DestroyContext(m_Context);
 		JS_ShutDown();
@@ -57,17 +116,18 @@ namespace sp { namespace spjs {
 
 		m_Global = spnew JS::RootedObject(m_Context, JS_NewGlobalObject(m_Context, &global_class, nullptr, JS::FireOnNewGlobalHook, JS::CompartmentOptions()));
 		m_Retval = spnew JS::RootedValue(m_Context);
+		m_Retval2 = spnew JS::RootedValue(m_Context);
 
 		m_AC = spnew JSAutoCompartment(m_Context, *m_Global);
 		JS_InitStandardClasses(m_Context, *m_Global);
 		JS_DefineFunctions(m_Context, *m_Global, myjs_global_functions);
+		JS_DefineFunction(m_Context, *m_Global, "__internal_get_exposed_value__", GetValue, 2, 0);
+		JS_DefineFunction(m_Context, *m_Global, "__internal_set_exposed_value__", SetValue, 3, 0);
 
 		while (true)
 		{
 			while (!m_StartWorking)
-			{
 				m_JSExeccv.wait(lock);
-			}
 
 			switch (m_CurrentCmd)
 			{
@@ -84,19 +144,27 @@ namespace sp { namespace spjs {
 			}
 			
 			m_StartWorking = false;
+			m_WorkDone = true;
+			m_JSExeccv.notify_one();
 		}
 	}
 
-	void ExecutionEngine::EvalScript(const String& script, const String& filename)
+	JS::RootedValue *ExecutionEngine::EvalScript(const String& script, const String& filename)
 	{
-		std::lock_guard<std::mutex> lock(m_Mutex);
+		std::unique_lock<std::mutex> lock(m_Mutex);
 		
 		m_CurrentCode = script;
 		m_CurrentFilename = filename;
 		m_CurrentCmd = EVAL;
 
+		m_WorkDone = false;
 		m_StartWorking = true;
 		m_JSExeccv.notify_one();
+		
+		while(!m_WorkDone)
+			m_JSExeccv.wait(lock);
+
+		return m_Retval;
 	}
 	
 	Script *ExecutionEngine::CompileScript(const String& script, const String& filename_)
@@ -126,6 +194,51 @@ namespace sp { namespace spjs {
 	{
 		SP_ASSERT(false);
 		JS_ExecuteScript(m_Context, *script->m_MHS);
+	}
+
+	String ExecutionEngine::EvalString(const String& s)
+	{
+		bool inJS = false;
+		uint curlies = 0;
+		std::stringstream ss, js;
+
+		for (char c : s)
+		{
+			if (c == '{')
+			{
+				if (inJS) js << c;
+				else inJS = true;
+				curlies++;
+			}
+			else if (c == '}')
+			{
+				if (--curlies == 0)
+				{
+					js << ';';
+					auto res = ToString(EvalScript(js.str()));
+					ss << res;
+					js.str("");
+					js.clear();
+					inJS = false;
+				}
+				else js << c;
+			}
+			else if (inJS) js << c;
+			else ss << c;
+
+		}
+
+		return ss.str();
+	}
+
+	String ExecutionEngine::ToString(JS::RootedValue *v)
+	{
+		std::unique_lock<std::mutex> lock(m_Mutex);
+		JS::HandleValue ho(v);
+
+		JS_DefineProperty(m_Context, *m_Global, "__internal_toString_parameter__", ho, 0);
+		lock.unlock();
+		return JS_EncodeString(m_Context, EvalScript("__internal_toString__(__internal_toString_parameter__)")->toString());
 	}
 
 	void ExecutionEngine::HandleLastError()

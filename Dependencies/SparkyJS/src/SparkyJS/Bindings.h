@@ -40,7 +40,7 @@ namespace sp { namespace spjs {
 
 	bool internal_get_frametime(JSContext* cx, unsigned int argc, JS::Value* vp)
 	{
-		*vp = JS::Int32Value(Application::GetApplication().GetFPS());
+		*vp = JS::Float32Value(Application::GetApplication().GetFrametime());
 		return true;
 	}
 

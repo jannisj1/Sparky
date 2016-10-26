@@ -3,16 +3,13 @@
   <style src="/ui/TestCSS.css"/>
   <script>
     function lol(x){
-      log.warn(x);
+      log.warn(f);
     }
     
   </script>
-  
-  <label class="biglabel" value="firstLabel"/>
-  <label value="labelTwo"/>
-  <div class="mydiv">
-    <label value="afa"/>
-    <label value="jsanniafafa"/>
+  <div id="debugInfo">
+    <label onclick="log.info('WHAZZUP?')">{app.fps} fps</label>
+    <label>{app.frameTime.toFixed(2)} ms</label>
+    <label>{app.memory.currentUsed}</label>
   </div>
-  <label onmouseover="lol(Math.sqrt(79128564804));" value="Hover for time"/>
 </ui>

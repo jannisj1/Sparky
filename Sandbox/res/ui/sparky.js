@@ -1,3 +1,6 @@
+function __internal_toString__(obj) {
+    return obj.toString();
+}
 
 class log {
     static info(x) {
@@ -76,7 +79,36 @@ class app {
         return __internal_get_fps__();
     }
 
+    static get frameTime() {
+        return __internal_get_frametime__();
+    }
+
     static get memory() {
         return new __internal_class_memory__();
+    }
+
+    
+}
+
+class __internal_class_expose_wrapper__ {
+    constructor(eeID, valueID, const_) { 
+        this.eeID = eeID | 0; 
+        this.valueID = valueID | 0;
+        this.isConst = const_;
+    }
+
+    get() {
+        return __internal_get_exposed_value__(this.eeID, this.valueID);
+    }
+
+    set(val) {
+        if (!this.isConst)
+            __internal_set_exposed_value__(this.eeID, this.valueID, val);
+        else
+            log.error("Can't set a const value!"); //TODO: Throw exception
+    }
+
+    toString() {
+        return this.get().toString();
     }
 }

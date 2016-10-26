@@ -135,6 +135,7 @@ selector: _identifier			{ $$ = spnew CSSNameSelector(*$1); }
 key_value_pairs: key_value_pair ';' key_value_pairs
 	| key_value_pair ';'
 	| key_value_pair
+	|
 
 
 key_value_pair: key ':' values { 

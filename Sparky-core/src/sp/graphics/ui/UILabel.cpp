@@ -14,9 +14,9 @@ namespace sp { namespace graphics { namespace ui {
 		m_Font = FontManager::Get();
 
 		if (domElement->Attribute("value"))
-			m_Value = domElement->Attribute("value");
+			m_InitialValue = domElement->Attribute("value");
 		else
-			m_Value = domElement->GetText();
+			m_InitialValue = domElement->GetText();
 	}
 
 	css::CSSBounds UILabel::CalculatePosition(const css::CSSBounds& space, const css::CSSBounds& initialSpace)
@@ -33,6 +33,7 @@ namespace sp { namespace graphics { namespace ui {
 		m_Bounds.x = space.x + GetPixelWidth(MARGIN_LEFT);
 		m_Bounds.y = space.y + GetPixelHeight(MARGIN_TOP);
 
+		//TODO: Calculate font height correctly
 		m_Bounds.width = m_Font->GetWidth(m_Value) + GetPixelWidth(PADDING_LEFT) + GetPixelWidth(PADDING_RIGHT) + GetPixelWidth(BORDER_LEFT_WIDTH) + GetPixelWidth(BORDER_RIGHT_WIDTH);
 		m_Bounds.height = m_Font->GetHeight(m_Value) + GetPixelHeight(PADDING_TOP) + GetPixelHeight(PADDING_BOTTOM) + GetPixelHeight(BORDER_TOP_WIDTH) + GetPixelHeight(BORDER_BOTTOM_WIDTH);
 		
@@ -48,7 +49,7 @@ namespace sp { namespace graphics { namespace ui {
 
 		m_Pos.y = Application::GetApplication().GetWindowHeight() - m_Pos.y;
 
-		String s = m_Value;
+		m_Value = m_JS->EvalString(m_InitialValue);
 
 		return PositionInsideParent(space, initialSpace);
 	}
