@@ -51,14 +51,10 @@ extern std::unordered_map<String, sp::css::CSSColor> color_map;
 %token _rgba
 
 %token _down
-%token _up
-%token _left
 %token _right
 %token _down_wrap
-%token _up_wrap
-%token _left_wrap
 %token _right_wrap
-%token _static
+%token _no_flow
 
 %token _width
 %token _height
@@ -87,6 +83,28 @@ extern std::unordered_map<String, sp::css::CSSColor> color_map;
 %token _border_right_color;
 %token _border_bottom_color;
 %token _border_left_color;
+
+%token _justify_content;
+%token _end;
+%token _start;
+%token _center;
+%token _space_around;
+%token _space_between;
+
+%token _align_items;
+
+%token _position;
+
+%token _relative;
+%token _absolute;
+%token _fixed;
+%token _static;
+
+%token _left;
+%token _top;//TODO remove this
+
+%token _auto;
+%token _display;
 
 %type<csskey> key
 %type<lu> length_unit
@@ -144,7 +162,8 @@ key_value_pair: key ':' values {
 	spdel vec;
 }
 
-key: _padding					{ $$ = PADDING; }
+key: 
+	_padding					{ $$ = PADDING; }
 	| _padding_top				{ $$ = PADDING_TOP; } 
 	| _padding_right			{ $$ = PADDING_RIGHT; } 
 	| _padding_bottom			{ $$ = PADDING_BOTTOM; } 
@@ -188,43 +207,86 @@ key: _padding					{ $$ = PADDING; }
 	| _border_bottom_color		{ $$ = BORDER_BOTTOM_COLOR; }
 	| _border_left_color		{ $$ = BORDER_LEFT_COLOR; }
 
+	| _justify_content			{ $$ = JUSTIFY_CONTENT; }
+	| _align_items				{ $$ = ALIGN_ITEMS; }
+	
+	| _position					{ $$ = POSITION; }
+	| _left						{ $$ = X; }
+	| _top						{ $$ = Y; }
+
+	| _display					{ $$ = DISPLAY; }
+
+	| _identifier				{ 
+		if(*$1 == "x") $$ = X;
+		else if(*$1 == "y") $$ = Y;
+		else
+		{
+			SP_ERROR("Unknown Css-Property: ", *$1);
+		}
+	 }
+
 values: values ',' value
 	| values value
 	| value
 
-value: length
+value: 
+	length
 	| color
 	| flow_direction
 	| border_style
+	| content_justification
+	| position
+	| display
 
-length: number length_unit		{ push_value_vector(spnew CSSLength($1, $2)); }
+length: 
+	number length_unit			{ push_value_vector(spnew CSSLength($1, $2)); }
 	| _fit_children				{ push_value_vector(spnew CSSLength(0.0f, CSSLength::FIT_CHILDREN)); }
 
-length_unit: _pixel				{ $$ = CSSLength::PIXEL; }
-			| '%'				{ $$ = CSSLength::PERCENT; }
-			| _em				{ $$ = CSSLength::EM; }
+length_unit: 
+	_pixel				{ $$ = CSSLength::PIXEL; }
+	| '%'				{ $$ = CSSLength::PERCENT; }
+	| _em				{ $$ = CSSLength::EM; }
 
-color: _identifier				{ push_value_vector(spnew CSSColor(color_map[*$1])); }
+color: 
+	_identifier				{ push_value_vector(spnew CSSColor(color_map[*$1])); }
 	| _rgb '(' color_number ',' color_number ',' color_number ')'	{ push_value_vector(spnew CSSColor((byte)$3, (byte)$5, (byte)$7)); }
 	| _rgba '(' color_number ',' color_number ',' color_number ',' number ')'	{ push_value_vector(spnew CSSColor((byte)$3, (byte)$5, (byte)$7, $9 * 255.0f)); }
 
-color_number: number			{ $$ = $1; }
+color_number: 
+	number						{ $$ = $1; }
 	| number '%'				{ $$ = ($1 / 100.0f) * 255.0f; }
 
 number: _float					{ $$ = $1; }
 
-flow_direction: _down			{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::DOWN)); }
-	| _up						{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::UP)); }
-	| _left						{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::LEFT)); }
+flow_direction: 
+	_down						{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::DOWN)); }
 	| _right					{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::RIGHT)); }
 	| _down_wrap				{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::DOWN, true)); }
-	| _up_wrap					{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::UP, true)); }
-	| _left_wrap				{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::LEFT, true)); }
 	| _right_wrap				{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::RIGHT, true)); }
-	| _static					{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::STATIC)); }
+	| _no_flow					{ push_value_vector(spnew CSSFlowDirection(CSSFlowDirection::NOFLOW)); }
 
-border_style: _solid			{ push_value_vector(spnew CSSBorderStyle(CSSBorderStyle::SOLID)); }
+border_style: 
+	_solid						{ push_value_vector(spnew CSSBorderStyle(CSSBorderStyle::SOLID)); }
 	| _none						{ push_value_vector(spnew CSSBorderStyle(CSSBorderStyle::NONE)); }
+
+content_justification: 
+	_end						{ push_value_vector(spnew CSSContentJustification(CSSContentJustification::END)); }
+	| _start					{ push_value_vector(spnew CSSContentJustification(CSSContentJustification::START)); }
+	| _center					{ push_value_vector(spnew CSSContentJustification(CSSContentJustification::CENTER)); }
+	| _space_around				{ push_value_vector(spnew CSSContentJustification(CSSContentJustification::SPACE_AROUND)); }
+	| _space_between			{ push_value_vector(spnew CSSContentJustification(CSSContentJustification::SPACE_BETWEEN)); }
+
+position: 
+	_static						{  push_value_vector(spnew CSSPosition(CSSPosition::STATIC)); }
+	| _relative					{  push_value_vector(spnew CSSPosition(CSSPosition::RELATIVE)); }
+	| _absolute					{  push_value_vector(spnew CSSPosition(CSSPosition::ABSOLUTE)); }
+	| _fixed					{  push_value_vector(spnew CSSPosition(CSSPosition::FIXED)); }
+
+
+display:
+	| _auto						{  push_value_vector(spnew CSSDisplay(CSSDisplay::AUTO)); }
+
+
 %%
 
 void yyerror(const char* s)

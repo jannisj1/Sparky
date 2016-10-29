@@ -7,7 +7,8 @@ void yyerror(const char *s);
 
 namespace sp { namespace css {
 
-	String masterCSS = "*{ border: none 0px black;width: 100%;height: fit-children;padding: 3px;margin: 4px;font-size: 2em;color: black;background-color: transparent;flow-children: down; } ui { height: 100%; background: white; margin: 0px; padding: 0px; } div { padding: 0px; margin: 0px; } ";
+	String masterCSS = "*{ border: none 0px black;width: 100%;height: fit-children;padding: 3px;margin: 4px;font-size: 2em;color: black;background-color: transparent;flow-children: down; justify-content: start; align-items: start; position: static; left: 0px; top: 0px; display: auto; } ui { height: 100%; background: transparent; margin: 0px; padding: 0px; } div { padding: 0px; margin: 0px; } slider { background: white; width: 8em; height: 1em; } ";
+	CSSRules g_TempPrivateRules;
 
 	void CSSParser::Parse(CSSRules& rules,  const String& css)
 	{
@@ -23,6 +24,25 @@ namespace sp { namespace css {
 	void CSSParser::ParseMasterCSS(CSSRules& rules)
 	{
 		Parse(rules, masterCSS);
+	}
+	
+	void CSSParser::Parse(std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*>& PrivateCSSRules, const String& css)
+	{
+		Parse(g_TempPrivateRules, String("private {") + css + "}");
+
+		for(auto& r: g_TempPrivateRules[0].second)
+		{
+			if (PrivateCSSRules.find(r.first) != PrivateCSSRules.end())
+			{
+				spdel PrivateCSSRules[r.first];
+			}
+
+			PrivateCSSRules[r.first] = r.second;
+
+		}
+		
+		spdel g_TempPrivateRules.front().first;
+		g_TempPrivateRules.clear();
 	}
 
 } }
@@ -87,6 +107,25 @@ void add_key_value_pair(CSSKey key, const std::vector<sp::css::CSSValue*>& v)
 	case BORDER_WIDTH:
 		broadcast_values(v, BORDER_TOP_WIDTH, BORDER_RIGHT_WIDTH, BORDER_BOTTOM_WIDTH, BORDER_LEFT_WIDTH);
 		break;
+	case DISPLAY:
+		if (v[0]->GetType() == CSSValue::ValueType::BORDER_STYLE)
+		{
+			spdel v[0];
+			if (((CSSBorderStyle*)v[0])->GetBorderStyle() == CSSBorderStyle::NONE)
+			{
+				res_map->back().second[DISPLAY] = spnew CSSDisplay(CSSDisplay::NONE);
+			}
+			else
+			{
+				res_map->back().second[DISPLAY] = spnew CSSDisplay(CSSDisplay::AUTO);
+			}
+		}
+		else
+		{
+			res_map->back().second[DISPLAY] = v[0];
+		}
+		break;
+	
 	case BORDER:
 		if (v.size() <= 3)
 		{

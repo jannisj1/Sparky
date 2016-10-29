@@ -83,4 +83,9 @@ namespace sp { namespace maths {
 		return (value > minimum) ? (value < maximum) ? value : maximum : minimum;
 	}
 
+	SP_API inline float roundStep(float value, float step, float start)
+	{
+		value -= start;
+		return start + (roundf(value / step) * step);
+	}
 } }

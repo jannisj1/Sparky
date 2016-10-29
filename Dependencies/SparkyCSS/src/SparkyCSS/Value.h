@@ -12,7 +12,10 @@ namespace sp { namespace css {
 			LENGTH,
 			COLOR,
 			FLOW_DIRECTION,
-			BORDER_STYLE
+			BORDER_STYLE,
+			JUSTIFY_CONTENT,
+			POSITION,
+			DISPLAY
 		};
 
 	private:
@@ -83,15 +86,9 @@ namespace sp { namespace css {
 				
 			case PERCENT:
 				if (horizontal)
-					if (cssinfo->Parent)
-						return cssinfo->Parent->InnerBounds.width * m_Val;
-					else
-						return Application::GetApplication().GetWindowWidth() * m_Val;
+					return cssinfo->InnerBounds.width * m_Val;
 				else
-					if (cssinfo->Parent)
-						return cssinfo->Parent->InnerBounds.height * m_Val;
-					else
-						return Application::GetApplication().GetWindowHeight() * m_Val;
+					return cssinfo->InnerBounds.height * m_Val;
 				break;
 
 			case EM:
@@ -115,10 +112,8 @@ namespace sp { namespace css {
 		enum FlowDirection
 		{
 			DOWN,
-			UP,
-			LEFT,
 			RIGHT,
-			STATIC
+			NOFLOW
 		};
 
 	private:
@@ -150,6 +145,68 @@ namespace sp { namespace css {
 			: m_Bs(bs), CSSValue(CSSValue::ValueType::BORDER_STYLE) {}
 
 		inline BorderStyle GetBorderStyle() const { return m_Bs; }
+	};
+
+	class CSSContentJustification : public CSSValue
+	{
+	public:
+		enum ContentJustification
+		{
+			START,
+			END,
+			CENTER,
+			SPACE_BETWEEN,
+			SPACE_AROUND
+		};
+
+	private:
+		ContentJustification m_JC;
+
+	public:
+		CSSContentJustification(ContentJustification jc)
+			: m_JC(jc), CSSValue(CSSValue::ValueType::JUSTIFY_CONTENT) {}
+
+		inline ContentJustification Get() const { return m_JC; }
+	};
+
+	class CSSPosition : public CSSValue
+	{
+	public:
+		enum Position
+		{
+			STATIC,
+			RELATIVE,
+			ABSOLUTE,
+			FIXED
+		};
+
+	private:
+		Position m_Pos;
+
+	public:
+		CSSPosition(Position pos)
+			: m_Pos(pos), CSSValue(CSSValue::ValueType::POSITION) {}
+
+		inline Position Get() const { return m_Pos; }
+	};
+
+	class CSSDisplay : public CSSValue
+	{
+	public:
+		enum Display
+		{
+			NONE,
+			AUTO
+		};
+
+	private:
+		Display m_Dis;
+
+	public:
+		CSSDisplay(Display dis)
+			: m_Dis(dis), CSSValue(CSSValue::ValueType::DISPLAY) { }
+
+		Display Get() const { return m_Dis; }
 	};
 
 } }

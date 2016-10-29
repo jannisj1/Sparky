@@ -26,7 +26,7 @@ namespace sp { namespace css {
 		CSSParser::Parse(m_Rules, css);
 	}
 	
-	CSSValue* CSSManager::GetValue(const UIElementCSSInfo& cssinfo, CSSKey key)
+	CSSValue* CSSManager::GetValue(const std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*>& PrivateCSSRules, const UIElementCSSInfo& cssinfo, CSSKey key)
 	{
 		CSSValue* current = nullptr;
 		uint32 specificity = 0;
@@ -44,9 +44,19 @@ namespace sp { namespace css {
 			}
 		}
 
+		if (PrivateCSSRules.find(key) != PrivateCSSRules.end())
+		{
+			current = PrivateCSSRules.at(key);
+		}
+
 		SP_ASSERT(current, "Could not find css-property (did you forget to include it in master.css?)");
 		
 		return current; 
+	}
+
+	void CSSManager::EvalPrivateCSS(std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*>& PrivateCSSRules, const String& css)
+	{
+		CSSParser::Parse(PrivateCSSRules, css);
 	}
 
 } }

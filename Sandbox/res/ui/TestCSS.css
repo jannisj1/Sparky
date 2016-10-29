@@ -1,19 +1,75 @@
 ui {
-    background: black;
+    background: transparent;
 }
 
 label {
     color: white;
     font-size: 24px;
-    margin: 0px;
 }
 
 label:hover {
     color: red;
 }
 
-#debugInfo {
-    margin-top: 10px;
-    margin-left: 5px;
+#infoHeader {
+    margin: 5px;
+    flow-children: right-wrap;
+    justify-content: flex-end;
+}
 
+#testDiv {
+    flow-children: right;
+    background: lightblue;
+    align-items: flex-end;
+}
+
+#testDiv label {
+    background: pink;
+    color: lawngreen;
+}
+
+#testDiv label:hover {
+    color: yellow;
+}
+
+#basicInfo {
+    width: fit-children;
+    flow-children: down;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+button {
+    border: 3px solid red;
+    width: fit-children;
+    background: rgb(43, 43, 43);
+}
+
+button:hover {
+    background: rgb(94, 94, 94);
+}
+
+button label {
+    color: red;
+}
+
+#fixedLabel {
+    color: green;
+    position: fixed;
+    top: 2px;
+    left: 2px;
+    display: none;
+}
+
+#fixedLabel:hover {
+    color:yellow;
+    background: blue;
+}
+
+slider {
+    border: 2px solid gray;
+    background-color: cadetblue;
+    width: 8em;
+    height: 1em;
+    color: red;
 }

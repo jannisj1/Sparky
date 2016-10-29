@@ -36,16 +36,12 @@
 "flow-children" return _flow_children;
 
 "down" return _down;
-"up" return _up;
-"left" return _left;
 "right" return _right;
 
 "down-wrap" return _down_wrap;
-"up-wrap" return _up_wrap;
-"left-wrap" return _left_wrap;
 "right-wrap" return _right_wrap;
 
-"static" return _static;
+"no-flow" return _no_flow;
 
 "width" return _width;
 "height" return _height;
@@ -81,6 +77,31 @@
 "border-right-color" return _border_right_color;
 "border-bottom-color" return _border_bottom_color;
 "border-left-color" return _border_left_color;
+
+"justify-content" return _justify_content;
+
+"flex-end" return _end;
+"end" return _end;
+"flex-start" return _start;
+"start" return _start;
+"center" return _center;
+"space-around" return _space_around;
+"space-between" return _space_between;
+
+"align-items" return _align_items;
+
+"position" return _position;
+
+"relative" return _relative;
+"absolute" return _absolute;
+"fixed" return _fixed;
+"static" return _static;
+
+"left" return _left;
+"top" return _top;
+
+"display" return _display;
+"auto" return _auto;
 
 ([0-9]+) |
 ([0-9]*[.][0-9]+)			{ yylval.f = std::stof(yytext); return _float; }

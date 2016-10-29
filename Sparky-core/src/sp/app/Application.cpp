@@ -1,7 +1,6 @@
 #include "sp/sp.h"
 #include "Application.h"
 
-#include "sp/debug/DebugLayer.h"
 #include "sp/debug/DebugRenderer.h"
 
 #include "sp/system/System.h"
@@ -17,9 +16,6 @@ namespace sp {
 	{
 		internal::System::Init();
 		PlatformInit();
-
-		m_DebugLayer = spnew debug::DebugLayer();
-		m_DebugLayer->Init();
 	}
 
 	void Application::PushLayer(Layer* layer)
@@ -94,8 +90,6 @@ namespace sp {
 
 	void Application::OnTick()
 	{
-		m_DebugLayer->OnTick();
-
 		for (uint i = 0; i < m_OverlayStack.size(); i++)
 			m_OverlayStack[i]->OnTick();
 
@@ -105,8 +99,6 @@ namespace sp {
 
 	void Application::OnUpdate(const Timestep& ts)
 	{
-		m_DebugLayer->OnUpdate(ts);
-
 		for (uint i = 0; i < m_OverlayStack.size(); i++)
 			m_OverlayStack[i]->OnUpdateInternal(ts);
 
@@ -127,10 +119,6 @@ namespace sp {
 			if (m_OverlayStack[i]->IsVisible())
 				m_OverlayStack[i]->OnRender();
 		}
-
-		Layer2D* debugLayer = (Layer2D*)m_DebugLayer;
-		if (debugLayer->IsVisible())
-			debugLayer->OnRender();
 
 		// debug::DebugRenderer::Present();
 	}

@@ -169,7 +169,7 @@ namespace sp { namespace spjs {
 	
 	Script *ExecutionEngine::CompileScript(const String& script, const String& filename_)
 	{
-		SP_ASSERT(false);
+		SP_ASSERT(false);//TODO
 		
 		Script *ret = spnew Script();
 
@@ -192,7 +192,7 @@ namespace sp { namespace spjs {
 
 	void ExecutionEngine::RunScript(const Script *script)
 	{
-		SP_ASSERT(false);
+		SP_ASSERT(false);//TODO
 		JS_ExecuteScript(m_Context, *script->m_MHS);
 	}
 
@@ -225,8 +225,11 @@ namespace sp { namespace spjs {
 			}
 			else if (inJS) js << c;
 			else ss << c;
-
 		}
+
+		String unclosedJS = js.str();
+		if(unclosedJS.length() > 0)
+			ss << "{" << unclosedJS;
 
 		return ss.str();
 	}
@@ -235,7 +238,7 @@ namespace sp { namespace spjs {
 	{
 		std::unique_lock<std::mutex> lock(m_Mutex);
 		JS::HandleValue ho(v);
-
+		//TODO call toString directly
 		JS_DefineProperty(m_Context, *m_Global, "__internal_toString_parameter__", ho, 0);
 		lock.unlock();
 		return JS_EncodeString(m_Context, EvalScript("__internal_toString__(__internal_toString_parameter__)")->toString());

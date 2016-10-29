@@ -16,12 +16,13 @@ namespace sp { namespace css {
 		inline uint GetHeight() const { return Application::GetApplication().GetWindowHeight(); }
 
 		void EvalCSS(const String& css);
-		CSSValue* GetValue(const UIElementCSSInfo& cssinfo, CSSKey key);
+		void EvalPrivateCSS(std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*>& PrivateCSSRules, const String& css);
+		CSSValue* GetValue(const std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*>& PrivateCSSRules, const UIElementCSSInfo& cssinfo, CSSKey key);
 		
 		template<class T>
-		T* Get(const UIElementCSSInfo& cssinfo, CSSKey key)
+		T* Get(const std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*>& PrivateCSSRules, const UIElementCSSInfo& cssinfo, CSSKey key)
 		{
-			return (T*)GetValue(cssinfo, key);
+			return (T*)GetValue(PrivateCSSRules, cssinfo, key);
 		}
 	};
 

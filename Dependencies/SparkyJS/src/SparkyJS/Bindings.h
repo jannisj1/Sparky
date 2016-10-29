@@ -68,7 +68,14 @@ namespace sp { namespace spjs {
 		return true;
 	}
 
+	bool internal_exit(JSContext* cx, unsigned int argc, JS::Value* vp)
+	{
+		Application::GetApplication().Stop();
+		return true;
+	}
+
 	static JSFunctionSpec myjs_global_functions[] = {
+		JS_FS("__internal_exit__", internal_exit, 0, 0),
 		JS_FS("__internal_log__", interal_log, 1, 0),
 		JS_FS("__internal_log_warning__", interal_log_warning, 1, 0),
 		JS_FS("__internal_log_error__", interal_log_error, 1, 0),

@@ -10,6 +10,11 @@ namespace sp { namespace graphics { namespace ui {
 	{
 		m_CSSInfo.Name = domElement->Name();
 		
+		if (domElement->Attribute("style"))
+		{
+			m_CSSManager->EvalPrivateCSS(m_PrivateCSSRules, domElement->Attribute("style"));
+		}
+		
 		if (domElement->Attribute("class"))
 			m_CSSInfo.Classes = SplitString(domElement->Attribute("class"), ' ');
 
@@ -21,8 +26,22 @@ namespace sp { namespace graphics { namespace ui {
 			m_CSSInfo.Parent = &parent->GetCSSInfo();
 		}
 
+
 		m_ChildrenWrapSize.x = 0;
 		m_ChildrenWrapSize.y = 0;
+	}
+
+	Widget::~Widget()
+	{
+		for(auto r : m_PrivateCSSRules)
+		{ 
+			spdel r.second;
+		}
+
+		for(auto c: m_Children)
+		{
+			spdel c;
+		}
 	}
 
 	void Widget::MoveBy(const maths::vec2& delta)
@@ -74,6 +93,10 @@ namespace sp { namespace graphics { namespace ui {
 	{
 		if (m_Bounds.Contains(e.GetPosition()))
 		{
+			const char *onclick = m_DOMElement->Attribute("onclick");
+			if (onclick)
+				m_JS->EvalScript(onclick);
+
 			if (FocusedWidget)
 			{
 				FocusedWidget->GetCSSInfo().State = css::IDLE;
@@ -85,10 +108,6 @@ namespace sp { namespace graphics { namespace ui {
 				m_CSSInfo.State = css::ACTIVE;
 				return true;
 			}
-
-			const char *onclick = m_DOMElement->Attribute("onclick");
-			if (onclick)
-				m_JS->EvalScript(onclick);
 		}
 
 		for (auto c : m_Children)
@@ -209,8 +228,24 @@ namespace sp { namespace graphics { namespace ui {
 
 		bool wrap = m_Parent->Get<CSSFlowDirection>(FLOW_CHILDREN)->IsWrapping();
 		CSSFlowDirection::FlowDirection fd = m_Parent->Get<CSSFlowDirection>(FLOW_CHILDREN)->GetDirection();
+		CSSPosition::Position pos = Get<CSSPosition>(POSITION)->Get();
 
 		CSSBounds ret = space;
+
+		if (pos != CSSPosition::STATIC)
+		{
+			m_RelativePos.x = GetPixelWidth(X);
+			m_RelativePos.y = GetPixelHeight(Y);
+
+			if (pos == CSSPosition::FIXED)
+			{
+				MoveBy(-space.position);
+			}
+		}
+		else
+		{
+			m_RelativePos = maths::vec2();
+		}
 
 		if (fd == CSSFlowDirection::RIGHT)
 		{
@@ -220,7 +255,7 @@ namespace sp { namespace graphics { namespace ui {
 				ret.height -= m_Parent->m_ChildrenWrapSize.y;
 				ret.y += m_Parent->m_ChildrenWrapSize.y;
 				ret.x = initialSpace.x;
-
+				
 				MoveBy(maths::vec2(-(space.x - initialSpace.x), m_Parent->m_ChildrenWrapSize.y));
 
 				m_Parent->m_ChildrenWrapSize.x = 0;
@@ -238,7 +273,6 @@ namespace sp { namespace graphics { namespace ui {
 				ret.width -= m_Parent->m_ChildrenWrapSize.x;
 				ret.x += m_Parent->m_ChildrenWrapSize.x;
 				ret.y = initialSpace.y;
-
 				MoveBy(maths::vec2(m_Parent->m_ChildrenWrapSize.x, -(space.y - initialSpace.y)));
 
 				m_Parent->m_ChildrenWrapSize.x = 0;
@@ -252,7 +286,19 @@ namespace sp { namespace graphics { namespace ui {
 		m_Parent->m_ChildrenWrapSize.x = m_Parent->m_ChildrenWrapSize.x < m_OuterBounds.width ? m_OuterBounds.width : m_Parent->m_ChildrenWrapSize.x;
 		m_Parent->m_ChildrenWrapSize.y = m_Parent->m_ChildrenWrapSize.y < m_OuterBounds.height ? m_OuterBounds.height : m_Parent->m_ChildrenWrapSize.y;
 
+		if (pos == CSSPosition::FIXED || pos == CSSPosition::ABSOLUTE)
+		{
+			return space;
+		}
+
 		return ret;
+	}
+
+	void Widget::PostProcessPosition()
+	{
+		MoveBy(m_RelativePos);
+		for (auto c : m_Children)
+			c->PostProcessPosition();
 	}
 
 } } }

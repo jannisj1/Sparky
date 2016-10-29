@@ -48,6 +48,15 @@ namespace sp { namespace css {
 		BORDER_RIGHT_COLOR,
 		BORDER_BOTTOM_COLOR,
 		BORDER_LEFT_COLOR,
+
+		JUSTIFY_CONTENT,
+		ALIGN_ITEMS,
+		
+		POSITION,
+		X,
+		Y,
+
+		DISPLAY
 	};
 
 	typedef std::vector<std::pair<CSSSelector*, std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*>>> CSSRules;
@@ -57,6 +66,7 @@ namespace sp { namespace css {
 	public:
 		static void ParseMasterCSS(CSSRules& rules);
 		static void Parse(CSSRules& rules, const String& css);
+		static void Parse(std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*>& PrivateCSSRules, const String& css);
 	};
 
 } }

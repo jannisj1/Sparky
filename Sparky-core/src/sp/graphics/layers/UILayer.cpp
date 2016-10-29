@@ -8,6 +8,7 @@
 #include "sp/graphics/ui/UIRoot.h"
 #include "sp/graphics/ui/UILabel.h"
 #include "sp/graphics/ui/UIButton.h"
+#include "sp/graphics/ui/UISlider.h"
 #include <SparkyJS/SparkyJS.h>
 
 namespace sp { namespace graphics {
@@ -92,7 +93,8 @@ namespace sp { namespace graphics {
 		if (elemName == "ui") curr = spnew ui::UIRoot(parent, m_CSSManager, domElement);
 		else if (elemName == "div") curr = spnew ui::UIDiv(parent, m_CSSManager, domElement);
 		else if (elemName == "label") curr = spnew ui::UILabel(parent, m_CSSManager, domElement);
-		//else if (elemName == "button") curr = spnew ui::UIButton(parent, m_CSSManager, domElement);
+		else if (elemName == "button") curr = spnew ui::UIButton(parent, m_CSSManager, domElement);
+		else if (elemName == "slider") curr = spnew ui::UISlider(parent, m_CSSManager, domElement);
 		else if (elemName == "style")
 		{
 			if (domElement->Attribute("src"))
@@ -143,12 +145,12 @@ namespace sp { namespace graphics {
 		FontManager::SetScale(maths::vec2(1, 1));
 		css::CSSBounds space(0, 0, Application::GetApplication().GetWindowWidth(), Application::GetApplication().GetWindowHeight());
 		m_RootWidget->CalculatePosition(space, space);
-		
+		m_RootWidget->PostProcessPosition();
+
 		FontManager::SetScale(saveScale); 
 		
 		OnUpdate(ts);
 	}
-
 
 	void UILayer::OnRender()
 	{
@@ -159,7 +161,8 @@ namespace sp { namespace graphics {
 
 		m_Renderer->Begin();
 		
-		m_RootWidget->OnRender(*m_Renderer);
+		if(m_RootWidget->Get<css::CSSDisplay>(css::DISPLAY)->Get() != css::CSSDisplay::NONE)
+			m_RootWidget->OnRender(*m_Renderer);
 
 		m_Renderer->End();
 		m_Renderer->Present();

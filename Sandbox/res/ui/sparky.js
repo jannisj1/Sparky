@@ -87,7 +87,9 @@ class app {
         return new __internal_class_memory__();
     }
 
-    
+    static exit() {
+        __internal_exit__();
+    }
 }
 
 class __internal_class_expose_wrapper__ {

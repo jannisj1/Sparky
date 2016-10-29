@@ -5,11 +5,21 @@
     function lol(x){
       log.warn(f);
     }
-    
   </script>
-  <div id="debugInfo">
-    <label onclick="log.info('WHAZZUP?')">{app.fps} fps</label>
-    <label>{app.frameTime.toFixed(2)} ms</label>
-    <label>{app.memory.currentUsed}</label>
+  
+  <div id="infoHeader">
+    <div id="basicInfo">
+      <label>{app.fps} fps</label>
+      <label>{app.frameTime.toFixed(2)} ms</label>
+      <label>{app.memory.currentUsed}</label>
+    </div>
+  </div>
+  <button onclick="app.exit()">
+    <label value="Exit"/>
+  </button>
+
+  <div id="myDiv">
+    <label>TO LONG FOR THIS SHIT</label>
+    <slider style="width: 18em; color: green; x: 20px; position: relative;" min="57" max="200" step="5"/>
   </div>
 </ui>

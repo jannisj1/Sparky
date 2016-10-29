@@ -27,29 +27,27 @@ namespace sp { namespace graphics { namespace ui {
 		css::CSSBounds m_OuterBounds;
 		Widget *m_Parent;
 		spjs::ExecutionEngine *m_JS = nullptr;
+		maths::vec2 m_RelativePos;
+		std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*> m_PrivateCSSRules;
 
 	public:
 		Widget(Widget *parent, css::CSSManager *cssManager, tinyxml2::XMLElement *domElement, bool activatable = false, bool focusable = false);
+		~Widget();
 
 	public:
 		static ui::Widget *FocusedWidget;
-		bool OnMousePressed(events::MousePressedEvent& e);
-		bool OnMouseReleased(events::MouseReleasedEvent& e);
-		bool OnMouseMoved(events::MouseMovedEvent& e);
-
-		//void OnHover()
+		virtual bool OnMousePressed(events::MousePressedEvent& e);
+		virtual bool OnMouseReleased(events::MouseReleasedEvent& e);
+		virtual bool OnMouseMoved(events::MouseMovedEvent& e);
 
 		virtual css::CSSBounds CalculatePosition(const css::CSSBounds& space, const css::CSSBounds& initialSpace) = 0;
+		virtual void PostProcessPosition();
 		virtual void OnRender(Renderer2D& renderer);
-		/*
-		virtual float GetWidth(const css::CSSBounds& space) = 0;
-		virtual float GetHeight(const css::CSSBounds& space) = 0;
-		*/
-
+		
 		inline void SetEE(spjs::ExecutionEngine *ee) { m_JS = ee; }
 
 		inline css::UIElementCSSInfo &GetCSSInfo() { return m_CSSInfo; }
-		inline const css::CSSValue *GetCSSValue(css::CSSKey key) { return m_CSSManager->GetValue(m_CSSInfo, key); }
+		inline const css::CSSValue *GetCSSValue(css::CSSKey key) { return m_CSSManager->GetValue(m_PrivateCSSRules, m_CSSInfo, key); }
 		
 		inline void AddChild(ui::Widget *child) { m_Children.push_back(child); }
 		inline std::vector<ui::Widget*>& GetChildren() { return m_Children; }
@@ -59,9 +57,9 @@ namespace sp { namespace graphics { namespace ui {
 		virtual void MoveBy(const maths::vec2& delta);
 
 		template<class T>
-		inline T *Get(css::CSSKey key) { return m_CSSManager->Get<T>(m_CSSInfo, key); }
+		inline T *Get(css::CSSKey key) { return m_CSSManager->Get<T>(m_PrivateCSSRules, m_CSSInfo, key); }
 		
-		maths::vec2 m_ChildrenWrapSize; // Should be protected
+		maths::vec2 m_ChildrenWrapSize;
 	
 	protected:
 		inline float GetPixelWidth(css::CSSKey key) { return Get<css::CSSLength>(key)->ToPixel(&m_CSSInfo, true); }

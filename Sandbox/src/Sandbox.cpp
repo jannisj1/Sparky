@@ -31,8 +31,8 @@ public:
 		VFS::Get()->Mount("ui", "res/ui");
 		
 		PushLayer(spnew TestUI());
-		// PushLayer(spnew Test2D());
 		// PushLayer(spnew Test3D());
+		// PushLayer(spnew Test2D());
 		// PushLayer(spnew SponzaTest());
 		// PushLayer(spnew DeferredTest()); // Doesn't work atm
 	}
