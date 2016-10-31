@@ -26,9 +26,6 @@ namespace sp { namespace graphics {
 		css::CSSManager *m_CSSManager = nullptr;
 		spjs::ExecutionEngine *m_EE = nullptr;
 
-		double m_TestValue = 123.45;
-		const double m_TestValue2 = 23987.349587;
-
 	public:
 		UILayer();
 		virtual ~UILayer();

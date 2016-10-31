@@ -1,3 +1,4 @@
+#include <sp/sp.h>
 #include "SparkyJS.h"
 #include "ShellPrincipals.h"
 #include "Bindings.h"
@@ -7,26 +8,34 @@
 
 namespace sp { namespace spjs {
 
-	static std::vector<ExecutionEngine*> EEInstances;
+	static std::vector<ExecutionEngine*> g_EEInstances;
+	static std::vector<DomElement*> g_DomElements;
+	static std::unordered_map<String, uint> g_IDLookup;
 
 	bool SetValue(JSContext* cx, unsigned int argc, JS::Value* vp)
 	{
 		JS::CallArgs c = JS::CallArgsFromVp(argc, vp);
-		auto val = EEInstances[c[0].toInt32()]->m_ExposedValues[c[1].toInt32()];
+		auto val = g_EEInstances[c[0].toInt32()]->m_ExposedValues[c[1].toInt32()];
 
 		switch (val.first.first)
 		{
 		case ExecutionEngine::ExposedValueType::DOUBLE:
-			*(double*)val.second = c[2].toDouble();
+			*(double*)val.second = c[2].toNumber();
 			break;
 		case ExecutionEngine::ExposedValueType::FLOAT:
-			*(float*)val.second = c[2].toDouble();
+			*(float*)val.second = c[2].toNumber();
 			break;
 		case ExecutionEngine::ExposedValueType::INT32:
-			*(int32*)val.second = c[2].toDouble();
+			*(int32*)val.second = c[2].toInt32();
 			break;
 		case ExecutionEngine::ExposedValueType::STRING:
-			*(String*)val.second = JS_EncodeString(EEInstances[c[0].toInt32()]->m_Context, c[2].toString());
+			*(String*)val.second = String(JS_EncodeString(cx, c[2].toString()));
+			break;
+		case ExecutionEngine::ExposedValueType::VEC2:
+			*(maths::vec2*)val.second = maths::vec2(c[2].toNumber(), c[3].toNumber());
+			break;
+		case ExecutionEngine::ExposedValueType::VEC3:
+			*(maths::vec3*)val.second = maths::vec3(c[2].toNumber(), c[3].toNumber(), c[4].toNumber());
 			break;
 		}
 
@@ -37,7 +46,7 @@ namespace sp { namespace spjs {
 	{
 		JS::CallArgs c = JS::CallArgsFromVp(argc, vp);
 		
-		auto val = EEInstances[c[0].toInt32()]->m_ExposedValues[c[1].toInt32()];
+		auto val = g_EEInstances[c[0].toInt32()]->m_ExposedValues[c[1].toInt32()];
 
 		switch (val.first.first)
 		{
@@ -51,11 +60,60 @@ namespace sp { namespace spjs {
 			*vp = JS::DoubleValue(*(int32*)val.second);
 			break;
 		case ExecutionEngine::ExposedValueType::STRING:
-			*vp = JS::StringValue(JS_NewStringCopyN(EEInstances[c[0].toInt32()]->m_Context, ((String*)val.second)->c_str(), ((String*)val.second)->length())); //TODO dont allocate a string everytime when it is const
+			*vp = JS::StringValue(JS_NewStringCopyN(g_EEInstances[c[0].toInt32()]->m_Context, ((String*)val.second)->c_str(), ((String*)val.second)->length()));
+			break;
+		case ExecutionEngine::ExposedValueType::VEC2:
+			{
+				JS::RootedObject ro(cx);
+				ro.set(JS_NewPlainObject(cx));
+				JS::MutableHandleObject mho(&ro);
+				JS_DefineProperty(cx, mho, "x", (*((maths::vec2*)val.second)).x, 0);
+				JS_DefineProperty(cx, mho, "y", (*((maths::vec2*)val.second)).y, 0);
+				*vp = JS::ObjectValue(*ro.get());
+			}
+			break;
+		case ExecutionEngine::ExposedValueType::VEC3:
+			{
+				JS::RootedObject ro(cx);
+				ro.set(JS_NewPlainObject(cx));
+				JS::MutableHandleObject mho(&ro);
+				JS_DefineProperty(cx, mho, "x", (*((maths::vec3*)val.second)).x, 0);
+				JS_DefineProperty(cx, mho, "y", (*((maths::vec3*)val.second)).y, 0);
+				JS_DefineProperty(cx, mho, "z", (*((maths::vec3*)val.second)).z, 0);
+
+				*vp = JS::ObjectValue(*ro.get());
+			}
 			break;
 		default:
 			SP_ASSERT(false);
 		}
+
+		return true;
+	}
+
+	bool GetElementByID(JSContext* cx, unsigned int argc, JS::Value* vp)
+	{
+		JS::CallArgs c = JS::CallArgsFromVp(argc, vp);
+		
+		auto domID = JS_EncodeString(cx, c[0].toString());
+
+		if (g_IDLookup.find(domID) == g_IDLookup.end())
+		{
+			SP_WARN("Dom-element with id \"", domID, "\" not found!");
+			*vp = JS::Int32Value(-1);
+			return true;
+		}
+		
+		int id = g_IDLookup[domID];
+		*vp = JS::Int32Value(id);
+		return true;
+	}
+
+	bool SetStyle(JSContext* cx, unsigned int argc, JS::Value* vp)
+	{
+		JS::CallArgs c = JS::CallArgsFromVp(argc, vp);
+		int id = c[0].toInt32();
+		g_DomElements[id]->SetCSSProperties(JS_EncodeString(cx, c[1].toString()));
 
 		return true;
 	}
@@ -70,8 +128,8 @@ namespace sp { namespace spjs {
 	{
 		std::thread t1(&ExecutionEngine::StartEngine, this);
 		t1.detach();
-		m_ID = EEInstances.size();
-		EEInstances.push_back(this);
+		m_ID = g_EEInstances.size();
+		g_EEInstances.push_back(this);
 	}
 
 	ExecutionEngine::~ExecutionEngine()
@@ -95,7 +153,7 @@ namespace sp { namespace spjs {
 		std::unique_lock<std::mutex> lock(m_Mutex);
 
 		JS_Init();
-		m_Context = JS_NewContext(8192);
+		m_Context = JS_NewContext(JS::DefaultHeapMaxBytes, JS::DefaultNurseryBytes);
 		SP_ASSERT(m_Context);
 
 		JS_SetFutexCanWait(m_Context);
@@ -122,7 +180,11 @@ namespace sp { namespace spjs {
 		JS_InitStandardClasses(m_Context, *m_Global);
 		JS_DefineFunctions(m_Context, *m_Global, myjs_global_functions);
 		JS_DefineFunction(m_Context, *m_Global, "__internal_get_exposed_value__", GetValue, 2, 0);
-		JS_DefineFunction(m_Context, *m_Global, "__internal_set_exposed_value__", SetValue, 3, 0);
+		JS_DefineFunction(m_Context, *m_Global, "__internal_set_exposed_value__", SetValue, 5, 0);
+		JS_DefineFunction(m_Context, *m_Global, "__internal_get_internal_element_id_by_id__", GetElementByID, 1, 0);
+		JS_DefineFunction(m_Context, *m_Global, "__internal_set_style__", SetStyle, 1, 0);
+
+		JS_DefineProperty(m_Context, *m_Global, "global", *m_Global, 0);
 
 		while (true)
 		{
@@ -160,7 +222,7 @@ namespace sp { namespace spjs {
 		m_WorkDone = false;
 		m_StartWorking = true;
 		m_JSExeccv.notify_one();
-		
+
 		while(!m_WorkDone)
 			m_JSExeccv.wait(lock);
 
@@ -202,7 +264,7 @@ namespace sp { namespace spjs {
 		uint curlies = 0;
 		std::stringstream ss, js;
 
-		for (char c : s)
+		for (const char& c : s)
 		{
 			if (c == '{')
 			{
@@ -236,12 +298,25 @@ namespace sp { namespace spjs {
 
 	String ExecutionEngine::ToString(JS::RootedValue *v)
 	{
-		std::unique_lock<std::mutex> lock(m_Mutex);
+		std::unique_lock<std::mutex> lock(m_Mutex2);
 		JS::HandleValue ho(v);
-		//TODO call toString directly
 		JS_DefineProperty(m_Context, *m_Global, "__internal_toString_parameter__", ho, 0);
 		lock.unlock();
 		return JS_EncodeString(m_Context, EvalScript("__internal_toString__(__internal_toString_parameter__)")->toString());
+		/*
+		std::unique_lock<std::mutex> lock(m_Mutex2);
+		JS::RootedObject ro(m_Context);
+		ro.set(&v->toObject());
+		JS::HandleObject ho(ro);
+		JS::RootedValue retval(m_Context);
+
+		JS::CallArgs ca;
+		JS::HandleValueArray hva(ca);
+
+		JS_CallFunctionName(m_Context, ho, "toString", hva, &retval);
+
+		lock.unlock();
+		return JS_EncodeString(m_Context, retval.toString()); */
 	}
 
 	void ExecutionEngine::HandleLastError()
@@ -268,4 +343,19 @@ namespace sp { namespace spjs {
 		JS::Evaluate(m_Context, opts, script, strlen(script), &rval);
 	}
 
+	DomElement::DomElement()
+	{
+		
+	}
+
+	DomElement::~DomElement()
+	{
+		
+	}
+
+	void DomElement::ExposeToJS()
+	{
+		g_IDLookup.insert(std::make_pair(m_CSSInfo.ID, g_DomElements.size()));
+		g_DomElements.push_back(this);
+	}
 } }

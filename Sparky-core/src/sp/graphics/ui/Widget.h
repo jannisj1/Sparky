@@ -8,21 +8,19 @@
 #include "sp/graphics/Renderer2D.h"
 
 #include <SparkyCSS/SparkyCSS.h>
-#include <SparkyJS/SparkyJS.h>
+#include <sp/js/SparkyJS.h>
 #include <tinyxml2.h>
 
 namespace sp { namespace graphics { namespace ui {
 
-	class SP_API Widget
+	class SP_API Widget : public spjs::DomElement
 	{
 	protected:
 		css::CSSBounds m_Bounds;
-		css::UIElementCSSInfo m_CSSInfo;
 		css::CSSManager *m_CSSManager;
 		tinyxml2::XMLElement *m_DOMElement;
 		std::vector<Widget*> m_Children;
 		bool m_Activatable, m_Focusable;
-		bool m_IsDivContainer;
 		css::CSSBounds &m_InnerBounds = m_CSSInfo.InnerBounds;
 		css::CSSBounds m_OuterBounds;
 		Widget *m_Parent;
@@ -49,7 +47,7 @@ namespace sp { namespace graphics { namespace ui {
 		inline css::UIElementCSSInfo &GetCSSInfo() { return m_CSSInfo; }
 		inline const css::CSSValue *GetCSSValue(css::CSSKey key) { return m_CSSManager->GetValue(m_PrivateCSSRules, m_CSSInfo, key); }
 		
-		inline void AddChild(ui::Widget *child) { m_Children.push_back(child); }
+		inline void AddChild(ui::Widget *child) { m_Children.push_back(child); m_DomChildren.push_back(child); }
 		inline std::vector<ui::Widget*>& GetChildren() { return m_Children; }
 
 		inline const css::CSSBounds& GetOuterBounds() const { return m_OuterBounds; }
@@ -60,7 +58,9 @@ namespace sp { namespace graphics { namespace ui {
 		inline T *Get(css::CSSKey key) { return m_CSSManager->Get<T>(m_PrivateCSSRules, m_CSSInfo, key); }
 		
 		maths::vec2 m_ChildrenWrapSize;
-	
+		
+		void SetCSSProperties(const String& css) override;
+
 	protected:
 		inline float GetPixelWidth(css::CSSKey key) { return Get<css::CSSLength>(key)->ToPixel(&m_CSSInfo, true); }
 		inline float GetPixelHeight(css::CSSKey key) { return Get<css::CSSLength>(key)->ToPixel(&m_CSSInfo, false); }

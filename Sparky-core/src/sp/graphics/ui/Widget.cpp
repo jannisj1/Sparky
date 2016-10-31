@@ -26,6 +26,7 @@ namespace sp { namespace graphics { namespace ui {
 			m_CSSInfo.Parent = &parent->GetCSSInfo();
 		}
 
+		ExposeToJS();
 
 		m_ChildrenWrapSize.x = 0;
 		m_ChildrenWrapSize.y = 0;
@@ -299,6 +300,11 @@ namespace sp { namespace graphics { namespace ui {
 		MoveBy(m_RelativePos);
 		for (auto c : m_Children)
 			c->PostProcessPosition();
+	}
+
+	void Widget::SetCSSProperties(const String& css)
+	{
+		m_CSSManager->EvalPrivateCSS(m_PrivateCSSRules, css);
 	}
 
 } } }

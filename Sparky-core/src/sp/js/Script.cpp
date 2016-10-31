@@ -1,3 +1,4 @@
+#include <sp/sp.h>
 #include "Script.h"
 
 namespace sp { namespace spjs {

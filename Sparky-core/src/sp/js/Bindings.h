@@ -11,21 +11,21 @@ namespace sp { namespace spjs {
 		JS_GlobalObjectTraceHook
 	};
 
-	bool interal_log(JSContext* cx, unsigned int argc, JS::Value* vp)
+	bool internal_log(JSContext* cx, unsigned int argc, JS::Value* vp)
 	{
 		JS::CallArgs c = JS::CallArgsFromVp(argc, vp);
 		SP_INFO(JS_EncodeString(cx, c[0].toString()));
 		return true;
 	}
 
-	bool interal_log_warning(JSContext* cx, unsigned int argc, JS::Value* vp)
+	bool internal_log_warning(JSContext* cx, unsigned int argc, JS::Value* vp)
 	{
 		JS::CallArgs c = JS::CallArgsFromVp(argc, vp);
 		SP_WARN(JS_EncodeString(cx, c[0].toString()));
 		return true;
 	}
 
-	bool interal_log_error(JSContext* cx, unsigned int argc, JS::Value* vp)
+	bool internal_log_error(JSContext* cx, unsigned int argc, JS::Value* vp)
 	{
 		JS::CallArgs c = JS::CallArgsFromVp(argc, vp);
 		SP_ERROR(JS_EncodeString(cx, c[0].toString()));
@@ -35,6 +35,12 @@ namespace sp { namespace spjs {
 	bool internal_get_fps(JSContext* cx, unsigned int argc, JS::Value* vp)
 	{
 		*vp = JS::Int32Value(Application::GetApplication().GetFPS());
+		return true;
+	}
+
+	bool internal_get_ups(JSContext* cx, unsigned int argc, JS::Value* vp)
+	{
+		*vp = JS::Int32Value(Application::GetApplication().GetUPS());
 		return true;
 	}
 
@@ -76,10 +82,11 @@ namespace sp { namespace spjs {
 
 	static JSFunctionSpec myjs_global_functions[] = {
 		JS_FS("__internal_exit__", internal_exit, 0, 0),
-		JS_FS("__internal_log__", interal_log, 1, 0),
-		JS_FS("__internal_log_warning__", interal_log_warning, 1, 0),
-		JS_FS("__internal_log_error__", interal_log_error, 1, 0),
+		JS_FS("__internal_log__", internal_log, 1, 0),
+		JS_FS("__internal_log_warning__", internal_log_warning, 1, 0),
+		JS_FS("__internal_log_error__", internal_log_error, 1, 0),
 		JS_FS("__internal_get_fps__", internal_get_fps, 0, 0),
+		JS_FS("__internal_get_ups__", internal_get_ups, 0, 0),
 		JS_FS("__internal_get_frametime__", internal_get_frametime, 0, 0),
 		JS_FS("__internal_get_totalAllocated__", internal_get_totalAllocated, 0, 0),
 		JS_FS("__internal_get_totalFreed__", internal_get_totalFreed, 0, 0),

@@ -9,7 +9,7 @@
 #include "sp/graphics/ui/UILabel.h"
 #include "sp/graphics/ui/UIButton.h"
 #include "sp/graphics/ui/UISlider.h"
-#include <SparkyJS/SparkyJS.h>
+#include <sp/js/SparkyJS.h>
 
 namespace sp { namespace graphics {
 
@@ -72,7 +72,7 @@ namespace sp { namespace graphics {
 
 		m_CSSManager = spnew css::CSSManager();
 		m_EE = spnew spjs::ExecutionEngine();
-		m_EE->EvalScript(VFS::Get()->ReadTextFile("/ui/sparky.js"));
+		m_EE->EvalScript(VFS::Get()->ReadTextFile("/ui/sparky.js"), "sparky.js");
 
 		m_Doc = spnew tinyxml2::XMLDocument();
 		tinyxml2::XMLError err = m_Doc->LoadFile(physicalPathXML.c_str());

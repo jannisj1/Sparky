@@ -3,23 +3,30 @@
   <style src="/ui/TestCSS.css"/>
   <script>
     function lol(x){
-      log.warn(f);
+      log.error(x.x);
+      log.error(x.y);
     }
   </script>
   
   <div id="infoHeader">
     <div id="basicInfo">
       <label>{app.fps} fps</label>
+      <label>{app.ups} ups</label>
       <label>{app.frameTime.toFixed(2)} ms</label>
       <label>{app.memory.currentUsed}</label>
     </div>
   </div>
+  
   <button onclick="app.exit()">
     <label value="Exit"/>
   </button>
-
-  <div id="myDiv">
+  
+    <button onclick="testVec3.set(makeVec3(15, 30, 4000))">
+    <label value="Test"/>
+  </button>
+  
+    <div id="myDiv">
     <label>TO LONG FOR THIS SHIT</label>
-    <slider style="width: 18em; color: green; x: 20px; position: relative;" min="57" max="200" step="5"/>
+    <slider id="mySlider" value="$testVal" style="width: 18em; color: green; x: 20px; position: relative;" min="57" max="200" step="0.2"/>
   </div>
 </ui>

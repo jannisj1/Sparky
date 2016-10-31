@@ -429,6 +429,8 @@
       <Filter>sp\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\sp\graphics\ui\UISlider.cpp" />
+    <ClCompile Include="src\sp\js\Script.cpp" />
+    <ClCompile Include="src\sp\js\SparkyJS.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\sp\app\Application.h">
@@ -827,6 +829,10 @@
       <Filter>sp\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\sp\graphics\ui\UISlider.h" />
+    <ClInclude Include="src\sp\js\SparkyJS.h" />
+    <ClInclude Include="src\sp\js\Bindings.h" />
+    <ClInclude Include="src\sp\js\Script.h" />
+    <ClInclude Include="src\sp\js\ShellPrincipals.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="SparkyCore-TODO.txt" />

@@ -32,11 +32,15 @@ void TestUI::OnInit(Renderer2D& renderer, Material& material)
 
 	FontManager::Add(spnew Font("Consolas", "res/consola.ttf", 96));
 	FontManager::Add(spnew Font("Brush Script", "res/BrushScriptStd.otf", 96));
+
+	m_EE->Expose("testVal", m_TestVal);
+	m_EE->Expose("testVec2", m_MyVec2);
+	m_EE->Expose("testVec3", m_MyVec3);
 }
 
 void TestUI::OnTick()
 {
-	
+	SP_WARN(m_MyVec3);
 }
 
 void TestUI::OnUpdate(const Timestep& ts)
