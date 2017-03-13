@@ -8,14 +8,15 @@
 #include "sp/graphics/Renderer2D.h"
 
 #include <SparkyCSS/SparkyCSS.h>
-#include <sp/js/SparkyJS.h>
+#include <sp/js/ExecutionEngine.h>
 #include <tinyxml2.h>
 
 namespace sp { namespace graphics { namespace ui {
 
-	class SP_API Widget : public spjs::DomElement
+	class SP_API Widget
 	{
 	protected:
+		css::UIElementCSSInfo m_CSSInfo;
 		css::CSSBounds m_Bounds;
 		css::CSSManager *m_CSSManager;
 		tinyxml2::XMLElement *m_DOMElement;
@@ -24,7 +25,7 @@ namespace sp { namespace graphics { namespace ui {
 		css::CSSBounds &m_InnerBounds = m_CSSInfo.InnerBounds;
 		css::CSSBounds m_OuterBounds;
 		Widget *m_Parent;
-		spjs::ExecutionEngine *m_JS = nullptr;
+		js::ExecutionContext *m_JS = nullptr;
 		maths::vec2 m_RelativePos;
 		std::unordered_map<sp::css::CSSKey, sp::css::CSSValue*> m_PrivateCSSRules;
 
@@ -42,12 +43,12 @@ namespace sp { namespace graphics { namespace ui {
 		virtual void PostProcessPosition();
 		virtual void OnRender(Renderer2D& renderer);
 		
-		inline void SetEE(spjs::ExecutionEngine *ee) { m_JS = ee; }
+		inline void SetEC(js::ExecutionContext *ec) { m_JS = ec; }
 
 		inline css::UIElementCSSInfo &GetCSSInfo() { return m_CSSInfo; }
 		inline const css::CSSValue *GetCSSValue(css::CSSKey key) { return m_CSSManager->GetValue(m_PrivateCSSRules, m_CSSInfo, key); }
 		
-		inline void AddChild(ui::Widget *child) { m_Children.push_back(child); m_DomChildren.push_back(child); }
+		inline void AddChild(ui::Widget *child) { m_Children.push_back(child); /*m_DomChildren.push_back(child);*/ }
 		inline std::vector<ui::Widget*>& GetChildren() { return m_Children; }
 
 		inline const css::CSSBounds& GetOuterBounds() const { return m_OuterBounds; }
@@ -59,7 +60,7 @@ namespace sp { namespace graphics { namespace ui {
 		
 		maths::vec2 m_ChildrenWrapSize;
 		
-		void SetCSSProperties(const String& css) override;
+		void SetCSSProperties(const String& css);
 
 	protected:
 		inline float GetPixelWidth(css::CSSKey key) { return Get<css::CSSLength>(key)->ToPixel(&m_CSSInfo, true); }

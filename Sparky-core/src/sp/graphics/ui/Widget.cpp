@@ -26,7 +26,7 @@ namespace sp { namespace graphics { namespace ui {
 			m_CSSInfo.Parent = &parent->GetCSSInfo();
 		}
 
-		ExposeToJS();
+		//ExposeToJS();
 
 		m_ChildrenWrapSize.x = 0;
 		m_ChildrenWrapSize.y = 0;
@@ -60,7 +60,7 @@ namespace sp { namespace graphics { namespace ui {
 			{
 				const char *mouseover = m_DOMElement->Attribute("onmouseover");
 				if(mouseover)
-					m_JS->EvalScript(mouseover);
+					m_JS->Evaluate(mouseover);
 
 				m_CSSInfo.State = css::HOVER;
 			}
@@ -71,7 +71,7 @@ namespace sp { namespace graphics { namespace ui {
 			{
 				const char *onmouseout = m_DOMElement->Attribute("onmouseout");
 				if (onmouseout)
-					m_JS->EvalScript(onmouseout);
+					m_JS->Evaluate(onmouseout);
 
 				m_CSSInfo.State = css::IDLE;
 			}
@@ -96,7 +96,7 @@ namespace sp { namespace graphics { namespace ui {
 		{
 			const char *onclick = m_DOMElement->Attribute("onclick");
 			if (onclick)
-				m_JS->EvalScript(onclick);
+				m_JS->Evaluate(onclick);
 
 			if (FocusedWidget)
 			{
@@ -125,7 +125,7 @@ namespace sp { namespace graphics { namespace ui {
 		{
 			const char *onrelease = m_DOMElement->Attribute("onrelease");
 			if (onrelease)
-				m_JS->EvalScript(onrelease);
+				m_JS->Evaluate(onrelease);
 
 			if (m_Bounds.Contains(e.GetPosition()))
 			{
@@ -136,7 +136,7 @@ namespace sp { namespace graphics { namespace ui {
 
 					const char *onfocus = m_DOMElement->Attribute("onfocus");
 					if (onfocus)
-						m_JS->EvalScript(onfocus);
+						m_JS->Evaluate(onfocus);
 				}
 				else m_CSSInfo.State = css::HOVER;
 			}
@@ -156,12 +156,13 @@ namespace sp { namespace graphics { namespace ui {
 
 	String Widget::GetDOMValue(const String& name)
 	{
+		//TODO
 		auto s = name.c_str();
 
 		if (s)
-			return m_JS->EvalString(s);
+			return "todo";//return m_JS->EvalString(s);
 		else
-			return "";
+			return "todo";
 
 	}
 

@@ -11,6 +11,10 @@ label:hover {
     color: red;
 }
 
+#myDiv {
+    flow-children: right;
+}
+
 #infoHeader {
     margin: 5px;
     flow-children: right-wrap;

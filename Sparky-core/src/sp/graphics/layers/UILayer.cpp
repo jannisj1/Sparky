@@ -9,7 +9,7 @@
 #include "sp/graphics/ui/UILabel.h"
 #include "sp/graphics/ui/UIButton.h"
 #include "sp/graphics/ui/UISlider.h"
-#include <sp/js/SparkyJS.h>
+#include "sp/js/ExecutionEngine.h"
 
 namespace sp { namespace graphics {
 
@@ -25,7 +25,6 @@ namespace sp { namespace graphics {
 
 	UILayer::~UILayer()
 	{
-		spdel m_EE;
 		spdel m_Material;
 		spdel m_Renderer;
 		spdel m_RootWidget;
@@ -68,11 +67,12 @@ namespace sp { namespace graphics {
 		spdel m_Doc;
 		spdel m_RootWidget;
 		spdel m_CSSManager;
-		spdel m_EE;
+		spdel m_ExecutionContext;
 
 		m_CSSManager = spnew css::CSSManager();
-		m_EE = spnew spjs::ExecutionEngine();
-		m_EE->EvalScript(VFS::Get()->ReadTextFile("/ui/sparky.js"), "sparky.js");
+		m_ExecutionContext = js::ExecutionEngine::Get()->CreateNewContext();
+
+		m_ExecutionContext->Evaluate(VFS::Get()->ReadTextFile("/ui/sparky.js"), "sparky.js");
 
 		m_Doc = spnew tinyxml2::XMLDocument();
 		tinyxml2::XMLError err = m_Doc->LoadFile(physicalPathXML.c_str());
@@ -111,12 +111,12 @@ namespace sp { namespace graphics {
 		{
 			if (domElement->Attribute("src"))
 			{ 
-				m_EE->EvalScript(VFS::Get()->ReadTextFile(domElement->Attribute("src")), domElement->Attribute("src"));
+				m_ExecutionContext->Evaluate(VFS::Get()->ReadTextFile(domElement->Attribute("src")), domElement->Attribute("src"));
 			}
 			else
 			{
 				const char *t = domElement->GetText();
-				m_EE->EvalScript((t == nullptr ? "" : t));
+				m_ExecutionContext->Evaluate((t == nullptr ? "" : t));
 			}
 		}
 		else SP_ERROR("Unknown UI-Element: ", elemName);
@@ -133,7 +133,7 @@ namespace sp { namespace graphics {
 				child = child->NextSiblingElement();
 			}
 
-			curr->SetEE(m_EE);
+			curr->SetEC(m_ExecutionContext);
 		}
 
 		return curr;

@@ -56,7 +56,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)Dependencies\SparkyCSS\src;$(SolutionDir)Dependencies\tinyxml2\src;$(SolutionDir)Dependencies\Spidermonkey\include\Spidermonkey;$(SolutionDir)Dependencies\Box2D\src;$(SolutionDir)Dependencies\gorilla-audio\src;$(SolutionDir)Dependencies\FreeType;$(SolutionDir)Dependencies\FreeType\include;$(SolutionDir)Dependencies\FreeImage\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Dependencies\SparkyCSS\lib\$(Platform)\$(Configuration)\;$(SolutionDir)Dependencies\tinyxml2\lib\$(Platform)\$(Configuration)\;$(SolutionDir)Dependencies\Spidermonkey\lib\x86;$(SolutionDir)Dependencies\libogg\bin;$(SolutionDir)Dependencies\OpenAL\libs\Win32;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\GLFW\lib-vc2013;$(SolutionDir)Dependencies\libvorbis\bin;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Dependencies\SparkyCSS\lib\$(Platform)\$(Configuration)\;$(SolutionDir)Dependencies\tinyxml2\lib\$(Platform)\$(Configuration)\;$(SolutionDir)Dependencies\libogg\bin;$(SolutionDir)Dependencies\OpenAL\libs\Win32;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\GLFW\lib-vc2013;$(SolutionDir)Dependencies\libvorbis\bin;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\Release\</OutDir>
     <IntDir>$(SolutionDir)bin\Release\Intermediates\$(ProjectName)\</IntDir>
     <TargetName>SPCore</TargetName>
@@ -70,7 +70,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)Dependencies\SparkyCSS\src;$(SolutionDir)Dependencies\tinyxml2\src;$(SolutionDir)Dependencies\Spidermonkey\include\Spidermonkey;$(SolutionDir)Dependencies\Box2D\src;$(SolutionDir)Dependencies\gorilla-audio\src;$(SolutionDir)Dependencies\FreeType;$(SolutionDir)Dependencies\FreeType\include;$(SolutionDir)Dependencies\FreeImage\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Dependencies\SparkyCSS\lib\$(Platform)\$(Configuration)\;$(SolutionDir)Dependencies\tinyxml2\lib\$(Platform)\$(Configuration)\;$(SolutionDir)Dependencies\Spidermonkey\lib\x86;$(SolutionDir)Dependencies\libogg\bin;$(SolutionDir)Dependencies\OpenAL\libs\Win32;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\GLFW\lib-vc2013;$(SolutionDir)Dependencies\libvorbis\bin;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Dependencies\SparkyCSS\lib\$(Platform)\$(Configuration)\;$(SolutionDir)Dependencies\tinyxml2\lib\$(Platform)\$(Configuration)\;$(SolutionDir)Dependencies\libogg\bin;$(SolutionDir)Dependencies\OpenAL\libs\Win32;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\GLFW\lib-vc2013;$(SolutionDir)Dependencies\libvorbis\bin;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\Debug\</OutDir>
     <IntDir>$(SolutionDir)bin\Debug\Intermediates\$(ProjectName)\</IntDir>
     <TargetName>SPCore</TargetName>
@@ -88,15 +88,13 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glew32s.lib;opengl32.lib;d3d11.lib;d3dcompiler.lib;mozjs-51a1.lib;tinyxml2.lib;SparkyCSS.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;opengl32.lib;d3d11.lib;d3dcompiler.lib;tinyxml2.lib;SparkyCSS.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /f /y "$(SolutionDir)Dependencies\FreeImage\bin\FreeImage.dll" "$(SolutionDir)bin\$(Configuration)"\*
-xcopy /f /y "$(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(SolutionDir)bin\$(Configuration)"\*
-xcopy /f /y "$(SolutionDir)Dependencies\Spidermonkey\bin\x86\mozglue.dll" "$(SolutionDir)bin\$(Configuration)"\*
-xcopy /f /y "$(SolutionDir)Dependencies\Spidermonkey\bin\x86\mozjs-51a1.dll" "$(SolutionDir)bin\$(Configuration)"\*</Command>
+xcopy /f /y "$(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(SolutionDir)bin\$(Configuration)"\*</Command>
       <Message>Copying dependencies...</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -122,16 +120,14 @@ xcopy /f /y "$(SolutionDir)Dependencies\Spidermonkey\bin\x86\mozjs-51a1.dll" "$(
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glew32s.lib;opengl32.lib;d3d11.lib;d3dcompiler.lib;mozjs-51a1.lib;tinyxml2.lib;SparkyCSS.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;opengl32.lib;d3d11.lib;d3dcompiler.lib;tinyxml2.lib;SparkyCSS.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /f /y "$(SolutionDir)Dependencies\FreeImage\bin\FreeImage.dll" "$(SolutionDir)bin\$(Configuration)"\*
-xcopy /f /y "$(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(SolutionDir)bin\$(Configuration)"\*
-xcopy /f /y "$(SolutionDir)Dependencies\Spidermonkey\bin\x86\mozglue.dll" "$(SolutionDir)bin\$(Configuration)"\*
-xcopy /f /y "$(SolutionDir)Dependencies\Spidermonkey\bin\x86\mozjs-51a1.dll" "$(SolutionDir)bin\$(Configuration)"\*</Command>
+xcopy /f /y "$(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(SolutionDir)bin\$(Configuration)"\*</Command>
       <Message>Copying dependencies...</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -202,8 +198,15 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClCompile Include="src\sp\graphics\ui\UIDiv.cpp" />
     <ClCompile Include="src\sp\graphics\ui\UIRoot.cpp" />
     <ClCompile Include="src\sp\graphics\ui\UISlider.cpp" />
-    <ClCompile Include="src\sp\js\Script.cpp" />
-    <ClCompile Include="src\sp\js\SparkyJS.cpp" />
+    <ClCompile Include="src\sp\js\DefaultEngine.cpp" />
+    <ClCompile Include="src\sp\js\DefaultExecutionContext.cpp" />
+    <ClCompile Include="src\sp\js\duktape.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Emscripten|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\sp\js\ExecutionContext.cpp" />
+    <ClCompile Include="src\sp\js\ExecutionEngine.cpp" />
     <ClCompile Include="src\sp\platform\directx\DXFramebufferDepth.cpp" />
     <ClCompile Include="src\sp\platform\directx\DXRenderer.cpp" />
     <ClCompile Include="src\sp\platform\directx\DXShaderResource.cpp" />
@@ -679,9 +682,12 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClInclude Include="src\sp\graphics\ui\UISlider.h" />
     <ClInclude Include="src\sp\graphics\ui\Widget.h" />
     <ClInclude Include="src\sp\js\Bindings.h" />
-    <ClInclude Include="src\sp\js\Script.h" />
-    <ClInclude Include="src\sp\js\ShellPrincipals.h" />
-    <ClInclude Include="src\sp\js\SparkyJS.h" />
+    <ClInclude Include="src\sp\js\DefaultEngine.h" />
+    <ClInclude Include="src\sp\js\DefaultExecutionContext.h" />
+    <ClInclude Include="src\sp\js\duktape.h" />
+    <ClInclude Include="src\sp\js\duk_config.h" />
+    <ClInclude Include="src\sp\js\ExecutionContext.h" />
+    <ClInclude Include="src\sp\js\ExecutionEngine.h" />
     <ClInclude Include="src\sp\maths\Rectangle.h" />
     <ClInclude Include="src\sp\platform\directx\DXCommon.h" />
     <ClInclude Include="src\sp\platform\directx\DXContext.h" />

@@ -24,7 +24,7 @@ namespace sp { namespace graphics {
 
 		tinyxml2::XMLDocument *m_Doc = nullptr;
 		css::CSSManager *m_CSSManager = nullptr;
-		spjs::ExecutionEngine *m_EE = nullptr;
+		js::ExecutionContext *m_ExecutionContext = nullptr;
 
 	public:
 		UILayer();

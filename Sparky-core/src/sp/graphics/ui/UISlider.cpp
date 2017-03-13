@@ -125,8 +125,8 @@ namespace sp { namespace graphics { namespace ui {
 			m_Value = maths::clamp(m_Value, m_MinValue, m_MaxValue);
 			
 			auto s = m_DOMElement->Attribute("value");
-			if (s)
-				m_JS->EvalSetterExpression(s, m_Value);
+			if (s);
+				//m_JS->EvalSetterExpression(s, m_Value);
 		}
 
 		return true;
