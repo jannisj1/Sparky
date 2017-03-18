@@ -434,6 +434,7 @@
     <ClCompile Include="src\sp\js\DefaultEngine.cpp" />
     <ClCompile Include="src\sp\js\DefaultExecutionContext.cpp" />
     <ClCompile Include="src\sp\js\duktape.c" />
+    <ClCompile Include="src\sp\js\Bindings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\sp\app\Application.h">

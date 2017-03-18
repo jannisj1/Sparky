@@ -49,8 +49,7 @@ namespace sp { namespace graphics { namespace ui {
 
 		m_Pos.y = Application::GetApplication().GetWindowHeight() - m_Pos.y;
 
-		//m_Value = m_JS->EvalString(m_InitialValue);
-		m_Value = "todo";
+		m_Value = m_JS->EvaluateDomExpression(m_InitialValue);
 
 		return PositionInsideParent(space, initialSpace);
 	}

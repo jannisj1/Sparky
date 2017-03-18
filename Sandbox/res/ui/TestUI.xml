@@ -10,10 +10,11 @@
   
   <div id="infoHeader">
     <div id="basicInfo">
-      <label>{app.fps} fps</label>
-      <label>{app.ups} ups</label>
-      <label>{app.frameTime.toFixed(2)} ms</label>
-      <label>{app.memory.currentUsed}</label>
+      <label>${ test(); } fps</label>
+      <!--<label>${app.ups} ups</label>
+      <label>${app.frameTime.toFixed(2)} ms</label>
+      <label>${app.memory.currentUsed}</label>
+      <label>${getTestString()}</label>-->
     </div>
   </div>
   
@@ -22,7 +23,7 @@
   </button>
   
     <button onclick="testVec3.set(makeVec3(15, 30, 4000))">
-    <label value=" { 'Hallo' } {'Test ' + Math.sqrt(200)} }"/>
+    <label value=" ${ 'Hallo' } ${'Test ' + Math.sqrt(200)} }"/>
   </button>
   
     <div id="myDiv">
@@ -35,6 +36,6 @@
       <label>TO LONG FOR THIS SHIT</label>
       <label>TO LONG FOR THIS SHIT</label>
       <label>TO LONG FOR THIS SHIT</label>
-    <slider id="mySlider" value="$testVal" style="width: 18em; color: green; x: 20px; position: relative;" min="57" max="200" step="0.2"/>
+      <slider id="mySlider" value="$testVal" style="width: 1em; height: 10em; color: green; x: 20px; position: relative;" min="57" max="200" step="0.2"/>
   </div>
 </ui>

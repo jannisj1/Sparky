@@ -163,7 +163,6 @@ namespace sp { namespace graphics { namespace ui {
 			return "todo";//return m_JS->EvalString(s);
 		else
 			return "todo";
-
 	}
 
 	void Widget::DrawBackgroundAndBorder(Renderer2D& renderer)

@@ -73,6 +73,7 @@ namespace sp { namespace graphics {
 		m_ExecutionContext = js::ExecutionEngine::Get()->CreateNewContext();
 
 		m_ExecutionContext->Evaluate(VFS::Get()->ReadTextFile("/ui/sparky.js"), "sparky.js");
+		m_ExecutionContext->Evaluate("function getTestString(){ return 'JOOO00'; }");
 
 		m_Doc = spnew tinyxml2::XMLDocument();
 		tinyxml2::XMLError err = m_Doc->LoadFile(physicalPathXML.c_str());

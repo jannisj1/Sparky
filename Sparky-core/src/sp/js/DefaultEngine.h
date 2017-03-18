@@ -14,6 +14,7 @@ namespace sp { namespace js {
 
 	protected:
 		ExecutionContext *NewContext() override;
+
 	};
 
 } }

@@ -12,7 +12,7 @@ label:hover {
 }
 
 #myDiv {
-    flow-children: right;
+    flow-children: right-wrap;
 }
 
 #infoHeader {
@@ -73,7 +73,7 @@ button label {
 slider {
     border: 2px solid gray;
     background-color: cadetblue;
-    width: 8em;
-    height: 1em;
+    width: 1em;
+    height: 8em;
     color: red;
 }
