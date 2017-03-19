@@ -200,7 +200,9 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClCompile Include="src\sp\graphics\ui\UIDiv.cpp" />
     <ClCompile Include="src\sp\graphics\ui\UIRoot.cpp" />
     <ClCompile Include="src\sp\graphics\ui\UISlider.cpp" />
-    <ClCompile Include="src\sp\js\Bindings.cpp" />
+    <ClCompile Include="src\sp\js\spjsAPI.cpp" />
+    <ClCompile Include="src\sp\js\ChakraEngine.cpp" />
+    <ClCompile Include="src\sp\js\ChakraExecutionContext.cpp" />
     <ClCompile Include="src\sp\js\DefaultEngine.cpp" />
     <ClCompile Include="src\sp\js\DefaultExecutionContext.cpp" />
     <ClCompile Include="src\sp\js\duktape.c">
@@ -684,7 +686,9 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClInclude Include="src\sp\graphics\ui\UIRoot.h" />
     <ClInclude Include="src\sp\graphics\ui\UISlider.h" />
     <ClInclude Include="src\sp\graphics\ui\Widget.h" />
-    <ClInclude Include="src\sp\js\Bindings.h" />
+    <ClInclude Include="src\sp\js\spjsAPI.h" />
+    <ClInclude Include="src\sp\js\ChakraEngine.h" />
+    <ClInclude Include="src\sp\js\ChakraExecutionContext.h" />
     <ClInclude Include="src\sp\js\DefaultEngine.h" />
     <ClInclude Include="src\sp\js\DefaultExecutionContext.h" />
     <ClInclude Include="src\sp\js\duktape.h" />

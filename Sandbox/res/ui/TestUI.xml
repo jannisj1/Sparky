@@ -10,7 +10,7 @@
   
   <div id="infoHeader">
     <div id="basicInfo">
-      <label>${ test(); } fps</label>
+      <label>${ app.fps } fps</label>
       <!--<label>${app.ups} ups</label>
       <label>${app.frameTime.toFixed(2)} ms</label>
       <label>${app.memory.currentUsed}</label>

@@ -4,7 +4,12 @@
 #include <sp/utils/Log.h>
 
 #include "ExecutionEngine.h"
+
+#ifdef SP_PLATFORM_WINDOWS
+#include "ChakraEngine.h"
+#else
 #include "DefaultEngine.h"
+#endif
 
 namespace sp { namespace js {
 
@@ -39,7 +44,11 @@ namespace sp { namespace js {
 	{
 		if (!instance)
 		{
+#ifdef SP_PLATFORM_WINDOWS
+			instance = spnew ChakraEngine;
+#else
 			instance = spnew DefaultEngine;
+#endif
 		}
 
 		return instance;

@@ -434,7 +434,9 @@
     <ClCompile Include="src\sp\js\DefaultEngine.cpp" />
     <ClCompile Include="src\sp\js\DefaultExecutionContext.cpp" />
     <ClCompile Include="src\sp\js\duktape.c" />
-    <ClCompile Include="src\sp\js\Bindings.cpp" />
+    <ClCompile Include="src\sp\js\ChakraEngine.cpp" />
+    <ClCompile Include="src\sp\js\ChakraExecutionContext.cpp" />
+    <ClCompile Include="src\sp\js\spjsAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\sp\app\Application.h">
@@ -833,13 +835,15 @@
       <Filter>sp\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\sp\graphics\ui\UISlider.h" />
-    <ClInclude Include="src\sp\js\Bindings.h" />
     <ClInclude Include="src\sp\js\ExecutionEngine.h" />
     <ClInclude Include="src\sp\js\ExecutionContext.h" />
     <ClInclude Include="src\sp\js\DefaultEngine.h" />
     <ClInclude Include="src\sp\js\DefaultExecutionContext.h" />
     <ClInclude Include="src\sp\js\duktape.h" />
     <ClInclude Include="src\sp\js\duk_config.h" />
+    <ClInclude Include="src\sp\js\ChakraEngine.h" />
+    <ClInclude Include="src\sp\js\ChakraExecutionContext.h" />
+    <ClInclude Include="src\sp\js\spjsAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="SparkyCore-TODO.txt" />

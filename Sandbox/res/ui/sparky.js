@@ -1,71 +1,63 @@
-/* function __internal_toString__(obj) {
-    return obj.toString();
-}
-
-function makeVec3(x_, y_, z_) {
-    return { x: x_, y: y_, z: z_ };
-}
-
-function makeVec2(x_, y_) {
-    return { x: x_, y: y_ };
-}
-
 class log {
     static info(x) {
-        __internal_log__(x.toString());
+        __spjs_log_info(x.toString());
     }
 
     static warn(x) {
-        __internal_log_warning__(x.toString());
+        __spjs_log_warning(x.toString());
     }
 
-    static error(x){
-        __internal_log_error__(x.toString());
+    static error(x) {
+        __spjs_log_error(x.toString());
+    }
+
+    static assert(condition, x) {
+        __spjs_log_assert(Boolean(condition), x.toString());
     }
 }
 
-function __internal_memory_size_to_string__(val){
-    function round(val) {
-        return Math.round(val * 100) / 100.0;
+function __spjs_memory_size_to_string(bytes){
+    function round(bytes) {
+        return Math.round(bytes * 100) / 100.0;
     }
 
     const gb = 1024 * 1024 * 1024;
     const mb = 1024 * 1024;
     const kb = 1024;
 
-    if (val >= gb)
-        return round(val / gb) + " GB";
-    else if (val >= mb)
-        return round(val / mb) + " MB";
-    else if (val >= kb)
-        return round(val / kb) + " KB";
+    if (bytes >= gb)
+        return round(bytes / gb) + " GB";
+    else if (bytes >= mb)
+        return round(bytes / mb) + " MB";
+    else if (bytes >= kb)
+        return round(bytes / kb) + " KB";
     else
-        return val + " bytes";
+        return bytes + " bytes";
 }
 
-class __internal_class_memory_size__ {
-    constructor(val) {
-        this.value = val;
+class __spjs_class_memory_size {
+    constructor(bytes) {
+        this.bytes = bytes;
     }
 
     toString() {
-        return __internal_memory_size_to_string__(this.value);
+        return __spjs_memory_size_to_string(this.bytes);
     }
 }
 
-class __internal_class_memory__ {
-    constructor() { }
+class __spjs_class_memory {
+    constructor() {}
 
     get totalAllocated() {
-        return new __internal_class_memory_size__(__internal_get_totalAllocated__());
+        return new __spjs_class_memory_size(__internal_get_totalAllocated__());
     }
 
     get totalFreed() {
-        return new __internal_class_memory_size__(__internal_get_totalFreed__());
+        return new __spjs_class_memory_size(__internal_get_totalFreed__());
     }
 
     get currentUsed() {
-        return new __internal_class_memory_size__(__internal_get_currentUsed__());
+        return new __spjs_class_memory_size(__internal_get_currentUsed__());
     }
 
     get totalAllocations() {
@@ -80,35 +72,26 @@ class __internal_class_memory__ {
     }
 }
 
-function getTestString() {
-    return "WHAZZUP";
-}
-
 class app {
     constructor() {}
 
     static get fps() {
-        return __internal_get_fps__();
+        return __spjs_get_fps();
     }
 
     static get ups() {
-        return __internal_get_ups__();
+        return __spjs_get_up();
     }
 
     static get frameTime() {
-        return __internal_get_frametime__();
+        return __spjs_get_frametime();
     }
 
     static get memory() {
-        return new __internal_class_memory__();
+        return new __spjs_class_memory();
     }
 
     static exit() {
-        __internal_exit__();
+        __spjs_exit();
     }
-}
-*/
-
-function test() {
-    return "1234";
 }
