@@ -200,7 +200,6 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClCompile Include="src\sp\graphics\ui\UIDiv.cpp" />
     <ClCompile Include="src\sp\graphics\ui\UIRoot.cpp" />
     <ClCompile Include="src\sp\graphics\ui\UISlider.cpp" />
-    <ClCompile Include="src\sp\js\spjsAPI.cpp" />
     <ClCompile Include="src\sp\js\ChakraEngine.cpp" />
     <ClCompile Include="src\sp\js\ChakraExecutionContext.cpp" />
     <ClCompile Include="src\sp\js\DefaultEngine.cpp" />
@@ -212,6 +211,7 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     </ClCompile>
     <ClCompile Include="src\sp\js\ExecutionContext.cpp" />
     <ClCompile Include="src\sp\js\ExecutionEngine.cpp" />
+    <ClCompile Include="src\sp\js\sparky.js.cpp" />
     <ClCompile Include="src\sp\platform\directx\DXFramebufferDepth.cpp" />
     <ClCompile Include="src\sp\platform\directx\DXRenderer.cpp" />
     <ClCompile Include="src\sp\platform\directx\DXShaderResource.cpp" />
@@ -686,7 +686,6 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClInclude Include="src\sp\graphics\ui\UIRoot.h" />
     <ClInclude Include="src\sp\graphics\ui\UISlider.h" />
     <ClInclude Include="src\sp\graphics\ui\Widget.h" />
-    <ClInclude Include="src\sp\js\spjsAPI.h" />
     <ClInclude Include="src\sp\js\ChakraEngine.h" />
     <ClInclude Include="src\sp\js\ChakraExecutionContext.h" />
     <ClInclude Include="src\sp\js\DefaultEngine.h" />
@@ -695,6 +694,7 @@ xcopy /f /y $"(SolutionDir)Dependencies\OpenAL\bin\x86\OpenAL32.dll" "$(Solution
     <ClInclude Include="src\sp\js\duk_config.h" />
     <ClInclude Include="src\sp\js\ExecutionContext.h" />
     <ClInclude Include="src\sp\js\ExecutionEngine.h" />
+    <ClInclude Include="src\sp\js\sparky.js.h" />
     <ClInclude Include="src\sp\maths\Rectangle.h" />
     <ClInclude Include="src\sp\platform\directx\DXCommon.h" />
     <ClInclude Include="src\sp\platform\directx\DXContext.h" />

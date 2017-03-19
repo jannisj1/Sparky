@@ -1,6 +1,6 @@
 #pragma once
 #include <sp/sp.h>
-#include <sp/String.h>
+#include "sp/String.h"
 
 namespace sp { namespace js {
 

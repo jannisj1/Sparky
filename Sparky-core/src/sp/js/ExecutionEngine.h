@@ -1,5 +1,5 @@
 #pragma once
-#include <sp/sp.h>
+#include "sp/sp.h"
 #include "ExecutionContext.h"
 
 namespace sp { namespace js {

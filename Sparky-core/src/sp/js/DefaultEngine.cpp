@@ -1,5 +1,5 @@
-#include <sp/sp.h>
-#include <sp/system/Memory.h>
+#include "sp/sp.h"
+#include "sp/system/Memory.h"
 #include "DefaultEngine.h"
 
 namespace sp { namespace js {

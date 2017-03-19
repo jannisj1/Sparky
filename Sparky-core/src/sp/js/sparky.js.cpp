@@ -1,3 +1,10 @@
+#include "sp/sp.h"
+
+namespace sp { namespace js {
+
+	const char *sparky_js_src =
+R"sparkyjs_delim(
+
 class log {
     static info(x) {
         __spjs_log_info(x.toString());
@@ -94,4 +101,10 @@ class app {
     static exit() {
         __spjs_exit();
     }
+}
+
+
+)sparkyjs_delim";
+
+	}
 }

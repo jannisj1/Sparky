@@ -1,6 +1,6 @@
-#include <sp/sp.h>
-#include <sp/utils/Log.h>
-#include <sp/system/VFS.h>
+#include "sp/sp.h"
+#include "sp/utils/Log.h"
+#include "sp/system/VFS.h"
 #include "DefaultExecutionContext.h"
 
 namespace sp { namespace js {

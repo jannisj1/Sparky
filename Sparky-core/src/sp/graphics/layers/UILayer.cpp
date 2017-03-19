@@ -10,6 +10,7 @@
 #include "sp/graphics/ui/UIButton.h"
 #include "sp/graphics/ui/UISlider.h"
 #include "sp/js/ExecutionEngine.h"
+#include "sp/js/sparky.js.h"
 
 namespace sp { namespace graphics {
 
@@ -57,12 +58,6 @@ namespace sp { namespace graphics {
 			SP_ERROR("xml-file \"", xml, "\" does not exist");
 			return;
 		}
-		
-		if (!VFS::Get()->ResolvePhysicalPath("/ui/sparky.js", physicalPathJS))
-		{
-			SP_ERROR("sparky.js could not be found!");
-			return;
-		}
 
 		spdel m_Doc;
 		spdel m_RootWidget;
@@ -72,7 +67,7 @@ namespace sp { namespace graphics {
 		m_CSSManager = spnew css::CSSManager();
 		m_ExecutionContext = js::ExecutionEngine::Get()->CreateNewContext();
 
-		m_ExecutionContext->Evaluate(VFS::Get()->ReadTextFile("/ui/sparky.js"), "sparky.js");
+		m_ExecutionContext->Evaluate(js::sparky_js_src, "sparky.js");
 
 		m_Doc = spnew tinyxml2::XMLDocument();
 		tinyxml2::XMLError err = m_Doc->LoadFile(physicalPathXML.c_str());
