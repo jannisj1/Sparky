@@ -49,19 +49,19 @@ class __spjs_class_memory {
     constructor() {}
 
     get totalAllocated() {
-        return new __spjs_class_memory_size(__internal_get_totalAllocated__());
+        return new __spjs_class_memory_size(__spjs_get_total_allocated());
     }
 
     get totalFreed() {
-        return new __spjs_class_memory_size(__internal_get_totalFreed__());
+        return new __spjs_class_memory_size(__spjs_get_total_freed());
     }
 
     get currentUsed() {
-        return new __spjs_class_memory_size(__internal_get_currentUsed__());
+        return new __spjs_class_memory_size(__spjs_get_current_used());
     }
 
     get totalAllocations() {
-        return __internal_get_totalAllocations__();
+        return __spjs_get_total_allocations();
     }
 
     toString() {
@@ -80,7 +80,7 @@ class app {
     }
 
     static get ups() {
-        return __spjs_get_up();
+        return __spjs_get_ups();
     }
 
     static get frameTime() {
